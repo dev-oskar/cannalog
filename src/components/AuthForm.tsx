@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../hooks/useAuth'
 
 interface AuthFormData {
@@ -12,6 +13,7 @@ export function AuthForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { signIn, signUp } = useAuth()
+  const { t } = useTranslation()
 
   const {
     register,
@@ -53,10 +55,10 @@ export function AuthForm() {
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[#1B2951] mb-2">
-            CannaLog
+            {t('app.name')}
           </h1>
           <p className="text-[#8B6F47]">
-            Cannabis Consumption Tracker
+            {t('app.tagline')}
           </p>
         </div>
 
@@ -71,7 +73,7 @@ export function AuthForm() {
                 : 'text-[#8B6F47] hover:text-[#1B2951]'
             }`}
           >
-            Login
+{t('auth.signIn')}
           </button>
           <button
             type="button"
@@ -82,7 +84,7 @@ export function AuthForm() {
                 : 'text-[#8B6F47] hover:text-[#1B2951]'
             }`}
           >
-            Register
+{t('auth.signUp')}
           </button>
         </div>
 
@@ -91,7 +93,7 @@ export function AuthForm() {
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-[#1B2951] mb-1">
-              Email
+              {t('auth.email')}
             </label>
             <input
               id="email"
@@ -114,7 +116,7 @@ export function AuthForm() {
           {/* Password */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-[#1B2951] mb-1">
-              Password
+              {t('auth.password')}
             </label>
             <input
               id="password"
@@ -147,7 +149,7 @@ export function AuthForm() {
             disabled={loading}
             className="w-full bg-[#4A7C59] text-white py-2 px-4 rounded-md hover:bg-[#3d6649] focus:outline-none focus:ring-2 focus:ring-[#4A7C59] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Sign Up'}
+{loading ? t('common.loading') : isLogin ? t('auth.signIn') : t('auth.signUp')}
           </button>
         </form>
 
@@ -158,7 +160,7 @@ export function AuthForm() {
             onClick={toggleMode}
             className="text-[#4A7C59] hover:text-[#3d6649] text-sm font-medium"
           >
-            {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+{isLogin ? t('auth.dontHaveAccount') : t('auth.alreadyHaveAccount')}
           </button>
         </div>
       </div>

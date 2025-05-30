@@ -1,33 +1,37 @@
+import { useTranslation } from 'react-i18next';
 import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth } from "./hooks/useAuth";
 import { useAgeVerification } from "./hooks/useAgeVerification";
 import { AuthForm } from "./components/AuthForm";
 import { AgeVerification } from "./components/AgeVerification";
+import { ThemeToggle } from "./components/ThemeToggle";
+import { LanguageSelector } from "./components/LanguageSelector";
 
 function AuthenticatedApp() {
   const { user, signOut } = useAuth();
+  const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-[#F5E6D3]">
+    <div className="min-h-screen bg-background test-variables">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-[#1B2951]">
-            CannaLog
-          </h1>
-          <button
-            onClick={signOut}
-            className="bg-[#8B6F47] text-white px-4 py-2 rounded-md hover:bg-[#7a5f3e] transition-colors"
-          >
-            Sign Out
-          </button>
+          <h1 className="text-2xl font-bold text-primary">{t('app.name')}</h1>
+          <div className="flex items-center gap-2">
+            <LanguageSelector />
+            <ThemeToggle />
+            <button
+              onClick={signOut}
+              className="bg-primary text-background px-4 py-2 rounded-md hover:bg-primary/80 transition-colors"
+            >
+              {t('auth.signOut')}
+            </button>
+          </div>
         </div>
-        
         <div className="text-center">
-          <p className="text-[#1B2951] mb-4">
-            Welcome, {user?.email}! 🌿
-          </p>
-          <p className="text-[#8B6F47]">
-            Authentication working! Ready for the next features.
+          <p className="text-primary mb-4">{t('dashboard.welcome', { email: user?.email })} 🌿</p>
+          <p className="text-secondary">
+            {t('dashboard.subtitle')}
           </p>
         </div>
       </div>
@@ -37,31 +41,35 @@ function AuthenticatedApp() {
 
 function AppContent() {
   const { user, loading: authLoading } = useAuth();
-  const { isVerified, loading: ageLoading, markAsVerified } = useAgeVerification();
+  const {
+    isVerified,
+    loading: ageLoading,
+    markAsVerified,
+  } = useAgeVerification();
+  const { t } = useTranslation();
 
-  // Show loading while checking both auth and age verification
   if (authLoading || ageLoading) {
     return (
-      <div className="min-h-screen bg-[#F5E6D3] flex items-center justify-center">
-        <div className="text-[#1B2951]">Loading...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-primary">{t('common.loading')}</div>
       </div>
     );
   }
 
-  // Show age verification gate first
   if (!isVerified) {
     return <AgeVerification onVerified={markAsVerified} />;
   }
 
-  // Then show auth flow
   return user ? <AuthenticatedApp /> : <AuthForm />;
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

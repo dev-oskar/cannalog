@@ -1,0 +1,59 @@
+{
+  "app": {
+    "name": "CannaLog",
+    "tagline": "Śledź swoją podróż z konopią"
+  },
+  "auth": {
+    "signIn": "Zaloguj się",
+    "signUp": "Zarejestruj się",
+    "signOut": "Wyloguj się",
+    "email": "Email",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "welcomeBack": "Witaj ponownie",
+    "createAccount": "Utwórz swoje konto",
+    "alreadyHaveAccount": "Masz już konto?",
+    "dontHaveAccount": "Nie masz konta?",
+    "loading": "Ładowanie...",
+    "signingIn": "Logowanie...",
+    "signingUp": "Rejestracja..."
+  },
+  "ageVerification": {
+    "title": "Wymagana weryfikacja wieku",
+    "subtitle": "Musisz mieć ukończone 18 lat, aby korzystać z CannaLog",
+    "question": "Czy masz ukończone 18 lat?",
+    "yes": "Tak, mam 18+",
+    "no": "Nie, mam mniej niż 18 lat",
+    "disclaimer": "Kontynuując, potwierdzasz, że masz wiek uprawniony do spożywania konopi w swojej jurysdykcji.",
+    "exitMessage": "Ta aplikacja jest przeznaczona dla użytkowników w wieku 18 lat lub starszych."
+  },
+  "dashboard": {
+    "welcome": "Witaj, {{email}}! 🌿",
+    "subtitle": "Uwierzytelnianie działa! Gotowe na kolejne funkcje.",
+    "stats": {
+      "totalSessions": "Łączne sesje",
+      "favoriteStrain": "Ulubiony szczep",
+      "avgRating": "Średnia ocena"
+    }
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "add": "Dodaj",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "close": "Zamknij",
+    "confirm": "Potwierdź",
+    "yes": "Tak",
+    "no": "Nie"
+  },
+  "errors": {
+    "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+    "network": "Błąd sieci. Sprawdź swoje połączenie.",
+    "unauthorized": "Nie masz uprawnień do wykonania tej czynności.",
+    "validation": "Sprawdź swoje dane i spróbuj ponownie."
+  }
+}

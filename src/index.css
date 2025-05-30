@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-primary: 27 41 81; /* #1B2951 - text/logo */
+    --color-secondary: 139 111 71; /* #8B6F47 - secondary */
+    --color-background: 245 230 211; /* #F5E6D3 - background */
+  }
+
+  .dark {
+    --color-primary: 245 230 211; /* #F5E6D3 - now text color */
+    --color-secondary: 139 111 71; /* #8B6F47 - stays same */
+    --color-background: 27 41 81; /* #1B2951 - now background */
+  }
+
+  /* Test if CSS variables work at all */
+  .test-variables {
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-primary));
+  }
+}

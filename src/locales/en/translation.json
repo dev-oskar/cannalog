@@ -1,0 +1,59 @@
+{
+  "app": {
+    "name": "CannaLog",
+    "tagline": "Track your cannabis journey"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create your account",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "loading": "Loading...",
+    "signingIn": "Signing in...",
+    "signingUp": "Signing up..."
+  },
+  "ageVerification": {
+    "title": "Age Verification Required",
+    "subtitle": "You must be 21 or older to use CannaLog",
+    "question": "Are you 21 years of age or older?",
+    "yes": "Yes, I am 21+",
+    "no": "No, I am under 21",
+    "disclaimer": "By proceeding, you confirm that you are of legal age to consume cannabis in your jurisdiction.",
+    "exitMessage": "This application is intended for users 21 years of age or older."
+  },
+  "dashboard": {
+    "welcome": "Welcome, {{email}}! 🌿",
+    "subtitle": "Authentication working! Ready for the next features.",
+    "stats": {
+      "totalSessions": "Total Sessions",
+      "favoriteStrain": "Favorite Strain",
+      "avgRating": "Average Rating"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "validation": "Please check your input and try again."
+  }
+}
