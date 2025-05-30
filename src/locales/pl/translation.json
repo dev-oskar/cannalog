@@ -27,13 +27,78 @@
     "disclaimer": "Kontynuując, potwierdzasz, że masz wiek uprawniony do spożywania konopi w swojej jurysdykcji.",
     "exitMessage": "Ta aplikacja jest przeznaczona dla użytkowników w wieku 18 lat lub starszych."
   },
+  "navigation": {
+    "dashboard": "Panel główny",
+    "sessions": "Sesje",
+    "strains": "Odmiany"
+  },
   "dashboard": {
-    "welcome": "Witaj, {{email}}! 🌿",
-    "subtitle": "Uwierzytelnianie działa! Gotowe na kolejne funkcje.",
+    "title": "Panel główny",
+    "subtitle": "Witaj w swoim dzienniku użytkownika CannaLog",
+    "welcome": "Witaj ponownie, {{email}}!",
     "stats": {
-      "totalSessions": "Łączne sesje",
-      "favoriteStrain": "Ulubiony szczep",
-      "avgRating": "Średnia ocena"
+      "totalSessions": "Łączna ilość sesji",
+      "favoriteStrain": "Ulubiona odmiana",
+      "thisWeek": "Ten tydzień",
+      "recentActivity": "Ostatnia aktywność",
+      "noSessions": "Nie dodano jeszcze sesji",
+      "logFirst": "Dodaj pierwszą sesję"
+    }
+  },
+  "sessions": {
+    "add": "Dodaj sesję",
+    "edit": "Edytuj sesję",
+    "delete": "Usuń sesję",
+    "history": {
+      "title": "Historia sesji",
+      "subtitle": "Zobacz i zarządzaj swoimi sesjami konsumpcji",
+      "empty": "Nie dodano jeszcze żadnych sesji. Zacznij śledzić swoją podróż z cannabis!",
+      "filters": {
+        "allTime": "Cały okres",
+        "thisWeek": "Ten tydzień",
+        "thisMonth": "Ten miesiąc",
+        "last3Months": "Ostatnie 3 miesiące",
+        "allStrains": "Wszystkie odmiany",
+        "allMethods": "Wszystkie metody"
+      },
+      "methods": {
+        "joint": "Joint",
+        "pipe": "Fajka",
+        "vape": "Waporyzator",
+        "edible": "Jedzenie"
+      },
+      "emptyState": {
+        "title": "Nie dodano jeszcze sesji",
+        "description": "Zacznij śledzić swoją podróż z konsumpcji cannabis"
+      }
+    }
+  },
+  "strains": {
+    "add": "Dodaj odmianę",
+    "edit": "Edytuj odmianę",
+    "delete": "Usuń odmianę",
+    "indica": "Indica",
+    "sativa": "Sativa",
+    "hybrid": "Hybryda",
+    "library": {
+      "title": "Biblioteka odmian",
+      "subtitle": "Zarządzaj swoją osobistą kolekcją odmian",
+      "empty": "Brak odmian w twojej bibliotece",
+      "search": "Szukaj odmian...",
+      "filters": {
+        "allTypes": "Wszystkie typy"
+      },
+      "emptyStates": {
+        "indica": "Brak odmian indica",
+        "sativa": "Brak odmian sativa",
+        "hybrid": "Brak odmian hybrydowych"
+      },
+      "quickAdd": {
+        "title": "Szybko dodaj popularne odmiany",
+        "addIndica": "Dodaj odmianę Indica",
+        "addSativa": "Dodaj odmianę Sativa",
+        "addHybrid": "Dodaj odmianę Hybryda"
+      }
     }
   },
   "common": {

@@ -27,13 +27,78 @@
     "disclaimer": "By proceeding, you confirm that you are of legal age to consume cannabis in your jurisdiction.",
     "exitMessage": "This application is intended for users 21 years of age or older."
   },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "sessions": "Sessions",
+    "strains": "Strains"
+  },
   "dashboard": {
-    "welcome": "Welcome, {{email}}! 🌿",
-    "subtitle": "Authentication working! Ready for the next features.",
+    "title": "Dashboard",
+    "subtitle": "Welcome to your cannabis journey tracker",
+    "welcome": "Welcome back, {{email}}!",
     "stats": {
       "totalSessions": "Total Sessions",
       "favoriteStrain": "Favorite Strain",
-      "avgRating": "Average Rating"
+      "thisWeek": "This Week",
+      "recentActivity": "Recent Activity",
+      "noSessions": "No sessions logged yet",
+      "logFirst": "Log Your First Session"
+    }
+  },
+  "sessions": {
+    "add": "Add Session",
+    "edit": "Edit Session",
+    "delete": "Delete Session",
+    "history": {
+      "title": "Session History",
+      "subtitle": "View and manage your consumption sessions",
+      "empty": "No sessions recorded yet. Start tracking your cannabis journey!",
+      "filters": {
+        "allTime": "All Time",
+        "thisWeek": "This Week",
+        "thisMonth": "This Month",
+        "last3Months": "Last 3 Months",
+        "allStrains": "All Strains",
+        "allMethods": "All Methods"
+      },
+      "methods": {
+        "joint": "Joint",
+        "pipe": "Pipe",
+        "vape": "Vape",
+        "edible": "Edible"
+      },
+      "emptyState": {
+        "title": "No sessions logged yet",
+        "description": "Start tracking your cannabis consumption journey"
+      }
+    }
+  },
+  "strains": {
+    "add": "Add Strain",
+    "edit": "Edit Strain",
+    "delete": "Delete Strain",
+    "indica": "Indica",
+    "sativa": "Sativa",
+    "hybrid": "Hybrid",
+    "library": {
+      "title": "Strain Library",
+      "subtitle": "Manage your personal strain collection",
+      "empty": "No strains in your library yet",
+      "search": "Search strains...",
+      "filters": {
+        "allTypes": "All Types"
+      },
+      "emptyStates": {
+        "indica": "No indica strains yet",
+        "sativa": "No sativa strains yet",
+        "hybrid": "No hybrid strains yet"
+      },
+      "quickAdd": {
+        "title": "Quick Add Popular Strains",
+        "addIndica": "Add Indica Strain",
+        "addSativa": "Add Sativa Strain",
+        "addHybrid": "Add Hybrid Strain"
+      }
     }
   },
   "common": {

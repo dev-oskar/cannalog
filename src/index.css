@@ -1,21 +1,51 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-primary: #4A7C59;
+  --color-secondary: #8B6F47;
+  --color-tertiary: #1B2951;
+  --color-background: #F5E6D3;
+  --color-surface: #ffffff;
+  
+  --font-family-sans: 'Work Sans', system-ui, -apple-system, sans-serif;
+}
 
 @layer base {
-  :root {
-    --color-primary: 27 41 81; /* #1B2951 - text/logo */
-    --color-secondary: 139 111 71; /* #8B6F47 - secondary */
-    --color-background: 245 230 211; /* #F5E6D3 - background */
+  html, body {
+    font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-tertiary);
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  * {
+    font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
   }
 
   .dark {
-    --color-primary: 245 230 211; /* #F5E6D3 - now text color */
-    --color-secondary: 139 111 71; /* #8B6F47 - stays same */
-    --color-background: 27 41 81; /* #1B2951 - now background */
+    background-color: var(--color-tertiary);
+    color: var(--color-background);
   }
-
-  /* Test if CSS variables work at all */
-  .test-variables {
-    background-color: rgb(var(--color-background));
-    color: rgb(var(--color-primary));
+  
+  /* Dark mode color overrides */
+  .dark .bg-background {
+    background-color: var(--color-tertiary) !important;
+  }
+  
+  .dark .bg-surface {
+    background-color: var(--color-tertiary) !important;
+  }
+  
+  .dark .text-primary {
+    color: var(--color-background) !important;
+  }
+  
+  .dark .text-secondary {
+    color: var(--color-background) !important;
+  }
+  
+  .dark .text-tertiary {
+    color: var(--color-background) !important;
   }
 }
