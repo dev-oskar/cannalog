@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
+@custom-variant dark (&:where(.dark, .dark *));
+/* * Core CannaLog styles based on the wireframe design brief.
+ * This includes the custom font and background, and the keyframe animation.
+ */
+:root {
+  /* Light theme variables (from mockup) */
+  --bg-color: #f5e6d3; /* beige */
+  --text-color: #1b2951; /* navy */
+  --card-bg-color: #ffffff;
+  --color-primary: #4a7c59; /* cannabis-green */
+  --color-primary-dark: #3a6347; /* cannabis-green-dark */
+  --color-secondary: #1b2951; /* navy */
+  --color-tertiary: #8b6f47; /* brown */
+}
+
+/* Dark theme variables (customized for mockup palette) */
+.dark {
+  --bg-color: #1b2951; /* navy for dark bg */
+  --text-color: #f5e6d3; /* beige for text */
+  --card-bg-color: #234057; /* deep navy card */
+  --color-primary: #3a6347; /* cannabis-green-dark */
+  --color-primary-dark: #4a7c59; /* lighter green for hover */
+  --color-secondary: #f5e6d3; /* beige as secondary */
+  --color-tertiary: #8b6f47; /* brown */
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* * Custom animation for the floating action button (FAB).
+ * This creates a subtle pulsing effect to draw attention.
+ */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.fab-button {
+  animation: pulse 2s infinite;
+}
+
+@theme {
+  --color-primary: #4a7c59;
+  --color-secondary: #1b2951;
+  --color-tertiary: #8b6f47;
+}

@@ -1,0 +1,20 @@
+---
+import "../styles/global.css";
+import BaseLayout from "./BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Sidebar from "../components/Sidebar.astro";
+import FooterSidebar from "../components/FooterSidebar.astro";
+---
+
+<BaseLayout title="Dashboard" description="User Dashboard">
+  <Navbar />
+  <Sidebar />
+  <div
+    id="main-content"
+    class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900 min-h-screen"
+  >
+    <slot />
+
+    <FooterSidebar />
+  </div>
+</BaseLayout>

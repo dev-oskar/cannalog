@@ -1,0 +1,15 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import NavBar from "../components/ui/Navbar.astro";
+
+// We just pass the props along to the BaseLayout
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <NavBar />
+  <main class="mt-20 px-10 md:px-20 lg:px-40 justify-center">
+    <slot />
+  </main>
+  <!-- <Footer /> -->
+</BaseLayout>
