@@ -1,12 +1,56 @@
 ---
 import Layout from "../layouts/DashboardLayout.astro";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-  <div class="flex justify-center">
-    <h1 class="text-2xl font-bold mt-20 mx-auto">hello</h1>
+  <div class="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+      <h1 class="text-2xl font-bold text-text-color">Dashboard</h1>
+      <p class="text-text-color/80 mt-1">
+        Welcome back, here's an overview of your CannaLog.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Example Card 1 -->
+      <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold text-text-color mb-3">
+          Recent Entries
+        </h2>
+        <p class="text-text-color/80">
+          You have added 3 new strain reviews this week. Keep up the great work!
+        </p>
+        <button
+          type="button"
+          class="mt-4 text-white bg-primary hover:bg-primary-darker focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
+        >
+          View Entries
+        </button>
+      </div>
+
+      <!-- Example Card 2 -->
+      <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold text-text-color mb-3">
+          Inventory Status
+        </h2>
+        <p class="text-text-color/80">
+          You are running low on 'Blue Dream'. Only 2 grams remaining.
+        </p>
+        <button
+          type="button"
+          class="mt-4 text-text-color border border-primary hover:bg-primary-light focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
+        >
+          Restock
+        </button>
+      </div>
+
+      <!-- Example Card 3 -->
+      <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold text-text-color mb-3">Discover</h2>
+        <p class="text-text-color/80">
+          Check out strains with similar terpene profiles to your favorites.
+        </p>
+      </div>
+    </div>
   </div>
 </Layout>
