@@ -1,59 +1,45 @@
 @import "tailwindcss";
-@import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
 @source "../../node_modules/flowbite";
 @custom-variant dark (&:where(.dark, .dark *));
-/* * Core CannaLog styles based on the wireframe design brief.
- * This includes the custom font and background, and the keyframe animation.
- */
-:root {
-  /* Light theme variables (from mockup) */
-  --bg-color: #f5e6d3; /* beige */
-  --text-color: #1b2951; /* navy */
-  --card-bg-color: #ffffff;
-  --color-primary: #4a7c59; /* cannabis-green */
-  --color-primary-dark: #3a6347; /* cannabis-green-dark */
-  --color-secondary: #1b2951; /* navy */
-  --color-tertiary: #8b6f47; /* brown */
-}
-
-/* Dark theme variables (customized for mockup palette) */
-.dark {
-  --bg-color: #1b2951; /* navy for dark bg */
-  --text-color: #f5e6d3; /* beige for text */
-  --card-bg-color: #234057; /* deep navy card */
-  --color-primary: #3a6347; /* cannabis-green-dark */
-  --color-primary-dark: #4a7c59; /* lighter green for hover */
-  --color-secondary: #f5e6d3; /* beige as secondary */
-  --color-tertiary: #8b6f47; /* brown */
-}
-
-body {
-  font-family: "Inter", sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* * Custom animation for the floating action button (FAB).
- * This creates a subtle pulsing effect to draw attention.
- */
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.fab-button {
-  animation: pulse 2s infinite;
-}
 
 @theme {
-  --color-primary: #4a7c59;
-  --color-secondary: #1b2951;
-  --color-tertiary: #8b6f47;
+  /* Primary Color Palette */
+  --color-primary-50: #f0f7f3;
+  --color-primary-100: #e1efea;
+  --color-primary-200: #c3dfd4;
+  --color-primary-300: #a5cfbe;
+  --color-primary-400: #87bfa8;
+  --color-primary-500: #69af92;
+  --color-primary-600: #4a7c59; /* Base */
+  --color-primary-700: #3b6347;
+  --color-primary-800: #2c4a35;
+  --color-primary-900: #1d3123;
+  --color-primary-950: #111e16;
+
+  /* Secondary Color Palette */
+  --color-secondary-50: #e8eaf2;
+  --color-secondary-100: #d1d5e6;
+  --color-secondary-200: #a3aacd;
+  --color-secondary-300: #757fb3;
+  --color-secondary-400: #47559a;
+  --color-secondary-500: #2f3e7a;
+  --color-secondary-600: #1b2951; /* Base */
+  --color-secondary-700: #162143;
+  --color-secondary-800: #111935;
+  --color-secondary-900: #0c1126;
+  --color-secondary-950: #070a1a;
+
+  /* Tertiary Color Palette */
+  --color-tertiary-50: #f8f5f0;
+  --color-tertiary-100: #f2ece1;
+  --color-tertiary-200: #e5d9c3;
+  --color-tertiary-300: #d8c6a5;
+  --color-tertiary-400: #cab287;
+  --color-tertiary-500: #bc9f69;
+  --color-tertiary-600: #a38957;
+  --color-tertiary-700: #8b6f47; /* Base */
+  --color-tertiary-800: #685336;
+  --color-tertiary-900: #463824;
+  --color-tertiary-950: #2c2317;
 }
