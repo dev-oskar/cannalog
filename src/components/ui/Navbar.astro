@@ -1,19 +1,17 @@
 ---
-import cannabisLogo from "../../assets/cannabis-logo.svg";
 import ColorModeSwitcher from "./ColorModeSwitcher.astro";
+import Logo from "./Logo.astro";
+
 export interface NavLink {
   label: string;
   href: string;
 }
 
 export interface Props {
-  logoText?: string;
   navLinks?: NavLink[];
 }
 
-// default values
 const {
-  logoText = "CannaLog",
   navLinks = [
     { label: "Our Mission", href: "#mission" },
     { label: "About", href: "#about" },
@@ -24,20 +22,15 @@ const {
 
 <header class="backdrop-blur-md sticky top-0 z-50">
   <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-    <a href="/" class="flex items-center space-x-3">
-      <img
-        src={cannabisLogo.src}
-        class="h-8 text-secondary"
-        alt=`${logoText} Logo`
-      />
-      <span class="text-2xl font-bold text-navy">{logoText}</span>
+    <a href="/">
+      <Logo />
     </a>
     <div class="hidden md:flex items-center space-x-8">
       {
         navLinks.map((link) => (
           <a
             href={link.href}
-            class="text-navy hover:text-cannabis-green transition duration-300"
+            class="hover:underline hover:underline-offset-2 transition duration-300"
           >
             {link.label}
           </a>
@@ -51,11 +44,7 @@ const {
         class="px-4 py-2 text-navy font-medium rounded-lg hover:bg-navy/10 transition duration-300"
         >Log In</a
       >
-      <a
-        href="#"
-        class="px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-600-dark shadow-md hover:shadow-lg transition duration-300"
-        >Register</a
-      >
+      <a href="#" class="btn-primary">Register</a>
     </div>
   </nav>
 </header>
