@@ -1,0 +1,20 @@
+{
+    "navbar": {
+        "mission": "Our Mission",
+        "about": "About",
+        "contact": "Contact",
+        "login": "Log In",
+        "register": "Register",
+        "toggleTheme": "Toggle Dark Theme"
+    },
+    "hero": {
+        "title": "Your Personal Cannabis Journey, Demystified.",
+        "subtitle": "CannaLog is a mindful companion for tracking, understanding, and optimizing your cannabis experiences. Gain insights, find what works for you, and cultivate well-being.",
+        "ctaButton": "Start Logging for Free"
+    },
+    "features": {
+        "title": "Your Journey, Illuminated",
+        "paragraph1": "CannaLog is more than a journal; it's your personal cartographer for the cannabis landscape. We help you connect the dots between cultivar, dosage, and your state of mind, transforming subjective feelings into actionable insights. By mindfully charting your sessions, you move beyond guesswork and start making intentional choices that truly enhance your well-being.",
+        "paragraph2": "Discover which terpenes uplift your creativity or what timing promotes restful sleep. Our intuitive tools empower you to build a personalized routine that is both effective and mindful."
+    }
+}

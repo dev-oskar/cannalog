@@ -2,6 +2,13 @@
 import ColorModeSwitcher from "./ui/ColorModeSwitcher.astro";
 import Logo from "./ui/Logo.astro";
 
+import { getLocale } from "astro-i18n-aut";
+import { useTranslations } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+const lang = getLocale(Astro.url);
+const t = useTranslations(lang as Lang);
+
 export interface NavLink {
   label: string;
   href: string;
@@ -13,9 +20,9 @@ export interface Props {
 
 const {
   navLinks = [
-    { label: "Our Mission", href: "#mission" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: t("navbar.mission"), href: "#mission" },
+    { label: t("navbar.about"), href: "#about" },
+    { label: t("navbar.contact"), href: "#contact" },
   ],
 } = Astro.props;
 ---
@@ -38,13 +45,13 @@ const {
       }
     </div>
     <div class="flex items-center space-x-2">
-      <ColorModeSwitcher />
+      <ColorModeSwitcher tooltip={t("navbar.toggleTheme")} />
       <a
         href="/signin"
         class="px-4 py-2 text-navy font-medium rounded-lg hover:bg-navy/10 transition duration-300"
-        >Log In</a
+        >{t("navbar.login")}</a
       >
-      <a href="/register" class="btn-primary">Register</a>
+      <a href="/register" class="btn-primary">{t("navbar.register")}</a>
     </div>
   </nav>
 </header>

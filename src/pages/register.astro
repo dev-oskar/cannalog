@@ -1,13 +1,24 @@
 ---
+import { getLocale } from "astro-i18n-aut";
 import PublicLayout from "../layouts/PublicLayout.astro";
 import Logo from "../components/ui/Logo.astro";
 
-const title = "Register - CannaLog";
-const description =
-  "Create an account to start logging your cannabis experiences with CannaLog.";
+const locale = getLocale(Astro.url);
+
+let title: string;
+switch (locale) {
+  case "pl":
+    title = "CannaLog - Załóż konto";
+    break;
+  case "en":
+    title = "CannaLog - Register";
+    break;
+  default:
+    title = "CannaLog - Register";
+}
 ---
 
-<PublicLayout title={title} description={description}>
+<PublicLayout title={title} locale={locale}>
   <section class="">
     <div
       class="flex flex-col items-center justify-center my-4 px-6 py-8 mx-auto md:h-fit lg:py-0"
@@ -59,8 +70,9 @@ const description =
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Confirm password</label
               >
+              <!-- type="confirm-password" -->
               <input
-                type="confirm-password"
+                type="password"
                 name="confirm-password"
                 id="confirm-password"
                 placeholder="••••••••"

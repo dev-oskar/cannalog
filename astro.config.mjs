@@ -1,11 +1,35 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 
-// https://astro.build/config
+import { i18n, filterSitemapByDefaultLocale } from "astro-i18n-aut/integration";
+import sitemap from "@astrojs/sitemap";
+
+const defaultLocale = "en";
+const locales = {
+  en: "en-EN",
+  pl: "pl-PL",
+};
+
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()]
-  }
+    plugins: [tailwindcss()],
+  },
+  trailingSlash: "never",
+  build: {
+    format: "file",
+  },
+  integrations: [
+    i18n({
+      locales,
+      defaultLocale,
+    }),
+    sitemap({
+      i18n: {
+        locales,
+        defaultLocale,
+      },
+      filter: filterSitemapByDefaultLocale({ defaultLocale }),
+    }),
+  ],
 });

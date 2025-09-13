@@ -1,0 +1,20 @@
+{
+    "navbar": {
+        "mission": "Nasza Misja",
+        "about": "O nas",
+        "contact": "Kontakt",
+        "login": "Zaloguj się",
+        "register": "Zarejestruj się",
+        "toggleTheme": "Przełącz motyw"
+    },
+    "hero": {
+        "title": "Twoja Osobista Podróż z Konopiami, Wyjaśniona.",
+        "subtitle": "CannaLog to świadomy towarzysz do śledzenia, rozumienia i optymalizacji Twoich doświadczeń z konopiami. Zdobywaj wiedzę, odkrywaj, co działa dla Ciebie i dbaj o swoje dobre samopoczucie.",
+        "ctaButton": "Zacznij Rejestrować za Darmo"
+    },
+    "features": {
+        "title": "Twoja Podróż, Rozjaśniona",
+        "paragraph1": "CannaLog to więcej niż dziennik; to Twój osobisty kartograf krajobrazu konopnego. Pomagamy łączyć fakty dotyczące odmiany, dawkowania i stanu umysłu, przekształcając subiektywne odczucia w praktyczne wnioski. Dzięki świadomemu rejestrowaniu sesji, porzucasz domysły i zaczynasz podejmować świadome decyzje, które realnie poprawiają Twoje samopoczucie.",
+        "paragraph2": "Odkryj, które terpeny pobudzają Twoją kreatywność, a które pory dnia sprzyjają spokojnemu snowi. Nasze intuicyjne narzędzia umożliwiają Ci stworzenie spersonalizowanej rutyny, która jest zarówno skuteczna, jak i świadoma."
+    }
+}
