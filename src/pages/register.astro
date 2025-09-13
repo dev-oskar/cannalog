@@ -1,9 +1,13 @@
 ---
 import PublicLayout from "../layouts/PublicLayout.astro";
 import Logo from "../components/ui/Logo.astro";
+
+const title = "Register - CannaLog";
+const description =
+  "Create an account to start logging your cannabis experiences with CannaLog.";
 ---
 
-<PublicLayout>
+<PublicLayout title={title} description={description}>
   <section class="">
     <div
       class="flex flex-col items-center justify-center my-4 px-6 py-8 mx-auto md:h-fit lg:py-0"
@@ -92,7 +96,7 @@ import Logo from "../components/ui/Logo.astro";
             >
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Already have an account? <a
-                href="#"
+                href="/signin"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >Login here</a
               >
