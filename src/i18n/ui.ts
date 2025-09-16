@@ -1,16 +1,18 @@
-import pl from "./pl.json";
 import en from "./en.json";
+import pl from "./pl.json";
 
 export const languages = {
-  pl: "Polski",
   en: "English",
+  pl: "Polski",
 };
 
-export const defaultLang = "pl";
+export const defaultLang = "en";
+
+export const showDefaultLang = false;
 
 export const ui = {
-  pl,
   en,
+  pl,
 } as const;
 
 // Defines the language keys, e.g., 'pl' | 'en'
