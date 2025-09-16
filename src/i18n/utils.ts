@@ -10,15 +10,24 @@ export function getLangFromUrl(url: URL) {
 export function useTranslatedPath(lang: keyof typeof ui) {
   return function translatePath(path: string, l: string = lang) {
     const langCode = l as Lang;
-    const pathToTranslate = path.startsWith("/") ? path : `/${path}`;
-    const finalPath =
-      pathToTranslate === "/" ? "" : pathToTranslate;
+    const isHash = path.startsWith('#');
 
     if (!showDefaultLang && langCode === defaultLang) {
+      // Default language logic
+      if (isHash) {
+        return `/${path}`; // Returns /#about
+      }
+      const finalPath = path === "/" ? "" : path;
       return finalPath === "" ? "/" : finalPath;
+    } else {
+      // Non-default language logic
+      const langPrefix = `/${langCode}`;
+      if (isHash) {
+        return `${langPrefix}${path}`; // Returns /pl#about
+      }
+      const finalPath = path === "/" ? "" : path;
+      return `${langPrefix}${finalPath}`; // Returns /pl or /pl/about
     }
-
-    return `/${langCode}${finalPath}`;
   };
 }
 
