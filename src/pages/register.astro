@@ -1,24 +1,57 @@
 ---
 import { getLocale } from "astro-i18n-aut";
-import PublicLayout from "../layouts/PublicLayout.astro";
+import { useTranslations } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
 import Logo from "../components/ui/Logo.astro";
+import PublicLayout from "../layouts/PublicLayout.astro";
 
-const locale = getLocale(Astro.url);
+const lang = getLocale(Astro.url);
+const t = useTranslations(lang as Lang);
 
-let title: string;
-switch (locale) {
-  case "pl":
-    title = "CannaLog - Załóż konto";
-    break;
-  case "en":
-    title = "CannaLog - Register";
-    break;
-  default:
-    title = "CannaLog - Register";
+export const prerender = false; // Not needed in 'server' mode
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+
+    if (!data) {
+      throw new Error("No form data submitted");
+    }
+
+    if (data.get("email") === "") {
+      throw new Error("Email is required");
+    }
+
+    if (data.get("password") === "") {
+      throw new Error("Password is required");
+    }
+
+    if (data.get("password") !== data.get("confirm-password")) {
+      throw new Error("Passwords do not match");
+    }
+    console.log(data.get("terms"));
+    if (data.get("terms") !== "on") {
+      throw new Error("You must accept the terms and conditions");
+    }
+
+    console.log("User registered:", {
+      email: data.get("email"),
+      password: data.get("password"),
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
 }
 ---
 
-<PublicLayout title={title} locale={locale}>
+<PublicLayout
+  title={t("register.title")}
+  description={t("register.description")}
+  locale={lang}
+>
   <section class="">
     <div
       class="flex flex-col items-center justify-center my-4 px-6 py-8 mx-auto md:h-fit lg:py-0"
@@ -27,18 +60,18 @@ switch (locale) {
         <Logo />
       </a>
       <div
-        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-primary-100 dark:bg-secondary-300"
+        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-lg xl:p-0"
       >
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 class="text-xl font-bold leading-tight tracking-tightmd:text-2xl">
-            Create an account
+            {t("register.heading")}
           </h1>
-          <form class="space-y-4 md:space-y-6" action="#">
+          <form class="space-y-4 md:space-y-6" action="#" method="POST">
             <div>
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Your email</label
+                >{t("register.emailLabel")}</label
               >
               <input
                 type="email"
@@ -46,14 +79,14 @@ switch (locale) {
                 id="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
-                required=""
+                required="true"
               />
             </div>
             <div>
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Password</label
+                >{t("register.passwordLabel")}</label
               >
               <input
                 type="password"
@@ -61,14 +94,14 @@ switch (locale) {
                 id="password"
                 placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
+                required="true"
               />
             </div>
             <div>
               <label
                 for="confirm-password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Confirm password</label
+                >{t("register.confirmPasswordLabel")}</label
               >
               <!-- type="confirm-password" -->
               <input
@@ -77,26 +110,27 @@ switch (locale) {
                 id="confirm-password"
                 placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
+                required="true"
               />
             </div>
             <div class="flex items-start">
               <div class="flex items-center h-5">
                 <input
                   id="terms"
+                  name="terms"
                   aria-describedby="terms"
                   type="checkbox"
                   class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                  required=""
+                  required="true"
                 />
               </div>
               <div class="ml-3 text-sm">
                 <label
                   for="terms"
                   class="font-light text-gray-500 dark:text-gray-300"
-                  >I accept the <a
-                    class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                    href="#">Terms and Conditions</a
+                  >{t("register.termsLabel")}<a
+                    class="pl-1 font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    href="#">{t("register.termsLink")}</a
                   ></label
                 >
               </div>
@@ -104,13 +138,14 @@ switch (locale) {
             <button
               type="submit"
               class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >Create an account</button
+              >{t("register.button")}</button
             >
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-              Already have an account? <a
+              {t("register.alreadyHaveAccount")}
+              <a
                 href="/signin"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >Login here</a
+                >{t("register.loginHere")}</a
               >
             </p>
           </form>
