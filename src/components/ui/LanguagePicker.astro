@@ -1,12 +1,20 @@
 ---
-import { languages } from "../../i18n/ui";
+import { languages, type Lang } from "../../i18n/ui";
+import { useTranslatedPath, getPathWithoutLang } from "../../i18n/utils";
+import { getLocale } from "astro-i18n-aut";
+
+const currentLang = getLocale(Astro.url) as Lang;
+const translatePath = useTranslatedPath(currentLang);
+
+// Get the current path without the language prefix
+const untranslatedPath = getPathWithoutLang(Astro.url.pathname, currentLang);
 ---
 
 <ul>
   {
-    Object.entries(languages).map(([lang, label]) => (
+    Object.entries(languages).map(([targetLang, label]) => (
       <li class="mb-4">
-        <a href={`/${lang}`}>{label}</a>
+        <a href={translatePath(untranslatedPath, targetLang)}>{label}</a>
       </li>
     ))
   }

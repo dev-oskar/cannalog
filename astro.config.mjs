@@ -23,6 +23,7 @@ export default defineConfig({
     i18n({
       locales,
       defaultLocale,
+      redirectDefaultLocale: true,
     }),
     sitemap({
       i18n: {
