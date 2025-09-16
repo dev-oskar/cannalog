@@ -16,5 +16,31 @@
         "title": "Twoja Podróż, Rozjaśniona",
         "paragraph1": "CannaLog to więcej niż dziennik; to Twój osobisty kartograf krajobrazu konopnego. Pomagamy łączyć fakty dotyczące odmiany, dawkowania i stanu umysłu, przekształcając subiektywne odczucia w praktyczne wnioski. Dzięki świadomemu rejestrowaniu sesji, porzucasz domysły i zaczynasz podejmować świadome decyzje, które realnie poprawiają Twoje samopoczucie.",
         "paragraph2": "Odkryj, które terpeny pobudzają Twoją kreatywność, a które pory dnia sprzyjają spokojnemu snowi. Nasze intuicyjne narzędzia umożliwiają Ci stworzenie spersonalizowanej rutyny, która jest zarówno skuteczna, jak i świadoma."
+    },
+    "register": {
+        "title": "Dołącz do CannaLog Dziś",
+        "description": "Zarejestruj się, aby rozpocząć swoją podróż z CannaLog i odkryj moc świadomego rejestrowania sesji z konopiami.",
+        "subtitle": "Zacznij swoją podróż z CannaLog i odkryj moc świadomego rejestrowania sesji z konopiami.",
+        "button": "Stwórz konto",
+        "heading": "Utwórz konto",
+        "emailLabel": "Twój email",
+        "passwordLabel": "Hasło",
+        "confirmPasswordLabel": "Potwierdź hasło",
+        "alreadyHaveAccount": "Masz już konto?",
+        "loginHere": "Zaloguj się tutaj",
+        "termsLabel": "Akceptuję",
+        "termsLink": "Regulamin"
+    },
+    "signin": {
+        "title": "Zaloguj się do CannaLog",
+        "description": "Zaloguj się, aby uzyskać dostęp do swojej osobistej podróży z konopiami i spostrzeżeń.",
+        "heading": "Zaloguj się na swoje konto",
+        "emailLabel": "Twój email",
+        "passwordLabel": "Hasło",
+        "rememberLabel": "Zapamiętaj mnie",
+        "forgotPasswordLink": "Nie pamiętasz hasła?",
+        "button": "Zaloguj się",
+        "noAccount": "Nie masz jeszcze konta?",
+        "signUpLink": "Zarejestruj się"
     }
 }
