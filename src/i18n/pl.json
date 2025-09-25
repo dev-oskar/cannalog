@@ -5,7 +5,9 @@
         "contact": "Kontakt",
         "login": "Zaloguj się",
         "register": "Zarejestruj się",
-        "toggleTheme": "Przełącz motyw"
+        "toggleTheme": "Przełącz motyw",
+        "dashboard": "Panel",
+        "signOut": "Wyloguj się"
     },
     "hero": {
         "title": "Twoja Osobista Podróż z Konopiami, Wyjaśniona.",
@@ -29,6 +31,55 @@
         "alreadyHaveAccount": "Masz już konto?",
         "loginHere": "Zaloguj się tutaj",
         "termsLabel": "Akceptuję",
-        "termsLink": "Regulamin"
+        "termsLink": "Regulamin",
+        "emailPlaceholder": "nazwa@firma.com",
+        "passwordPlaceholder": "••••••••",
+        "confirmPasswordPlaceholder": "••••••••",
+        "successMessage": "Konto zostało utworzone pomyślnie! Sprawdź swoją skrzynkę e-mail i kliknij link weryfikacyjny, aby aktywować swoje konto. Po weryfikacji możesz się zalogować.",
+        "errors": {
+            "noFormData": "Nie przesłano danych formularza",
+            "emailRequired": "Email jest wymagany",
+            "passwordRequired": "Hasło jest wymagane",
+            "passwordsMismatch": "Hasła nie pasują do siebie",
+            "termsRequired": "Musisz zaakceptować regulamin",
+            "registrationFailed": "Rejestracja nie powiodła się - spróbuj ponownie",
+            "unexpectedError": "Wystąpił nieoczekiwany błąd"
+        }
+    },
+    "confirm": {
+        "successMessage": "Email zweryfikowany pomyślnie! Teraz możesz się zalogować.",
+        "failureMessage": "Weryfikacja emaila nie powiodła się. Link mógł wygasnąć lub być nieprawidłowy.",
+        "networkError": "Nie udało się zweryfikować emaila. Spróbuj ponownie lub skontaktuj się z pomocą techniczną.",
+        "missingToken": "Nieprawidłowy link weryfikacyjny. Brak tokenu weryfikacyjnego."
+    },
+    "verifyEmail": {
+        "title": "Weryfikacja emaila - CannaLog",
+        "heading": "Weryfikacja emaila",
+        "successMessage": "Email zweryfikowany pomyślnie! Teraz możesz się zalogować do swojego konta.",
+        "failureMessage": "Weryfikacja emaila nie powiodła się. Link mógł wygasnąć lub być nieprawidłowy.",
+        "networkError": "Nie udało się zweryfikować emaila. Spróbuj ponownie lub skontaktuj się z pomocą techniczną.",
+        "missingToken": "Nieprawidłowy link weryfikacyjny. Brak tokenu weryfikacyjnego.",
+        "invalidType": "Nieprawidłowy typ weryfikacji.",
+        "signInNow": "Zaloguj się teraz",
+        "backToHome": "Powrót do strony głównej"
+    },
+    "signin": {
+        "title": "Cannalog - Zaloguj się",
+        "heading": "Zaloguj się do swojego konta",
+        "emailLabel": "Twój email",
+        "passwordLabel": "Hasło",
+        "emailPlaceholder": "nazwa@firma.com",
+        "passwordPlaceholder": "••••••••",
+        "rememberMe": "Zapamiętaj mnie",
+        "forgotPassword": "Zapomniałeś hasła?",
+        "signInButton": "Zaloguj się",
+        "noAccount": "Nie masz jeszcze konta?",
+        "signUp": "Zarejestruj się",
+        "errors": {
+            "fillFields": "Wypełnij wszystkie pola",
+            "authFailed": "Uwierzytelnienie nie powiodło się. Spróbuj ponownie.",
+            "checkCredentials": "Uwierzytelnienie nie powiodło się. Sprawdź swoje dane logowania.",
+            "authRequired": "Zaloguj się, aby uzyskać dostęp do tej strony"
+        }
     }
 }

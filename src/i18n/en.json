@@ -5,7 +5,9 @@
         "contact": "Contact",
         "login": "Log In",
         "register": "Register",
-        "toggleTheme": "Toggle Dark Theme"
+        "toggleTheme": "Toggle Dark Theme",
+        "dashboard": "Dashboard",
+        "signOut": "Sign Out"
     },
     "hero": {
         "title": "Your Personal Cannabis Journey, Demystified.",
@@ -29,6 +31,55 @@
         "alreadyHaveAccount": "Already have an account?",
         "loginHere": "Login here",
         "termsLabel": "I accept the",
-        "termsLink": "Terms and Conditions"
+        "termsLink": "Terms and Conditions",
+        "emailPlaceholder": "name@company.com",
+        "passwordPlaceholder": "••••••••",
+        "confirmPasswordPlaceholder": "••••••••",
+        "successMessage": "Account created successfully! Please check your email and click the verification link to activate your account. After verification, you can sign in.",
+        "errors": {
+            "noFormData": "No form data submitted",
+            "emailRequired": "Email is required",
+            "passwordRequired": "Password is required",
+            "passwordsMismatch": "Passwords do not match",
+            "termsRequired": "You must accept the terms and conditions",
+            "registrationFailed": "Registration failed - please try again",
+            "unexpectedError": "An unexpected error occurred"
+        }
+    },
+    "confirm": {
+        "successMessage": "Email verified successfully! You can now sign in.",
+        "failureMessage": "Email verification failed. The link may be expired or invalid.",
+        "networkError": "Failed to verify email. Please try again or contact support.",
+        "missingToken": "Invalid verification link. Missing verification token."
+    },
+    "verifyEmail": {
+        "title": "Email Verification - CannaLog",
+        "heading": "Email Verification",
+        "successMessage": "Email verified successfully! You can now sign in to your account.",
+        "failureMessage": "Email verification failed. The link may be expired or invalid.",
+        "networkError": "Failed to verify email. Please try again or contact support.",
+        "missingToken": "Invalid verification link. Missing verification token.",
+        "invalidType": "Invalid verification type.",
+        "signInNow": "Sign In Now",
+        "backToHome": "Back to Home"
+    },
+    "signin": {
+        "title": "Cannalog - Sign in",
+        "heading": "Sign in to your account",
+        "emailLabel": "Your email",
+        "passwordLabel": "Password",
+        "emailPlaceholder": "name@company.com",
+        "passwordPlaceholder": "••••••••",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot password?",
+        "signInButton": "Sign in",
+        "noAccount": "Don't have an account yet?",
+        "signUp": "Sign up",
+        "errors": {
+            "fillFields": "Please fill in all fields",
+            "authFailed": "Authentication failed. Please try again.",
+            "checkCredentials": "Authentication failed. Please check your credentials.",
+            "authRequired": "Please sign in to access this page"
+        }
     }
 }

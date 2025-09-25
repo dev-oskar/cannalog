@@ -1,5 +1,26 @@
 ---
 import Layout from "../layouts/DashboardLayout.astro";
+
+// Check for our custom session cookies
+const accessToken = Astro.cookies.get("nhost-access-token")?.value;
+const userCookie = Astro.cookies.get("nhost-user")?.value;
+
+let user = null;
+let isAuthenticated = false;
+
+if (accessToken && userCookie) {
+  try {
+    user = JSON.parse(userCookie);
+    isAuthenticated = true;
+  } catch (error) {
+    // Handle parsing error silently
+  }
+}
+
+// Redirect if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect("/signin?error=authentication-required");
+}
 ---
 
 <Layout>
@@ -7,8 +28,13 @@ import Layout from "../layouts/DashboardLayout.astro";
     <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
       <h1 class="text-2xl font-bold text-text-color">Dashboard</h1>
       <p class="text-text-color/80 mt-1">
-        Welcome back, here's an overview of your CannaLog.
+        Welcome back{user?.name ? `, ${user.name}` : ""}! Here's an overview of your CannaLog.
       </p>
+      {user?.email && (
+        <p class="text-sm text-text-color/60 mt-2">
+          Signed in as: {user.email}
+        </p>
+      )}
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
