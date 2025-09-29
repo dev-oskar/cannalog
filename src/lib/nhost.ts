@@ -1,4 +1,5 @@
-import { createClient } from "@nhost/nhost-js";
+import pkg from "@nhost/nhost-js";
+const { createClient } = pkg;
 
 // Configuration
 const NHOST_SUBDOMAIN = import.meta.env.NHOST_SUBDOMAIN || process.env.NHOST_SUBDOMAIN;
