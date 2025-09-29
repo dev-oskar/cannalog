@@ -1,15 +1,17 @@
-import pkg from "@nhost/nhost-js";
-const { createClient } = pkg;
-
 // Configuration
 const NHOST_SUBDOMAIN = import.meta.env.NHOST_SUBDOMAIN || process.env.NHOST_SUBDOMAIN;
 const NHOST_REGION = import.meta.env.NHOST_REGION || process.env.NHOST_REGION;
 const NHOST_AUTH_URL = `https://${NHOST_SUBDOMAIN}.auth.${NHOST_REGION}.nhost.run/v1`;
 
-export const nhost = createClient({
-  subdomain: NHOST_SUBDOMAIN,
-  region: NHOST_REGION,
-});
+// Simple nhost client replacement - just the URLs we need
+export const nhost = {
+  auth: {
+    url: NHOST_AUTH_URL
+  },
+  graphql: {
+    url: `https://${NHOST_SUBDOMAIN}.graphql.${NHOST_REGION}.nhost.run/v1`
+  }
+};
 
 // Auth utility functions using direct API calls
 export const authUtils = {
