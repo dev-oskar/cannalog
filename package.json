@@ -1,7 +1,16 @@
 {
   "name": "cannalog",
   "type": "module",
+  "author": {
+    "name": "dev-oskar",
+    "email": "thematrixadmin@protonmail.ch"
+  },
+  "description": "CannaLog - The personal cannabis journal",
+  "readme": "README.md",
+  "displayName": "CannaLog",
+  "homepage": "https://cannalog.netlify.app/",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
