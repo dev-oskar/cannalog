@@ -10,40 +10,73 @@
         "signOut": "Wyloguj się"
     },
     "hero": {
-        "title": "Twoja Osobista Podróż z Konopiami, Wyjaśniona.",
-        "subtitle": "CannaLog to świadomy towarzysz do śledzenia, rozumienia i optymalizacji Twoich doświadczeń z konopiami. Zdobywaj wiedzę, odkrywaj, co działa dla Ciebie i dbaj o swoje dobre samopoczucie.",
-        "ctaButton": "Zacznij Rejestrować za Darmo"
+        "title": "Twoja konopna podróż - jasna jak nigdy.",
+        "subtitle": "CannaLog to Twój kompan w świadomym podejściu do konopi. Śledź, analizuj i optymalizuj swoje doświadczenia. Odkryj, co naprawdę na Ciebie działa.",
+        "ctaButton": "Zacznij za darmo"
     },
     "features": {
-        "title": "Twoja Podróż, Rozjaśniona",
-        "paragraph1": "CannaLog to więcej niż dziennik; to Twój osobisty kartograf krajobrazu konopnego. Pomagamy łączyć fakty dotyczące odmiany, dawkowania i stanu umysłu, przekształcając subiektywne odczucia w praktyczne wnioski. Dzięki świadomemu rejestrowaniu sesji, porzucasz domysły i zaczynasz podejmować świadome decyzje, które realnie poprawiają Twoje samopoczucie.",
-        "paragraph2": "Odkryj, które terpeny pobudzają Twoją kreatywność, a które pory dnia sprzyjają spokojnemu snowi. Nasze intuicyjne narzędzia umożliwiają Ci stworzenie spersonalizowanej rutyny, która jest zarówno skuteczna, jak i świadoma."
+        "title": "Twoja podróż na nowo odkryta",
+        "paragraph1": "CannaLog to więcej niż zwykły dzienniczek - to Twój przewodnik po świecie konopi. Łączymy odmiany, dawki i Twoje samopoczucie w jedną całość. Zamiast zgadywać, będziesz podejmować świadome decyzje, które naprawdę wpłyną na Twoje życie.",
+        "paragraph2": "Dowiedz się, które terpeny rozpędzają Twoją kreatywność, a które pomagają zasnąć. Nasze narzędzia pomogą Ci stworzyć rutynę idealnie dopasowaną do Twoich potrzeb."
+    },
+    "toolkit": {
+        "title": "Narzędzia dla Twojego zdrowia",
+        "subtitle": "CannaLog to więcej niż aplikacja - to Twój cyfrowy asystent, który pomoże Ci zrozumieć i ulepszyć Twoje doświadczenia z konopiami. Prosto i skutecznie.",
+        "logging": {
+            "title": "Rejestruj sesje",
+            "description": "Zapisuj wszystko co ważne - odmianę, dawkę, nastrój, aktywności. Szybko i bez zbędnych komplikacji."
+        },
+        "insights": {
+            "title": "Poznaj swoje wzorce",
+            "description": "Zobacz, co naprawdę na Ciebie działa. Nasza analiza pokaże Ci, które odmiany i dawki najlepiej sprawdzają się w różnych sytuacjach."
+        },
+        "explore": {
+            "title": "Odkrywaj nowe możliwości",
+            "description": "Przeglądaj naszą bazę odmian, poznawaj kannabinoidy i terpeny. Znajdź coś nowego, co może Ci się spodobać."
+        },
+        "tracking": {
+            "title": "Monitoruj objawy",
+            "description": "Śledź wpływ konopi na Twoje samopoczucie i zdrowie. Wszystko w przejrzystych wykresach i zestawieniach."
+        },
+        "security": {
+            "title": "Prywatność przede wszystkim",
+            "description": "Twoje dane są tylko Twoje. Wszystko jest zaszyfrowane i bezpieczne - nikt oprócz Ciebie do tego nie ma dostępu."
+        },
+        "reminders": {
+            "title": "Przypomnienia",
+            "description": "Ustaw powiadomienia, żeby nie zapomnieć o sesjach, dawkach czy po prostu o chwili refleksji. Twoja rutyna pod kontrolą."
+        }
+    },
+    "cta": {
+        "title": "Zacznij już dziś - za darmo!",
+        "subtitle": "Bez ukrytych kosztów, bez kart kredytowych. Po prostu zacznij i zobacz, jak to działa.",
+        "button": "Sprawdź sam!"
     },
     "register": {
-        "title": "Dołącz do CannaLog Dziś",
-        "description": "Zarejestruj się, aby rozpocząć swoją podróż z CannaLog i odkryj moc świadomego rejestrowania sesji z konopiami.",
-        "subtitle": "Zacznij swoją podróż z CannaLog i odkryj moc świadomego rejestrowania sesji z konopiami.",
-        "button": "Stwórz konto",
-        "heading": "Utwórz konto",
-        "emailLabel": "Twój email",
+        "title": "Dołącz do CannaLog",
+        "description": "Załóż konto i zacznij świadomie podchodzić do konopi. Odkryj, co naprawdę na Ciebie działa.",
+        "subtitle": "Zacznij swoją podróż z CannaLog i odkryj, co naprawdę na Ciebie działa.",
+        "button": "Załóż konto",
+        "heading": "Załóż konto",
+        "emailLabel": "Email",
         "passwordLabel": "Hasło",
-        "confirmPasswordLabel": "Potwierdź hasło",
+        "confirmPasswordLabel": "Powtórz hasło",
         "alreadyHaveAccount": "Masz już konto?",
-        "loginHere": "Zaloguj się tutaj",
+        "loginHere": "Zaloguj się",
         "termsLabel": "Akceptuję",
         "termsLink": "Regulamin",
-        "emailPlaceholder": "nazwa@firma.com",
+        "emailPlaceholder": "twoj@email.com",
         "passwordPlaceholder": "••••••••",
         "confirmPasswordPlaceholder": "••••••••",
-        "successMessage": "Konto zostało utworzone pomyślnie! Sprawdź swoją skrzynkę e-mail i kliknij link weryfikacyjny, aby aktywować swoje konto. Po weryfikacji możesz się zalogować.",
+        "successMessage": "Konto założone! Sprawdź swoją pocztę i kliknij w link, żeby aktywować konto. Potem będziesz mógł się zalogować.",
         "errors": {
-            "noFormData": "Nie przesłano danych formularza",
-            "emailRequired": "Email jest wymagany",
-            "passwordRequired": "Hasło jest wymagane",
-            "passwordsMismatch": "Hasła nie pasują do siebie",
+            "noFormData": "Brak danych",
+            "emailRequired": "Podaj email",
+            "passwordRequired": "Podaj hasło",
+            "passwordsMismatch": "Hasła się nie zgadzają",
             "termsRequired": "Musisz zaakceptować regulamin",
-            "registrationFailed": "Rejestracja nie powiodła się - spróbuj ponownie",
-            "unexpectedError": "Wystąpił nieoczekiwany błąd"
+            "registrationFailed": "Coś poszło nie tak - spróbuj jeszcze raz",
+            "unexpectedError": "Wystąpił błąd"
         }
     },
     "confirm": {
@@ -64,22 +97,62 @@
         "backToHome": "Powrót do strony głównej"
     },
     "signin": {
-        "title": "Cannalog - Zaloguj się",
-        "heading": "Zaloguj się do swojego konta",
-        "emailLabel": "Twój email",
+        "title": "CannaLog - Logowanie",
+        "heading": "Zaloguj się",
+        "emailLabel": "Email",
         "passwordLabel": "Hasło",
-        "emailPlaceholder": "nazwa@firma.com",
+        "emailPlaceholder": "twoj@email.com",
         "passwordPlaceholder": "••••••••",
         "rememberMe": "Zapamiętaj mnie",
         "forgotPassword": "Zapomniałeś hasła?",
-        "signInButton": "Zaloguj się",
-        "noAccount": "Nie masz jeszcze konta?",
-        "signUp": "Zarejestruj się",
+        "signInButton": "Zaloguj",
+        "noAccount": "Nie masz konta?",
+        "signUp": "Załóż je tutaj",
         "errors": {
             "fillFields": "Wypełnij wszystkie pola",
-            "authFailed": "Uwierzytelnienie nie powiodło się. Spróbuj ponownie.",
-            "checkCredentials": "Uwierzytelnienie nie powiodło się. Sprawdź swoje dane logowania.",
-            "authRequired": "Zaloguj się, aby uzyskać dostęp do tej strony"
+            "authFailed": "Coś poszło nie tak. Spróbuj jeszcze raz.",
+            "checkCredentials": "Sprawdź email i hasło.",
+            "authRequired": "Musisz się zalogować"
         }
+    },
+    "dashboard": {
+        "title": "Panel główny",
+        "welcomeBack": "Witaj ponownie",
+        "welcomeMessage": "! Oto przegląd Twojego CannaLog.",
+        "signedInAs": "Zalogowany jako:",
+        "recentEntries": {
+            "title": "Ostatnie wpisy",
+            "description": "W tym tygodniu dodałeś 3 nowe recenzje odmian. Świetna robota!",
+            "button": "Zobacz wpisy"
+        },
+        "inventory": {
+            "title": "Stan magazynu",
+            "description": "Kończy Ci się 'Blue Dream'. Zostały tylko 2 gramy.",
+            "button": "Uzupełnij"
+        },
+        "discover": {
+            "title": "Odkrywaj",
+            "description": "Zobacz odmiany o podobnych profilach terpenowych do Twoich ulubionych."
+        }
+    },
+    "sidebar": {
+        "logout": "Wyloguj",
+        "nav": {
+            "overview": "Przegląd",
+            "features": "Funkcje",
+            "strains": "Moje odmiany",
+            "sessions": "Sesje",
+            "journal": "Dziennik",
+            "analytics": "Analityka",
+            "docs": "Dokumentacja",
+            "help": "Pomoc",
+            "settings": "Ustawienia",
+            "language": "Język"
+        }
+    },
+    "footer": {
+        "termsAndConditions": "Regulamin",
+        "privacyPolicy": "Polityka prywatności",
+        "contact": "Kontakt"
     }
 }

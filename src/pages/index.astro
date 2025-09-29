@@ -18,18 +18,16 @@ const t = useTranslations(lang as Lang);
   <section class="py-20 md:py-32 dark:text-white">
     <div class="container mx-auto px-6 text-center">
       <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
-        Your Personal Cannabis Journey, Demystified.
+        {t("hero.title")}
       </h1>
       <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8">
-        CannaLog is a mindful companion for tracking, understanding, and
-        optimizing your cannabis experiences. Gain insights, find what works for
-        you, and cultivate well-being.
+        {t("hero.subtitle")}
       </p>
       <a
         href="#"
         class="inline-block bg-primary-600 hover:bg-primary-700 px-8 py-4 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition duration-300 dark:bg-secondary-500 dark:text-white"
       >
-        Start Logging for Free
+        {t("hero.ctaButton")}
       </a>
     </div>
   </section>
@@ -39,20 +37,13 @@ const t = useTranslations(lang as Lang);
     >
       <div class="font-light">
         <h2 class="mb-4 text-4xl tracking-tight font-extrabold">
-          Your Journey, Illuminated
+          {t("features.title")}
         </h2>
         <p class="mb-4">
-          CannaLog is more than a journal; it's your personal cartographer for
-          the cannabis landscape. We help you connect the dots between cultivar,
-          dosage, and your state of mind, transforming subjective feelings into
-          actionable insights. By mindfully charting your sessions, you move
-          beyond guesswork and start making intentional choices that truly
-          enhance your well-being.
+          {t("features.paragraph1")}
         </p>
         <p>
-          Discover which terpenes uplift your creativity or what timing promotes
-          restful sleep. Our intuitive tools empower you to build a personalized
-          routine that is both effective and mindful.
+          {t("features.paragraph2")}
         </p>
       </div>
       <div class="grid grid-cols-2 gap-4 mt-8">
@@ -75,12 +66,10 @@ const t = useTranslations(lang as Lang);
         <h2
           class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
-          A Toolkit for Your Well-being
+          {t("toolkit.title")}
         </h2>
         <p class="text-gray-500 sm:text-xl dark:text-gray-400">
-          CannaLog is more than an app; it's a powerful companion designed to
-          help you track, understand, and optimize your personal cannabis
-          experience with clarity and ease.
+          {t("toolkit.subtitle")}
         </p>
       </div>
       <div
@@ -102,11 +91,10 @@ const t = useTranslations(lang as Lang);
             >
           </div>
           <h3 class="mb-2 text-xl font-bold dark:text-white">
-            Mindful Session Logging
+            {t("toolkit.logging.title")}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Easily record every detail—from cultivar and dosage to your mood and
-            activities. Track what matters to you in just a few taps.
+            {t("toolkit.logging.description")}
           </p>
         </div>
         <div>
@@ -124,12 +112,10 @@ const t = useTranslations(lang as Lang);
             >
           </div>
           <h3 class="mb-2 text-xl font-bold dark:text-white">
-            Personalized Insights
+            {t("toolkit.insights.title")}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Uncover your personal patterns. Our smart analytics help you
-            understand which strains and doses best suit your wellness goals,
-            from sleep to creativity.
+            {t("toolkit.insights.description")}
           </p>
         </div>
         <div>
@@ -147,12 +133,10 @@ const t = useTranslations(lang as Lang);
             >
           </div>
           <h3 class="mb-2 text-xl font-bold dark:text-white">
-            Explore & Discover
+            {t("toolkit.explore.title")}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Dive into our extensive library to learn about different strains,
-            cannabinoids, and terpenes. Find new products that align with your
-            desired effects.
+            {t("toolkit.explore.description")}
           </p>
         </div>
         <div>
@@ -171,12 +155,10 @@ const t = useTranslations(lang as Lang);
             >
           </div>
           <h3 class="mb-2 text-xl font-bold dark:text-white">
-            Symptom Tracking
+            {t("toolkit.tracking.title")}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Monitor how cannabis affects specific symptoms or conditions. See
-            your progress over time with clear, easy-to-read charts and
-            summaries.
+            {t("toolkit.tracking.description")}
           </p>
         </div>
         <div>
@@ -195,12 +177,10 @@ const t = useTranslations(lang as Lang);
             >
           </div>
           <h3 class="mb-2 text-xl font-bold dark:text-white">
-            Secure & Private
+            {t("toolkit.security.title")}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Your journal is your own. Your data is encrypted and stored
-            securely, ensuring your personal cannabis journey remains completely
-            private.
+            {t("toolkit.security.description")}
           </p>
         </div>
         <div>
@@ -218,12 +198,10 @@ const t = useTranslations(lang as Lang);
             >
           </div>
           <h3 class="mb-2 text-xl font-bold dark:text-white">
-            Custom Reminders
+            {t("toolkit.reminders.title")}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            Stay consistent with your wellness routine. Set custom reminders to
-            log your sessions, take your dosage, or simply take a moment to
-            reflect.
+            {t("toolkit.reminders.description")}
           </p>
         </div>
       </div>
@@ -235,16 +213,15 @@ const t = useTranslations(lang as Lang);
         <h2
           class="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white"
         >
-          Start for free today!
+          {t("cta.title")}
         </h2>
         <p class="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-          There's no catch - it's completely free to get started. No credit card
-          required.
+          {t("cta.subtitle")}
         </p>
         <a
           href="#"
           class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-          >Try now!</a
+          >{t("cta.button")}</a
         >
       </div>
     </div>

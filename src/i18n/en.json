@@ -19,6 +19,39 @@
         "paragraph1": "CannaLog is more than a journal; it's your personal cartographer for the cannabis landscape. We help you connect the dots between cultivar, dosage, and your state of mind, transforming subjective feelings into actionable insights. By mindfully charting your sessions, you move beyond guesswork and start making intentional choices that truly enhance your well-being.",
         "paragraph2": "Discover which terpenes uplift your creativity or what timing promotes restful sleep. Our intuitive tools empower you to build a personalized routine that is both effective and mindful."
     },
+    "toolkit": {
+        "title": "A Toolkit for Your Well-being",
+        "subtitle": "CannaLog is more than an app; it's a powerful companion designed to help you track, understand, and optimize your personal cannabis experience with clarity and ease.",
+        "logging": {
+            "title": "Mindful Session Logging",
+            "description": "Easily record every detail—from cultivar and dosage to your mood and activities. Track what matters to you in just a few taps."
+        },
+        "insights": {
+            "title": "Personalized Insights",
+            "description": "Uncover your personal patterns. Our smart analytics help you understand which strains and doses best suit your wellness goals, from sleep to creativity."
+        },
+        "explore": {
+            "title": "Explore & Discover",
+            "description": "Dive into our extensive library to learn about different strains, cannabinoids, and terpenes. Find new products that align with your desired effects."
+        },
+        "tracking": {
+            "title": "Symptom Tracking",
+            "description": "Monitor how cannabis affects specific symptoms or conditions. See your progress over time with clear, easy-to-read charts and summaries."
+        },
+        "security": {
+            "title": "Secure & Private",
+            "description": "Your journal is your own. Your data is encrypted and stored securely, ensuring your personal cannabis journey remains completely private."
+        },
+        "reminders": {
+            "title": "Custom Reminders",
+            "description": "Stay consistent with your wellness routine. Set custom reminders to log your sessions, take your dosage, or simply take a moment to reflect."
+        }
+    },
+    "cta": {
+        "title": "Start for free today!",
+        "subtitle": "There's no catch - it's completely free to get started. No credit card required.",
+        "button": "Try now!"
+    },
     "register": {
         "title": "Join CannaLog Today",
         "description": "Sign up to start your journey with CannaLog and discover the power of mindful cannabis session logging.",
@@ -81,5 +114,45 @@
             "checkCredentials": "Authentication failed. Please check your credentials.",
             "authRequired": "Please sign in to access this page"
         }
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "welcomeBack": "Welcome back",
+        "welcomeMessage": "! Here's an overview of your CannaLog.",
+        "signedInAs": "Signed in as:",
+        "recentEntries": {
+            "title": "Recent Entries",
+            "description": "You have added 3 new strain reviews this week. Keep up the great work!",
+            "button": "View Entries"
+        },
+        "inventory": {
+            "title": "Inventory Status",
+            "description": "You are running low on 'Blue Dream'. Only 2 grams remaining.",
+            "button": "Restock"
+        },
+        "discover": {
+            "title": "Discover",
+            "description": "Check out strains with similar terpene profiles to your favorites."
+        }
+    },
+    "sidebar": {
+        "logout": "Logout",
+        "nav": {
+            "overview": "Overview",
+            "features": "Features",
+            "strains": "My Strains",
+            "sessions": "Sessions",
+            "journal": "Journal",
+            "analytics": "Analytics",
+            "docs": "Docs",
+            "help": "Help",
+            "settings": "Settings",
+            "language": "Language"
+        }
+    },
+    "footer": {
+        "termsAndConditions": "Terms and conditions",
+        "privacyPolicy": "Privacy Policy",
+        "contact": "Contact"
     }
 }

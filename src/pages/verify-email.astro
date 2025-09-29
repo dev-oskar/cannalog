@@ -22,9 +22,9 @@ if (token && type === "emailConfirmation") {
     const NHOST_AUTH_URL = `https://${NHOST_SUBDOMAIN}.auth.${NHOST_REGION}.nhost.run/v1`;
 
     const response = await fetch(`${NHOST_AUTH_URL}/user/email/confirm`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ token }),
     });
@@ -53,55 +53,61 @@ if (userCookie && accessTokenCookie) {
 }
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={lang}>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{t("verifyEmail.title")}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900">
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900">
     <div class="flex min-h-screen items-center justify-center px-6 py-12">
-        <div class="w-full max-w-md">
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-                <div class="text-center">
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                        {t("verifyEmail.heading")}
-                    </h1>
-                    
-                    {message && (
-                        <div class="mb-4 p-4 text-green-800 bg-green-50 dark:bg-green-900 dark:text-green-200 rounded-lg">
-                            <p>{message}</p>
-                        </div>
-                    )}
-                    
-                    {error && (
-                        <div class="mb-4 p-4 text-red-800 bg-red-50 dark:bg-red-900 dark:text-red-200 rounded-lg">
-                            <p>{error}</p>
-                        </div>
-                    )}
-                    
-                    <div class="mt-6 flex flex-col space-y-3">
-                        {message && (
-                            <a 
-                                href="/signin" 
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
-                            >
-                                {t("verifyEmail.signInNow")}
-                            </a>
-                        )}
-                        
-                        <a 
-                            href="/" 
-                            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
-                        >
-                            {t("verifyEmail.backToHome")}
-                        </a>
-                    </div>
+      <div class="w-full max-w-md">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+          <div class="text-center">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              {t("verifyEmail.heading")}
+            </h1>
+
+            {
+              message && (
+                <div class="mb-4 p-4 text-green-800 bg-green-50 dark:bg-green-900 dark:text-green-200 rounded-lg">
+                  <p>{message}</p>
                 </div>
+              )
+            }
+
+            {
+              error && (
+                <div class="mb-4 p-4 text-red-800 bg-red-50 dark:bg-red-900 dark:text-red-200 rounded-lg">
+                  <p>{error}</p>
+                </div>
+              )
+            }
+
+            <div class="mt-6 flex flex-col space-y-3">
+              {
+                message && (
+                  <a
+                    href="/signin"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+                  >
+                    {t("verifyEmail.signInNow")}
+                  </a>
+                )
+              }
+
+              <a
+                href="/"
+                class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+              >
+                {t("verifyEmail.backToHome")}
+              </a>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

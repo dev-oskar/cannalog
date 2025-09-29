@@ -4,15 +4,38 @@ import BaseLayout from "./BaseLayout.astro";
 import Sidebar from "../components/Sidebar.astro";
 import FooterSidebar from "../components/FooterSidebar.astro";
 
-// Example user data to be passed to the Sidebar
-const user = {
-  name: "Neil Sims",
-  email: "neil.sims@flowbite.com",
-  avatarUrl: "https://flowbite.com/docs/images/people/profile-picture-5.jpg",
-};
+export interface Props {
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    displayName?: string | null;
+  };
+  title?: string;
+  description?: string;
+}
+
+const {
+  user,
+  title = "Dashboard",
+  description = "User Dashboard",
+} = Astro.props;
+
+// Create user object for Sidebar with avatar placeholder
+const sidebarUser = user
+  ? {
+      name: user.displayName || user.name || "User",
+      email: user.email || "",
+      avatarUrl:
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
+          user.displayName || user.name || user.email || "User"
+        ) +
+        "&background=6366f1&color=fff&size=96",
+    }
+  : undefined;
 ---
 
-<BaseLayout title="Dashboard" description="User Dashboard">
+<BaseLayout title={title} description={description}>
   <!-- Hamburger button for mobile, previously in Navbar -->
   <button
     data-drawer-target="logo-sidebar"
@@ -37,7 +60,7 @@ const user = {
     </svg>
   </button>
 
-  <Sidebar user={user} />
+  <Sidebar user={sidebarUser} />
 
   <main class="p-4 pt-12 sm:pt-4 md:ml-64 h-auto">
     <slot />

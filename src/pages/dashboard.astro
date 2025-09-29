@@ -1,80 +1,79 @@
 ---
 import Layout from "../layouts/DashboardLayout.astro";
+import { requireAuth } from "../lib/auth";
 
-// Check for our custom session cookies
-const accessToken = Astro.cookies.get("nhost-access-token")?.value;
-const userCookie = Astro.cookies.get("nhost-user")?.value;
+import { getLocale } from "astro-i18n-aut";
+import { useTranslations } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
 
-let user = null;
-let isAuthenticated = false;
+const lang = getLocale(Astro.url);
+const t = useTranslations(lang as Lang);
 
-if (accessToken && userCookie) {
-  try {
-    user = JSON.parse(userCookie);
-    isAuthenticated = true;
-  } catch (error) {
-    // Handle parsing error silently
-  }
-}
-
-// Redirect if not authenticated
-if (!isAuthenticated) {
-  return Astro.redirect("/signin?error=authentication-required");
-}
+// Check authentication and get user data
+const { user, accessToken, isAuthenticated } = requireAuth(
+  Astro.cookies,
+  Astro.url.pathname
+);
 ---
 
-<Layout>
+<Layout user={user || undefined}>
   <div class="p-4 sm:p-6 lg:p-8 space-y-6">
     <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
-      <h1 class="text-2xl font-bold text-text-color">Dashboard</h1>
+      <h1 class="text-2xl font-bold text-text-color">{t("dashboard.title")}</h1>
       <p class="text-text-color/80 mt-1">
-        Welcome back{user?.name ? `, ${user.name}` : ""}! Here's an overview of your CannaLog.
+        {t("dashboard.welcomeBack")}{user?.name ? `, ${user.name}` : ""}{
+          t("dashboard.welcomeMessage")
+        }
       </p>
-      {user?.email && (
-        <p class="text-sm text-text-color/60 mt-2">
-          Signed in as: {user.email}
-        </p>
-      )}
+      {
+        user?.email && (
+          <p class="text-sm text-text-color/60 mt-2">
+            {t("dashboard.signedInAs")} {user.email}
+          </p>
+        )
+      }
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       <!-- Example Card 1 -->
       <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold text-text-color mb-3">
-          Recent Entries
+          {t("dashboard.recentEntries.title")}
         </h2>
         <p class="text-text-color/80">
-          You have added 3 new strain reviews this week. Keep up the great work!
+          {t("dashboard.recentEntries.description")}
         </p>
         <button
           type="button"
           class="mt-4 text-white bg-primary-600 hover:bg-primary-600-darker focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
         >
-          View Entries
+          {t("dashboard.recentEntries.button")}
         </button>
       </div>
 
       <!-- Example Card 2 -->
       <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold text-text-color mb-3">
-          Inventory Status
+          {t("dashboard.inventory.title")}
         </h2>
         <p class="text-text-color/80">
-          You are running low on 'Blue Dream'. Only 2 grams remaining.
+          {t("dashboard.inventory.description")}
         </p>
         <button
           type="button"
           class="mt-4 text-text-color border border-primary hover:bg-primary-600-light focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
         >
-          Restock
+          {t("dashboard.inventory.button")}
         </button>
       </div>
 
       <!-- Example Card 3 -->
       <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold text-text-color mb-3">Discover</h2>
+        <h2 class="text-xl font-semibold text-text-color mb-3">
+          {t("dashboard.discover.title")}
+        </h2>
         <p class="text-text-color/80">
-          Check out strains with similar terpene profiles to your favorites.
+          {t("dashboard.discover.description")}
         </p>
       </div>
     </div>

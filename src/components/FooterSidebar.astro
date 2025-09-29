@@ -1,5 +1,10 @@
 ---
+import { getLocale } from "astro-i18n-aut";
+import { useTranslations } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
 
+const lang = getLocale(Astro.url);
+const t = useTranslations(lang as Lang);
 ---
 
 <footer
@@ -10,21 +15,21 @@
       <a
         href="#"
         class="mr-4 text-sm font-normal text-text-color/80 hover:underline hover:text-text-color md:mr-6"
-        >Terms and conditions</a
+        >{t("footer.termsAndConditions")}</a
       >
     </li>
     <li>
       <a
         href="#"
         class="mr-4 text-sm font-normal text-text-color/80 hover:underline hover:text-text-color md:mr-6"
-        >Privacy Policy</a
+        >{t("footer.privacyPolicy")}</a
       >
     </li>
     <li>
       <a
         href="#"
         class="text-sm font-normal text-text-color/80 hover:underline hover:text-text-color"
-        >Contact</a
+        >{t("footer.contact")}</a
       >
     </li>
   </ul>
