@@ -63,27 +63,32 @@ const displayName = user.displayName || user.email;
   <div
     class="h-full px-3 pb-4 overflow-y-auto bg-primary-600 dark:bg-secondary-800 flex flex-col"
   >
-    <!-- Desktop Toggle Button -->
-    <div class="hidden sm:flex justify-end pt-3 pb-2">
+    <!-- Responsive Toggle Button -->
+    <div class="flex justify-end sm:justify-end pt-3 pb-2">
       <button
-        id="desktop-sidebar-toggle"
+        id="sidebar-toggle"
         type="button"
         class="p-2 text-white dark:text-white bg-primary-700/20 dark:bg-secondary-700/30 border border-primary-500/30 dark:border-tertiary-600/40 rounded-lg hover:bg-primary-700/40 dark:hover:bg-secondary-700/50 hover:border-primary-400/50 dark:hover:border-tertiary-500/60 transition-all duration-200 shadow-sm hover:shadow-md"
         title={i18n.t("sidebar.toggleSidebar")}
       >
+        <!-- Desktop collapse/expand icons -->
         <Icon
           id="sidebar-collapse-icon"
           name="tabler:chevrons-left"
-          class="w-4 h-4 text-primary-100 dark:text-gray-300 hover:text-white dark:hover:text-white"
+          class="hidden sm:block w-4 h-4 text-primary-100 dark:text-gray-300 hover:text-white dark:hover:text-white"
         />
         <Icon
           id="sidebar-expand-icon"
           name="tabler:chevrons-right"
           class="hidden w-4 h-4 text-primary-100 dark:text-gray-300 hover:text-white dark:hover:text-white"
         />
-        <span id="sidebar-toggle-text" class="sr-only"
-          >{i18n.t("sidebar.toggleSidebar")}</span
-        >
+        <!-- Mobile close icon -->
+        <Icon
+          id="sidebar-close-icon"
+          name="tabler:x"
+          class="sm:hidden w-4 h-4 text-primary-100 dark:text-gray-300 hover:text-white dark:hover:text-white"
+        />
+        <span class="sr-only">{i18n.t("sidebar.toggleSidebar")}</span>
       </button>
     </div>
 
@@ -93,8 +98,7 @@ const displayName = user.displayName || user.email;
     >
       <img
         class="w-16 h-16 mb-2 rounded-full shadow-md"
-        src={user.avatarUrl ||
-          `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(displayName)}&backgroundColor=059669`}
+        src={user.avatarUrl}
         alt={`${displayName}'s avatar`}
       />
       <h5
@@ -226,16 +230,28 @@ const displayName = user.displayName || user.email;
   </div>
 </aside>
 
+<!-- Floating Toggle Button - Outside sidebar so always accessible -->
+<button
+  id="mobile-sidebar-toggle"
+  type="button"
+  class="hidden fixed top-4 left-4 z-30 p-2 text-white dark:text-white bg-primary-600 dark:bg-secondary-800 border border-primary-700 dark:border-secondary-700 rounded-lg hover:bg-primary-700 dark:hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 shadow-sm transition-colors duration-200"
+  title={i18n.t("sidebar.toggleSidebar")}
+>
+  <Icon name="tabler:menu-2" class="w-5 h-5" />
+  <span class="sr-only">{i18n.t("sidebar.toggleSidebar")}</span>
+</button>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // Sidebar collapse/expand functionality
     const sidebarElement = document.getElementById("sidebar");
-    const desktopToggle = document.getElementById("desktop-sidebar-toggle");
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    const mobileSidebarToggle = document.getElementById(
+      "mobile-sidebar-toggle"
+    );
     const collapseIcon = document.getElementById("sidebar-collapse-icon");
     const expandIcon = document.getElementById("sidebar-expand-icon");
-    const mainContent = document.querySelector("main");
 
-    // Initialize sidebar state from localStorage
+    // Initialize sidebar state
     function initializeSidebarState() {
       const isCollapsed = localStorage.getItem("sidebar-collapsed") === "true";
       const isDesktop = window.innerWidth >= 640;
@@ -245,114 +261,150 @@ const displayName = user.displayName || user.email;
       } else if (isDesktop) {
         expandSidebar();
       }
+
+      // Show/hide mobile toggle button based on sidebar state
+      updateMobileToggleVisibility();
     }
 
     function collapseSidebar() {
-      if (sidebarElement && window.innerWidth >= 640) {
-        // Force hide sidebar on desktop
-        sidebarElement.classList.add("-translate-x-full");
-        sidebarElement.classList.remove("translate-x-0", "sm:translate-x-0");
-        sidebarElement.setAttribute("data-collapsed", "true");
+      if (!sidebarElement || window.innerWidth < 640) return;
 
-        // Update icons
-        if (collapseIcon && expandIcon) {
-          collapseIcon.classList.add("hidden");
-          expandIcon.classList.remove("hidden");
-        }
+      sidebarElement.classList.add("-translate-x-full");
+      sidebarElement.classList.remove("translate-x-0", "sm:translate-x-0");
+      sidebarElement.setAttribute("data-collapsed", "true");
 
-        // Adjust main content margin
-        if (mainContent) {
-          mainContent.classList.remove("md:ml-64");
-          mainContent.classList.add("md:ml-0");
-        }
+      // Update desktop icons
+      collapseIcon?.classList.add("hidden");
+      expandIcon?.classList.remove("hidden");
 
-        localStorage.setItem("sidebar-collapsed", "true");
-
-        // Emit state change event
-        window.dispatchEvent(
-          new CustomEvent("sidebarStateChange", {
-            detail: { collapsed: true },
-          })
-        );
-      }
+      localStorage.setItem("sidebar-collapsed", "true");
+      updateMobileToggleVisibility();
+      emitStateChange(true);
     }
 
     function expandSidebar() {
-      if (sidebarElement && window.innerWidth >= 640) {
-        // Show sidebar on desktop
+      if (!sidebarElement || window.innerWidth < 640) return;
+
+      sidebarElement.classList.remove("-translate-x-full");
+      sidebarElement.classList.add("translate-x-0", "sm:translate-x-0");
+      sidebarElement.setAttribute("data-collapsed", "false");
+
+      // Update desktop icons
+      collapseIcon?.classList.remove("hidden");
+      expandIcon?.classList.add("hidden");
+
+      localStorage.setItem("sidebar-collapsed", "false");
+      updateMobileToggleVisibility();
+      emitStateChange(false);
+    }
+
+    function toggleMobileSidebar() {
+      if (!sidebarElement || window.innerWidth >= 640) return;
+
+      const isHidden = sidebarElement.classList.contains("-translate-x-full");
+
+      if (isHidden) {
         sidebarElement.classList.remove("-translate-x-full");
-        sidebarElement.classList.add("translate-x-0", "sm:translate-x-0");
-        sidebarElement.setAttribute("data-collapsed", "false");
+        sidebarElement.classList.add("translate-x-0");
+      } else {
+        sidebarElement.classList.add("-translate-x-full");
+        sidebarElement.classList.remove("translate-x-0");
+      }
 
-        // Update icons
-        if (collapseIcon && expandIcon) {
-          collapseIcon.classList.remove("hidden");
-          expandIcon.classList.add("hidden");
-        }
+      updateMobileToggleVisibility();
+    }
 
-        // Adjust main content margin
-        if (mainContent) {
-          mainContent.classList.add("md:ml-64");
-          mainContent.classList.remove("md:ml-0");
-        }
+    function updateMobileToggleVisibility() {
+      if (!mobileSidebarToggle || !sidebarElement) return;
 
-        localStorage.setItem("sidebar-collapsed", "false");
+      const isDesktop = window.innerWidth >= 640;
+      const isCollapsed = localStorage.getItem("sidebar-collapsed") === "true";
+      const isMobileHidden =
+        sidebarElement.classList.contains("-translate-x-full");
 
-        // Emit state change event
-        window.dispatchEvent(
-          new CustomEvent("sidebarStateChange", {
-            detail: { collapsed: false },
-          })
-        );
+      if (!isDesktop && isMobileHidden) {
+        // Show mobile toggle when sidebar is hidden on mobile
+        mobileSidebarToggle.classList.remove("hidden");
+      } else if (isDesktop && isCollapsed) {
+        // Show mobile toggle as floating button when desktop sidebar is collapsed
+        mobileSidebarToggle.classList.remove("hidden");
+      } else {
+        // Hide mobile toggle
+        mobileSidebarToggle.classList.add("hidden");
       }
     }
 
-    // Desktop toggle functionality
-    if (desktopToggle && sidebarElement) {
-      desktopToggle.addEventListener("click", function () {
-        const isCollapsed =
-          sidebarElement.getAttribute("data-collapsed") === "true";
-
-        if (isCollapsed) {
-          expandSidebar();
-        } else {
-          collapseSidebar();
-        }
-      });
+    function emitStateChange(collapsed: boolean) {
+      window.dispatchEvent(
+        new CustomEvent("sidebarStateChange", {
+          detail: { collapsed },
+        })
+      );
     }
 
-    // Listen for expand sidebar events from floating button
-    window.addEventListener("expandSidebar", function () {
-      expandSidebar();
+    // Event listeners
+    sidebarToggle?.addEventListener("click", function () {
+      const isDesktop = window.innerWidth >= 640;
+
+      if (isDesktop) {
+        const isCollapsed =
+          sidebarElement?.getAttribute("data-collapsed") === "true";
+        isCollapsed ? expandSidebar() : collapseSidebar();
+      } else {
+        toggleMobileSidebar();
+      }
     });
 
-    // Initialize on load
-    initializeSidebarState();
+    mobileSidebarToggle?.addEventListener("click", function () {
+      const isDesktop = window.innerWidth >= 640;
+
+      if (isDesktop) {
+        expandSidebar(); // Always expand when clicking floating button
+      } else {
+        toggleMobileSidebar();
+      }
+    });
+
+    // Close mobile sidebar when clicking outside
+    document.addEventListener("click", function (event) {
+      if (window.innerWidth >= 640) return;
+
+      const target = event.target as Node;
+      if (
+        sidebarElement &&
+        !sidebarElement.contains(target) &&
+        !mobileSidebarToggle?.contains(target) &&
+        !sidebarElement.classList.contains("-translate-x-full")
+      ) {
+        sidebarElement.classList.add("-translate-x-full");
+        sidebarElement.classList.remove("translate-x-0");
+        updateMobileToggleVisibility();
+      }
+    });
 
     // Handle window resize
     window.addEventListener("resize", function () {
       const isDesktop = window.innerWidth >= 640;
-      const isCollapsed = localStorage.getItem("sidebar-collapsed") === "true";
 
       if (isDesktop) {
-        // Desktop: Apply saved state
-        if (isCollapsed) {
-          collapseSidebar();
-        } else {
-          expandSidebar();
-        }
+        // Desktop: Apply saved collapse state
+        const isCollapsed =
+          localStorage.getItem("sidebar-collapsed") === "true";
+        isCollapsed ? collapseSidebar() : expandSidebar();
       } else {
-        // Mobile: Reset to mobile behavior
-        if (sidebarElement && mainContent) {
+        // Mobile: Reset to mobile behavior (hidden by default)
+        if (sidebarElement) {
           sidebarElement.classList.add("-translate-x-full");
           sidebarElement.classList.remove("translate-x-0");
-          mainContent.classList.remove("md:ml-0", "md:ml-64");
-          mainContent.classList.add("md:ml-64");
         }
       }
+      updateMobileToggleVisibility();
     });
 
-    // Existing theme toggle code
+    // Initialize
+    initializeSidebarState();
+
+    // Theme toggle functionality
     const themeToggleDarkIcon = document.getElementById(
       "theme-toggle-dark-icon"
     );
@@ -361,11 +413,6 @@ const displayName = user.displayName || user.email;
     );
     const themeToggleBtn = document.getElementById("sidebar-theme-toggle");
 
-    if (!themeToggleDarkIcon || !themeToggleLightIcon || !themeToggleBtn) {
-      return; // Exit if elements don't exist
-    }
-
-    // Function to update icons based on current theme
     function updateThemeIcons() {
       const isDark =
         document.documentElement.classList.contains("dark") ||
@@ -381,7 +428,6 @@ const displayName = user.displayName || user.email;
       }
     }
 
-    // Initialize theme and icons
     function initializeTheme() {
       const savedTheme = localStorage.getItem("color-theme");
       const prefersDark = window.matchMedia(
@@ -393,11 +439,9 @@ const displayName = user.displayName || user.email;
       } else {
         document.documentElement.classList.remove("dark");
       }
-
       updateThemeIcons();
     }
 
-    // Toggle theme function
     function toggleTheme() {
       const isDark = document.documentElement.classList.contains("dark");
 
@@ -408,84 +452,51 @@ const displayName = user.displayName || user.email;
         document.documentElement.classList.add("dark");
         localStorage.setItem("color-theme", "dark");
       }
-
       updateThemeIcons();
     }
 
-    // Initialize theme on load
+    // Initialize theme
     initializeTheme();
-
-    // Add click event listener
-    themeToggleBtn.addEventListener("click", toggleTheme);
+    themeToggleBtn?.addEventListener("click", toggleTheme);
 
     // Listen for system theme changes
     window
       .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", function (e) {
+      .addEventListener("change", function () {
         if (!localStorage.getItem("color-theme")) {
           initializeTheme();
         }
       });
-
-    // Mobile drawer functionality - integrated with desktop toggle
-    const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
-
-    if (mobileDrawerToggle && sidebarElement) {
-      mobileDrawerToggle.addEventListener("click", function () {
-        const isHidden = sidebarElement.classList.contains("-translate-x-full");
-
-        if (isHidden) {
-          sidebarElement.classList.remove("-translate-x-full");
-          sidebarElement.classList.add("translate-x-0");
-        } else {
-          sidebarElement.classList.add("-translate-x-full");
-          sidebarElement.classList.remove("translate-x-0");
-        }
-      });
-
-      // Close sidebar when clicking outside on mobile
-      document.addEventListener("click", function (event) {
-        const isSmallScreen = window.innerWidth < 640;
-        if (
-          isSmallScreen &&
-          !sidebarElement.contains(event.target as Node) &&
-          !mobileDrawerToggle.contains(event.target as Node) &&
-          !sidebarElement.classList.contains("-translate-x-full")
-        ) {
-          sidebarElement.classList.add("-translate-x-full");
-          sidebarElement.classList.remove("translate-x-0");
-        }
-      });
-    }
 
     // Language dropdown functionality
     const languageToggle = document.getElementById("language-toggle");
     const languageDropdown = document.getElementById("language-dropdown");
     const languageChevron = document.getElementById("language-chevron");
 
-    if (languageToggle && languageDropdown && languageChevron) {
-      languageToggle.addEventListener("click", function () {
-        const isHidden = languageDropdown.classList.contains("hidden");
+    languageToggle?.addEventListener("click", function () {
+      const isHidden = languageDropdown?.classList.contains("hidden");
 
-        if (isHidden) {
-          languageDropdown.classList.remove("hidden");
-          languageChevron.style.transform = "rotate(180deg)";
-        } else {
-          languageDropdown.classList.add("hidden");
-          languageChevron.style.transform = "rotate(0deg)";
-        }
-      });
+      if (isHidden) {
+        languageDropdown?.classList.remove("hidden");
+        if (languageChevron) languageChevron.style.transform = "rotate(180deg)";
+      } else {
+        languageDropdown?.classList.add("hidden");
+        if (languageChevron) languageChevron.style.transform = "rotate(0deg)";
+      }
+    });
 
-      // Close dropdown when clicking outside
-      document.addEventListener("click", function (event) {
-        if (
-          !languageToggle.contains(event.target as Node) &&
-          !languageDropdown.contains(event.target as Node)
-        ) {
-          languageDropdown.classList.add("hidden");
-          languageChevron.style.transform = "rotate(0deg)";
-        }
-      });
-    }
+    // Close language dropdown when clicking outside
+    document.addEventListener("click", function (event) {
+      const target = event.target as Node;
+      if (
+        languageToggle &&
+        languageDropdown &&
+        !languageToggle.contains(target) &&
+        !languageDropdown.contains(target)
+      ) {
+        languageDropdown.classList.add("hidden");
+        if (languageChevron) languageChevron.style.transform = "rotate(0deg)";
+      }
+    });
   });
 </script>

@@ -3,7 +3,6 @@ import "../styles/global.css";
 import BaseLayout from "./BaseLayout.astro";
 import Sidebar from "../components/Sidebar.astro";
 import FooterSidebar from "../components/FooterSidebar.astro";
-import { Icon } from "astro-icon/components";
 import { useI18n } from "../integrations/i18n-globals";
 
 const { t } = useI18n(Astro);
@@ -16,33 +15,7 @@ const {
 ---
 
 <BaseLayout title={title} description={description}>
-  <!-- Hamburger button for mobile, previously in Navbar -->
-  <button
-    id="mobile-drawer-toggle"
-    type="button"
-    class="fixed top-4 left-4 z-30 inline-flex items-center p-2 text-sm text-white dark:text-white cursor-pointer bg-primary-600 dark:bg-secondary-800 border border-primary-700 dark:border-secondary-700 rounded-lg sm:hidden hover:bg-primary-50 dark:hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 shadow-sm"
-  >
-    <span class="sr-only">{t("sidebar.toggleSidebar")}</span>
-    <Icon
-      name="tabler:layout-sidebar-left-collapse"
-      class="w-6 h-6"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    />
-  </button>
-
   <Sidebar user={user} />
-
-  <!-- Floating toggle button for collapsed sidebar - desktop only -->
-  <button
-    id="floating-sidebar-toggle"
-    type="button"
-    class="hidden fixed top-4 left-4 z-30 p-2 cursor-pointer text-gray-600 dark:text-gray-300 bg-primary-400 dark:bg-gray-800/90 border border-gray-200/80 dark:border-gray-700/80 rounded-lg shadow-sm hover:bg-primary-500 dark:hover:bg-gray-700/95 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400/30 dark:focus:ring-gray-500/30 transition-all duration-200 backdrop-blur-sm"
-    title={t("sidebar.toggleSidebar")}
-  >
-    <Icon class="w-5 h-5" name="tabler:menu-2" />
-  </button>
 
   <main
     class="p-4 pt-12 sm:pt-4 md:ml-64 h-auto transition-all duration-300 ease-in-out"
@@ -55,58 +28,27 @@ const {
     // Initialize main content margin based on sidebar state
     document.addEventListener("DOMContentLoaded", function () {
       const main = document.querySelector("main");
-      const floatingToggle = document.getElementById("floating-sidebar-toggle");
-      const sidebar = document.getElementById("sidebar");
       const isDesktop = window.innerWidth >= 640;
       const isCollapsed = localStorage.getItem("sidebar-collapsed") === "true";
 
-      // Initialize main content and floating button
+      // Initialize main content margin for desktop
       if (main && isDesktop && isCollapsed) {
         main.classList.remove("md:ml-64");
         main.classList.add("md:ml-0");
-
-        if (floatingToggle) {
-          floatingToggle.classList.remove("hidden");
-          floatingToggle.classList.add("block");
-        }
       }
 
-      // Handle floating toggle button click
-      if (floatingToggle) {
-        floatingToggle.addEventListener("click", function () {
-          // Trigger the sidebar's expand function
-          const event = new CustomEvent("expandSidebar");
-          window.dispatchEvent(event);
-        });
-      }
-
-      // Listen for sidebar state changes
+      // Listen for sidebar state changes to adjust main content
       window.addEventListener("sidebarStateChange", function (e) {
         const isCollapsed = (e as CustomEvent).detail.collapsed;
         const isDesktop = window.innerWidth >= 640;
 
-        if (floatingToggle) {
-          if (isDesktop && isCollapsed) {
-            floatingToggle.classList.remove("hidden");
-            floatingToggle.classList.add("block");
+        if (main && isDesktop) {
+          if (isCollapsed) {
+            main.classList.remove("md:ml-64");
+            main.classList.add("md:ml-0");
           } else {
-            floatingToggle.classList.add("hidden");
-            floatingToggle.classList.remove("block");
-          }
-        }
-      });
-
-      // Handle window resize for floating button
-      window.addEventListener("resize", function () {
-        const isDesktop = window.innerWidth >= 640;
-        const isCollapsed =
-          localStorage.getItem("sidebar-collapsed") === "true";
-
-        if (floatingToggle) {
-          if (isDesktop && isCollapsed) {
-            floatingToggle.classList.remove("hidden");
-          } else {
-            floatingToggle.classList.add("hidden");
+            main.classList.remove("md:ml-0");
+            main.classList.add("md:ml-64");
           }
         }
       });
