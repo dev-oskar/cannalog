@@ -1,9 +1,5 @@
-import nhostPkg from "@nhost/nhost-js";
-import nhostSessionPkg from "@nhost/nhost-js/session";
-const { createServerClient } = nhostPkg;
-const { DEFAULT_SESSION_KEY } = nhostSessionPkg;
-type NhostClient = nhostPkg.NhostClient;
-type Session = nhostSessionPkg.Session;
+import { createServerClient, type NhostClient } from "@nhost/nhost-js";
+import { DEFAULT_SESSION_KEY, type Session } from "@nhost/nhost-js/session";
 import type { AstroCookies } from "astro";
 
 const key = DEFAULT_SESSION_KEY;

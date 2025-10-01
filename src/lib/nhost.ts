@@ -1,6 +1,4 @@
-import nhostPkg from "@nhost/nhost-js";
-const { createClient } = nhostPkg;
-type NhostClient = nhostPkg.NhostClient;
+import { createClient, type NhostClient } from "@nhost/nhost-js";
 
 // Client-side Nhost instance - this is the default client for browser usage
 // Uses localStorage by default for session storage

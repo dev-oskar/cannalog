@@ -15,6 +15,11 @@ const locales = {
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      // Force @nhost/nhost-js to be treated as external for SSR
+      // This prevents Vite from trying to bundle it and causing CommonJS/ESM conflicts
+      external: ["@nhost/nhost-js", "@nhost/nhost-js/session"],
+    },
   },
   trailingSlash: "never",
   build: {
