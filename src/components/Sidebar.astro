@@ -1,15 +1,9 @@
 ---
-import { getLocale } from "astro-i18n-aut";
-import {
-  useTranslations,
-  useTranslatedPath,
-  getPathWithoutLang,
-} from "../i18n/utils";
-import { languages, type Lang } from "../i18n/ui";
 import { Icon } from "astro-icon/components";
+import { useI18n } from "../integrations/i18n-globals";
 
-const lang = getLocale(Astro.url);
-const t = useTranslations(lang as Lang);
+// Single line i18n setup - everything included!
+const i18n = useI18n(Astro);
 
 export interface Props {
   user: {
@@ -21,43 +15,38 @@ export interface Props {
 
 const { user } = Astro.props;
 
-// Language picker setup
-const currentLang = lang as Lang;
-const translatePath = useTranslatedPath(currentLang);
-const untranslatedPath = getPathWithoutLang(Astro.url.pathname, currentLang);
-
 const mainNavItems = [
   {
-    href: translatePath("/dashboard"),
-    label: t("sidebar.nav.overview"),
+    href: i18n.translatePath("/dashboard"),
+    label: i18n.t("sidebar.nav.overview"),
     icon: "tabler:layout-dashboard",
   },
   {
-    href: translatePath("/dashboard/strains"),
-    label: t("sidebar.nav.strains"),
+    href: i18n.translatePath("/dashboard/strains"),
+    label: i18n.t("sidebar.nav.strains"),
     icon: "tabler:plant",
   },
   {
-    href: translatePath("/dashboard/sessions"),
-    label: t("sidebar.nav.sessions"),
+    href: i18n.translatePath("/dashboard/sessions"),
+    label: i18n.t("sidebar.nav.sessions"),
     icon: "tabler:book-upload",
   },
   {
-    href: translatePath("/dashboard/journal"),
-    label: t("sidebar.nav.journal"),
+    href: i18n.translatePath("/dashboard/journal"),
+    label: i18n.t("sidebar.nav.journal"),
     icon: "tabler:book",
   },
   {
-    href: translatePath("/dashboard/analytics"),
-    label: t("sidebar.nav.analytics"),
+    href: i18n.translatePath("/dashboard/analytics"),
+    label: i18n.t("sidebar.nav.analytics"),
     icon: "tabler:chart-pie-2",
   },
 ];
 
 const footerNavItems = [
   {
-    href: translatePath("/dashboard/settings"),
-    label: t("sidebar.nav.settings"),
+    href: i18n.translatePath("/dashboard/settings"),
+    label: i18n.t("sidebar.nav.settings"),
     icon: "tabler:settings",
   },
 ];
@@ -67,19 +56,45 @@ const displayName = user.displayName || user.email;
 
 <aside
   id="sidebar"
-  class="fixed top-0 left-0 z-50 w-64 h-screen transition-transform -translate-x-full bg-primary-600 dark:bg-secondary-800 border-r border-primary-700 dark:border-tertiary-700 sm:translate-x-0"
+  class="fixed top-0 left-0 z-50 w-64 h-screen transition-all duration-300 ease-in-out -translate-x-full bg-primary-600 dark:bg-secondary-800 border-r border-primary-700 dark:border-tertiary-700 sm:translate-x-0"
   aria-label="Sidebar"
+  data-collapsed="false"
 >
   <div
     class="h-full px-3 pb-4 overflow-y-auto bg-primary-600 dark:bg-secondary-800 flex flex-col"
   >
+    <!-- Desktop Toggle Button -->
+    <div class="hidden sm:flex justify-end pt-3 pb-2">
+      <button
+        id="desktop-sidebar-toggle"
+        type="button"
+        class="p-2 text-white dark:text-white bg-primary-700/20 dark:bg-secondary-700/30 border border-primary-500/30 dark:border-tertiary-600/40 rounded-lg hover:bg-primary-700/40 dark:hover:bg-secondary-700/50 hover:border-primary-400/50 dark:hover:border-tertiary-500/60 transition-all duration-200 shadow-sm hover:shadow-md"
+        title={i18n.t("sidebar.toggleSidebar")}
+      >
+        <Icon
+          id="sidebar-collapse-icon"
+          name="tabler:chevrons-left"
+          class="w-4 h-4 text-primary-100 dark:text-gray-300 hover:text-white dark:hover:text-white"
+        />
+        <Icon
+          id="sidebar-expand-icon"
+          name="tabler:chevrons-right"
+          class="hidden w-4 h-4 text-primary-100 dark:text-gray-300 hover:text-white dark:hover:text-white"
+        />
+        <span id="sidebar-toggle-text" class="sr-only"
+          >{i18n.t("sidebar.toggleSidebar")}</span
+        >
+      </button>
+    </div>
+
     <!-- User Profile Section -->
     <div
       class="flex flex-col items-center py-4 border-b border-primary-700 dark:border-tertiary-700"
     >
       <img
         class="w-16 h-16 mb-2 rounded-full shadow-md"
-        src={user.avatarUrl}
+        src={user.avatarUrl ||
+          `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(displayName)}&backgroundColor=059669`}
         alt={`${displayName}'s avatar`}
       />
       <h5
@@ -98,7 +113,7 @@ const displayName = user.displayName || user.email;
           class="inline-flex items-center justify-center w-full px-3 py-2 text-sm cursor-pointer font-medium text-center text-white dark:text-white border border-primary-700 dark:border-tertiary-700 rounded-md hover:bg-primary-700 dark:hover:bg-secondary-700 focus:ring-2 focus:outline-none focus:ring-primary-300 dark:focus:ring-primary-400 transition-colors duration-200"
         >
           <Icon class="w-4 h-4 me-2" name="tabler:logout" />
-          {t("sidebar.logout")}
+          {i18n.t("sidebar.logout")}
         </button>
       </form>
     </div>
@@ -161,7 +176,8 @@ const displayName = user.displayName || user.email;
           class="hidden flex-shrink-0 w-6 h-6 text-primary-100 dark:text-gray-300 transition duration-75 group-hover:text-white dark:group-hover:text-white"
         />
 
-        <span class="flex-1 text-left ms-3">{t("navbar.toggleTheme")}</span>
+        <span class="flex-1 text-left ms-3">{i18n.t("navbar.toggleTheme")}</span
+        >
       </button>
 
       <!-- Language Picker -->
@@ -174,7 +190,9 @@ const displayName = user.displayName || user.email;
           name="tabler:language"
           class="flex-shrink-0 w-6 h-6 text-primary-100 dark:text-gray-300 transition duration-75 group-hover:text-white dark:group-hover:text-white"
         />
-        <span class="flex-1 text-left ms-3">{t("sidebar.nav.language")}</span>
+        <span class="flex-1 text-left ms-3"
+          >{i18n.t("sidebar.nav.language")}</span
+        >
         <Icon
           id="language-chevron"
           class="w-4 h-4 text-primary-100 dark:text-gray-300 transition-transform duration-200 group-hover:text-white dark:group-hover:text-white"
@@ -184,11 +202,18 @@ const displayName = user.displayName || user.email;
       <div id="language-dropdown" class="hidden ml-6 mt-2 mb-2">
         <ul class="space-y-1">
           {
-            Object.entries(languages).map(([targetLang, label]) => (
+            Object.entries(i18n.languages).map(([targetLang, label]) => (
               <li>
                 <a
-                  href={translatePath(untranslatedPath, targetLang)}
-                  class="block px-3 py-2 text-sm text-primary-100 dark:text-gray-300 hover:bg-primary-700 dark:hover:bg-secondary-700 hover:text-white dark:hover:text-white rounded-md transition-colors duration-200"
+                  href={i18n.translatePath(
+                    i18n.getUntranslatedPath(),
+                    targetLang
+                  )}
+                  class={`block px-3 py-2 text-sm rounded-md transition-colors duration-200 ${
+                    targetLang === i18n.lang
+                      ? "bg-primary-700 dark:bg-secondary-700 text-white dark:text-white"
+                      : "text-primary-100 dark:text-gray-300 hover:bg-primary-700 dark:hover:bg-secondary-700 hover:text-white dark:hover:text-white"
+                  }`}
                 >
                   {label}
                 </a>
@@ -203,6 +228,131 @@ const displayName = user.displayName || user.email;
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // Sidebar collapse/expand functionality
+    const sidebarElement = document.getElementById("sidebar");
+    const desktopToggle = document.getElementById("desktop-sidebar-toggle");
+    const collapseIcon = document.getElementById("sidebar-collapse-icon");
+    const expandIcon = document.getElementById("sidebar-expand-icon");
+    const mainContent = document.querySelector("main");
+
+    // Initialize sidebar state from localStorage
+    function initializeSidebarState() {
+      const isCollapsed = localStorage.getItem("sidebar-collapsed") === "true";
+      const isDesktop = window.innerWidth >= 640;
+
+      if (isDesktop && isCollapsed) {
+        collapseSidebar();
+      } else if (isDesktop) {
+        expandSidebar();
+      }
+    }
+
+    function collapseSidebar() {
+      if (sidebarElement && window.innerWidth >= 640) {
+        // Force hide sidebar on desktop
+        sidebarElement.classList.add("-translate-x-full");
+        sidebarElement.classList.remove("translate-x-0", "sm:translate-x-0");
+        sidebarElement.setAttribute("data-collapsed", "true");
+
+        // Update icons
+        if (collapseIcon && expandIcon) {
+          collapseIcon.classList.add("hidden");
+          expandIcon.classList.remove("hidden");
+        }
+
+        // Adjust main content margin
+        if (mainContent) {
+          mainContent.classList.remove("md:ml-64");
+          mainContent.classList.add("md:ml-0");
+        }
+
+        localStorage.setItem("sidebar-collapsed", "true");
+
+        // Emit state change event
+        window.dispatchEvent(
+          new CustomEvent("sidebarStateChange", {
+            detail: { collapsed: true },
+          })
+        );
+      }
+    }
+
+    function expandSidebar() {
+      if (sidebarElement && window.innerWidth >= 640) {
+        // Show sidebar on desktop
+        sidebarElement.classList.remove("-translate-x-full");
+        sidebarElement.classList.add("translate-x-0", "sm:translate-x-0");
+        sidebarElement.setAttribute("data-collapsed", "false");
+
+        // Update icons
+        if (collapseIcon && expandIcon) {
+          collapseIcon.classList.remove("hidden");
+          expandIcon.classList.add("hidden");
+        }
+
+        // Adjust main content margin
+        if (mainContent) {
+          mainContent.classList.add("md:ml-64");
+          mainContent.classList.remove("md:ml-0");
+        }
+
+        localStorage.setItem("sidebar-collapsed", "false");
+
+        // Emit state change event
+        window.dispatchEvent(
+          new CustomEvent("sidebarStateChange", {
+            detail: { collapsed: false },
+          })
+        );
+      }
+    }
+
+    // Desktop toggle functionality
+    if (desktopToggle && sidebarElement) {
+      desktopToggle.addEventListener("click", function () {
+        const isCollapsed =
+          sidebarElement.getAttribute("data-collapsed") === "true";
+
+        if (isCollapsed) {
+          expandSidebar();
+        } else {
+          collapseSidebar();
+        }
+      });
+    }
+
+    // Listen for expand sidebar events from floating button
+    window.addEventListener("expandSidebar", function () {
+      expandSidebar();
+    });
+
+    // Initialize on load
+    initializeSidebarState();
+
+    // Handle window resize
+    window.addEventListener("resize", function () {
+      const isDesktop = window.innerWidth >= 640;
+      const isCollapsed = localStorage.getItem("sidebar-collapsed") === "true";
+
+      if (isDesktop) {
+        // Desktop: Apply saved state
+        if (isCollapsed) {
+          collapseSidebar();
+        } else {
+          expandSidebar();
+        }
+      } else {
+        // Mobile: Reset to mobile behavior
+        if (sidebarElement && mainContent) {
+          sidebarElement.classList.add("-translate-x-full");
+          sidebarElement.classList.remove("translate-x-0");
+          mainContent.classList.remove("md:ml-0", "md:ml-64");
+          mainContent.classList.add("md:ml-64");
+        }
+      }
+    });
+
+    // Existing theme toggle code
     const themeToggleDarkIcon = document.getElementById(
       "theme-toggle-dark-icon"
     );
@@ -277,45 +427,33 @@ const displayName = user.displayName || user.email;
         }
       });
 
-    // Mobile drawer functionality
+    // Mobile drawer functionality - integrated with desktop toggle
     const mobileDrawerToggle = document.getElementById("mobile-drawer-toggle");
-    const sidebar = document.getElementById("sidebar");
 
-    if (mobileDrawerToggle && sidebar) {
+    if (mobileDrawerToggle && sidebarElement) {
       mobileDrawerToggle.addEventListener("click", function () {
-        const isHidden = sidebar.classList.contains("-translate-x-full");
+        const isHidden = sidebarElement.classList.contains("-translate-x-full");
 
         if (isHidden) {
-          sidebar.classList.remove("-translate-x-full");
-          sidebar.classList.add("translate-x-0");
+          sidebarElement.classList.remove("-translate-x-full");
+          sidebarElement.classList.add("translate-x-0");
         } else {
-          sidebar.classList.add("-translate-x-full");
-          sidebar.classList.remove("translate-x-0");
+          sidebarElement.classList.add("-translate-x-full");
+          sidebarElement.classList.remove("translate-x-0");
         }
       });
 
       // Close sidebar when clicking outside on mobile
       document.addEventListener("click", function (event) {
-        const isSmallScreen = window.innerWidth < 640; // sm breakpoint
+        const isSmallScreen = window.innerWidth < 640;
         if (
           isSmallScreen &&
-          !sidebar.contains(event.target as Node) &&
+          !sidebarElement.contains(event.target as Node) &&
           !mobileDrawerToggle.contains(event.target as Node) &&
-          !sidebar.classList.contains("-translate-x-full")
+          !sidebarElement.classList.contains("-translate-x-full")
         ) {
-          sidebar.classList.add("-translate-x-full");
-          sidebar.classList.remove("translate-x-0");
-        }
-      });
-
-      // Close sidebar on window resize to desktop
-      window.addEventListener("resize", function () {
-        if (
-          window.innerWidth >= 640 &&
-          !sidebar.classList.contains("-translate-x-full")
-        ) {
-          sidebar.classList.add("-translate-x-full");
-          sidebar.classList.remove("translate-x-0");
+          sidebarElement.classList.add("-translate-x-full");
+          sidebarElement.classList.remove("translate-x-0");
         }
       });
     }

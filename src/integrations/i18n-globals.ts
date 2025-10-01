@@ -1,41 +1,102 @@
 import { getLocale } from "astro-i18n-aut";
-import { useTranslations, useTranslatedPath } from "../i18n/utils";
-import type { Lang } from "../i18n/ui";
-import type { I18nUtils } from "../types/i18n";
+import { defaultLang, ui, showDefaultLang, languages } from "../i18n/ui";
+import type { Lang, TranslationKey } from "../i18n/ui";
 
 /**
- * Senior engineer's solution: One-liner i18n setup
- * Usage: const { lang, t, translatePath } = useI18n(Astro);
+ * Comprehensive i18n utility - Senior Engineer's Solution
+ * Usage: const i18n = useI18n(Astro);
+ *
+ * Provides everything needed for internationalization:
+ * - i18n.t('key') - Translation function
+ * - i18n.lang - Current language
+ * - i18n.translatePath('/path') - Path translation with language prefix
+ * - i18n.getUntranslatedPath() - Current path without language prefix
+ * - i18n.languages - Available languages object
+ * - i18n.isDefaultLang - Boolean check for default language
  *
  * Benefits:
- * - Eliminates repetitive boilerplate from 3 lines to 1
- * - Maintains full type safety with TypeScript
- * - Zero runtime overhead - just a simple wrapper
- * - Consistent API across all .astro files
- * - Easy to extend with additional utilities if needed
+ * - Single import, complete i18n solution
+ * - Type-safe with full TypeScript support
+ * - Zero runtime overhead
+ * - Consistent API across all components
+ * - Self-contained with all utilities included
  */
-export function useI18n(Astro: any): I18nUtils {
-  const lang = getLocale(Astro.url) as Lang;
-  const t = useTranslations(lang);
-  const translatePath = useTranslatedPath(lang);
 
-  return { lang, t, translatePath };
+interface I18nUtils {
+  lang: Lang;
+  t: (key: TranslationKey) => string;
+  translatePath: (path: string, targetLang?: string) => string;
+  getUntranslatedPath: (pathname?: string) => string;
+  languages: typeof languages;
+  isDefaultLang: boolean;
 }
 
-/**
- * Alternative pattern for component-level i18n setup
- * Could be extended with additional utilities like formatters, validators, etc.
- */
-export function createI18nContext(Astro: any) {
-  const { lang, t, translatePath } = useI18n(Astro);
+function createTranslationFunction(lang: Lang) {
+  const currentLang = lang && ui[lang] ? lang : defaultLang;
+
+  return function t(key: TranslationKey): string {
+    const keys = key.split(".");
+    const text = keys.reduce(
+      (obj: any, currentKey: string) => obj?.[currentKey],
+      ui[currentLang]
+    );
+    return typeof text === "string" ? text : key;
+  };
+}
+
+function createPathTranslator(lang: Lang) {
+  return function translatePath(
+    path: string,
+    targetLang: string = lang
+  ): string {
+    const langCode = targetLang as Lang;
+    const isHash = path.startsWith("#");
+
+    if (!showDefaultLang && langCode === defaultLang) {
+      if (isHash) return `/${path}`;
+      const finalPath = path === "/" ? "" : path;
+      return finalPath === "" ? "/" : finalPath;
+    } else {
+      const langPrefix = `/${langCode}`;
+      if (isHash) return `${langPrefix}${path}`;
+      const finalPath = path === "/" ? "" : path;
+      return `${langPrefix}${finalPath}`;
+    }
+  };
+}
+
+function createUntranslatedPathGetter(lang: Lang, pathname: string) {
+  return function getUntranslatedPath(customPathname?: string): string {
+    const targetPathname = customPathname || pathname;
+
+    if (lang === defaultLang) {
+      return targetPathname;
+    }
+
+    const langPrefix = `/${lang}`;
+    if (targetPathname.startsWith(langPrefix)) {
+      return targetPathname.substring(langPrefix.length) || "/";
+    }
+    return targetPathname;
+  };
+}
+
+export function useI18n(Astro: any): I18nUtils {
+  const lang = getLocale(Astro.url) as Lang;
+  const t = createTranslationFunction(lang);
+  const translatePath = createPathTranslator(lang);
+  const getUntranslatedPath = createUntranslatedPathGetter(
+    lang,
+    Astro.url.pathname
+  );
+  const isDefaultLang = lang === defaultLang;
 
   return {
     lang,
     t,
     translatePath,
-    // Future extensions could go here:
-    // formatDate: (date: Date) => formatDate(date, lang),
-    // formatCurrency: (amount: number) => formatCurrency(amount, lang),
-    // validate: (field: string, value: any) => validateField(field, value, lang)
+    getUntranslatedPath,
+    languages,
+    isDefaultLang,
   };
 }

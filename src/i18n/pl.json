@@ -118,6 +118,7 @@
   },
   "dashboard": {
     "title": "Panel główny",
+    "description": "Witamy w Twoim osobistym panelu podróży z konopiami. Tutaj możesz śledzić swoje sesje, przeglądać statystyki i zarządzać swoim profilem.",
     "welcomeBack": "Witaj ponownie",
     "welcomeMessage": "! Oto przegląd Twojego CannaLog.",
     "signedInAs": "Zalogowany jako:",
@@ -138,13 +139,14 @@
   },
   "sidebar": {
     "logout": "Wyloguj",
+    "toggleSidebar": "Przełącz panel boczny",
     "nav": {
       "overview": "Przegląd",
       "features": "Funkcje",
       "strains": "Moje odmiany",
       "sessions": "Sesje",
       "journal": "Dziennik",
-      "analytics": "Analityka",
+      "analytics": "Statystyki",
       "docs": "Dokumentacja",
       "help": "Pomoc",
       "settings": "Ustawienia",

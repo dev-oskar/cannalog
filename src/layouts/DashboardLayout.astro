@@ -3,56 +3,113 @@ import "../styles/global.css";
 import BaseLayout from "./BaseLayout.astro";
 import Sidebar from "../components/Sidebar.astro";
 import FooterSidebar from "../components/FooterSidebar.astro";
+import { Icon } from "astro-icon/components";
+import { useI18n } from "../integrations/i18n-globals";
+
+const { t } = useI18n(Astro);
 
 const {
   user,
-  title = "Dashboard",
-  description = "User Dashboard",
+  title = t("dashboard.title"),
+  description = t("dashboard.description"),
 } = Astro.props;
-
-// Create user object for Sidebar with avatar placeholder
-// const sidebarUser = user
-//   ? {
-//       name: user.displayName || user.name || "User",
-//       email: user.email || "",
-//       avatarUrl:
-//         "https://ui-avatars.com/api/?name=" +
-//         encodeURIComponent(
-//           user.displayName || user.name || user.email || "User"
-//         ) +
-//         "&background=6366f1&color=fff&size=96",
-//     }
-//   : undefined;
 ---
 
 <BaseLayout title={title} description={description}>
   <!-- Hamburger button for mobile, previously in Navbar -->
-  <!-- Hamburger button for mobile, previously in Navbar -->
   <button
     id="mobile-drawer-toggle"
     type="button"
-    class="fixed top-4 left-4 z-30 inline-flex items-center p-2 text-sm text-primary-600 dark:text-white bg-white dark:bg-secondary-800 border border-primary-300 dark:border-secondary-700 rounded-lg sm:hidden hover:bg-primary-50 dark:hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 shadow-sm"
+    class="fixed top-4 left-4 z-30 inline-flex items-center p-2 text-sm text-white dark:text-white cursor-pointer bg-primary-600 dark:bg-secondary-800 border border-primary-700 dark:border-secondary-700 rounded-lg sm:hidden hover:bg-primary-50 dark:hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 shadow-sm"
   >
-    <span class="sr-only">Open sidebar</span>
-    <svg
+    <span class="sr-only">{t("sidebar.toggleSidebar")}</span>
+    <Icon
+      name="tabler:layout-sidebar-left-collapse"
       class="w-6 h-6"
-      aria-hidden="true"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        clip-rule="evenodd"
-        fill-rule="evenodd"
-        d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-      ></path>
-    </svg>
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    />
   </button>
 
   <Sidebar user={user} />
 
-  <main class="p-4 pt-12 sm:pt-4 md:ml-64 h-auto">
+  <!-- Floating toggle button for collapsed sidebar - desktop only -->
+  <button
+    id="floating-sidebar-toggle"
+    type="button"
+    class="hidden fixed top-4 left-4 z-30 p-2 cursor-pointer text-gray-600 dark:text-gray-300 bg-primary-400 dark:bg-gray-800/90 border border-gray-200/80 dark:border-gray-700/80 rounded-lg shadow-sm hover:bg-primary-500 dark:hover:bg-gray-700/95 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400/30 dark:focus:ring-gray-500/30 transition-all duration-200 backdrop-blur-sm"
+    title={t("sidebar.toggleSidebar")}
+  >
+    <Icon class="w-5 h-5" name="tabler:menu-2" />
+  </button>
+
+  <main
+    class="p-4 pt-12 sm:pt-4 md:ml-64 h-auto transition-all duration-300 ease-in-out"
+  >
     <slot />
     <FooterSidebar />
   </main>
+
+  <script>
+    // Initialize main content margin based on sidebar state
+    document.addEventListener("DOMContentLoaded", function () {
+      const main = document.querySelector("main");
+      const floatingToggle = document.getElementById("floating-sidebar-toggle");
+      const sidebar = document.getElementById("sidebar");
+      const isDesktop = window.innerWidth >= 640;
+      const isCollapsed = localStorage.getItem("sidebar-collapsed") === "true";
+
+      // Initialize main content and floating button
+      if (main && isDesktop && isCollapsed) {
+        main.classList.remove("md:ml-64");
+        main.classList.add("md:ml-0");
+
+        if (floatingToggle) {
+          floatingToggle.classList.remove("hidden");
+          floatingToggle.classList.add("block");
+        }
+      }
+
+      // Handle floating toggle button click
+      if (floatingToggle) {
+        floatingToggle.addEventListener("click", function () {
+          // Trigger the sidebar's expand function
+          const event = new CustomEvent("expandSidebar");
+          window.dispatchEvent(event);
+        });
+      }
+
+      // Listen for sidebar state changes
+      window.addEventListener("sidebarStateChange", function (e) {
+        const isCollapsed = (e as CustomEvent).detail.collapsed;
+        const isDesktop = window.innerWidth >= 640;
+
+        if (floatingToggle) {
+          if (isDesktop && isCollapsed) {
+            floatingToggle.classList.remove("hidden");
+            floatingToggle.classList.add("block");
+          } else {
+            floatingToggle.classList.add("hidden");
+            floatingToggle.classList.remove("block");
+          }
+        }
+      });
+
+      // Handle window resize for floating button
+      window.addEventListener("resize", function () {
+        const isDesktop = window.innerWidth >= 640;
+        const isCollapsed =
+          localStorage.getItem("sidebar-collapsed") === "true";
+
+        if (floatingToggle) {
+          if (isDesktop && isCollapsed) {
+            floatingToggle.classList.remove("hidden");
+          } else {
+            floatingToggle.classList.add("hidden");
+          }
+        }
+      });
+    });
+  </script>
 </BaseLayout>
