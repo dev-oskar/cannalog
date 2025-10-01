@@ -1,10 +1,10 @@
 ---
-import Layout from "../layouts/DashboardLayout.astro";
-import { getSession, getUser } from "../lib/auth";
+import Layout from "../../layouts/DashboardLayout.astro";
+import { getSession, getUser } from "../../lib/auth";
 
 import { getLocale } from "astro-i18n-aut";
-import { useTranslations } from "../i18n/utils";
-import type { Lang } from "../i18n/ui";
+import { useTranslations } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
 
 const lang = getLocale(Astro.url);
 const t = useTranslations(lang as Lang);

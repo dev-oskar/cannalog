@@ -27,12 +27,11 @@ const {
 
 <BaseLayout title={title} description={description}>
   <!-- Hamburger button for mobile, previously in Navbar -->
+  <!-- Hamburger button for mobile, previously in Navbar -->
   <button
-    data-drawer-target="logo-sidebar"
-    data-drawer-toggle="logo-sidebar"
-    aria-controls="logo-sidebar"
+    id="mobile-drawer-toggle"
     type="button"
-    class="fixed top-4 left-4 z-30 inline-flex items-center p-2 text-sm text-text-color rounded-lg sm:hidden hover:bg-secondary/10 focus:outline-none focus:ring-2 focus:ring-primary/50"
+    class="fixed top-4 left-4 z-30 inline-flex items-center p-2 text-sm text-primary-600 dark:text-white bg-white dark:bg-secondary-800 border border-primary-300 dark:border-secondary-700 rounded-lg sm:hidden hover:bg-primary-50 dark:hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 shadow-sm"
   >
     <span class="sr-only">Open sidebar</span>
     <svg
