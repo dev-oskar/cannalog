@@ -16,7 +16,8 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     ssr: {
-      // Force @nhost/nhost-js to be treated as external for SSR
+      // Force @nhost/nhost-js to be bundled into the SSR build (noExternal)
+      // This ensures Vite transforms the CommonJS modules properly for the Netlify Functions environment
       noExternal: ["@nhost/nhost-js", "@nhost/nhost-js/session"],
     },
   },

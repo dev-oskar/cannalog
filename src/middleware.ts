@@ -1,7 +1,9 @@
 import { defineMiddleware } from "astro:middleware";
 import { handleNhostMiddleware } from "./lib/nhost-server";
+import { getLangFromUrl, useTranslatedPath } from "./i18n/utils";
+import { defaultLang } from "./i18n/ui";
 
-// Define route patterns that don't require authentication
+// Define route patterns that don't require authentication (without language prefix)
 const publicRoutePatterns = [
   // Core public pages
   { path: "/", exact: true },
@@ -20,27 +22,48 @@ const publicRoutePatterns = [
 ];
 
 /**
- * Check if a path should be publicly accessible
+ * Extract the path without language prefix for route checking
  */
-function isPublicRoute(pathname: string): boolean {
+function getPathWithoutLang(pathname: string, lang: string): string {
+  if (lang === defaultLang) {
+    return pathname;
+  }
+  const langPrefix = `/${lang}`;
+  if (pathname.startsWith(langPrefix)) {
+    return pathname.substring(langPrefix.length) || "/";
+  }
+  return pathname;
+}
+
+/**
+ * Check if a path should be publicly accessible (checking the path without language prefix)
+ */
+function isPublicRoute(pathname: string, lang: string): boolean {
+  const pathWithoutLang = getPathWithoutLang(pathname, lang);
+
   return publicRoutePatterns.some((pattern) => {
     if (pattern.exact) {
-      return pathname === pattern.path;
+      return pathWithoutLang === pattern.path;
     }
     if (pattern.prefix) {
-      return pathname.startsWith(pattern.path);
+      return pathWithoutLang.startsWith(pattern.path);
     }
     return false;
   });
 }
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  // Get the current path
+  // Get the current path and extract language
   const path = context.url.pathname;
-  console.log(`[MIDDLEWARE] Processing path: ${path}`);
+  const lang = getLangFromUrl(context.url);
+  const translatePath = useTranslatedPath(lang);
+
+  console.log(
+    `[MIDDLEWARE] Processing path: ${path}, detected language: ${lang}`
+  );
 
   // Check if this is a public route or a public asset
-  const isPublic = isPublicRoute(path);
+  const isPublic = isPublicRoute(path, lang);
 
   console.log(`[MIDDLEWARE] Is public route: ${isPublic}`);
 
@@ -53,16 +76,34 @@ export const onRequest = defineMiddleware(async (context, next) => {
     `[MIDDLEWARE] Session found: ${!!session}, User: ${!!session?.user}, Path: ${path}`
   );
 
-  // If it's a public route, allow access without checking auth
+  // If it's a public route, check if we should redirect authenticated users
   if (isPublic) {
+    console.log(`[MIDDLEWARE] Public route detected: ${path}`);
+
+    // For signin/register pages, redirect authenticated users to dashboard
+    const pathWithoutLang = getPathWithoutLang(path, lang);
+    if (
+      session &&
+      (pathWithoutLang === "/signin" || pathWithoutLang === "/register")
+    ) {
+      const localizedDashboardPath = translatePath("/dashboard");
+      console.log(
+        `[MIDDLEWARE] Authenticated user trying to access ${pathWithoutLang}, redirecting to: ${localizedDashboardPath}`
+      );
+      return context.redirect(localizedDashboardPath);
+    }
+
     console.log(`[MIDDLEWARE] Allowing access to public route: ${path}`);
     return next();
   }
 
-  // If no session and not a public route, redirect to signin
+  // If no session and not a public route, redirect to localized signin
   if (!session) {
-    console.log(`[MIDDLEWARE] No session, redirecting to signin from: ${path}`);
-    return context.redirect("/signin?error=auth-required");
+    const localizedSigninPath = translatePath("/signin");
+    console.log(
+      `[MIDDLEWARE] No session, redirecting to localized signin: ${localizedSigninPath} from: ${path}`
+    );
+    return context.redirect(`${localizedSigninPath}?error=auth-required`);
   }
 
   // Session exists, allow access to protected route

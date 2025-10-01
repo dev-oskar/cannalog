@@ -1,12 +1,13 @@
 ---
 import { getLocale } from "astro-i18n-aut";
-import { useTranslations } from "../i18n/utils";
+import { useTranslations, useTranslatedPath } from "../i18n/utils";
 import type { Lang } from "../i18n/ui";
 import PublicLayout from "../layouts/PublicLayout.astro";
 import Logo from "../components/ui/Logo.astro";
 
 const lang = getLocale(Astro.url);
 const t = useTranslations(lang as Lang);
+const translatePath = useTranslatedPath(lang as Lang);
 
 const title = t("signin.title");
 
@@ -90,6 +91,8 @@ if (errorParam) {
             method="post"
             id="signin-form"
           >
+            <!-- Hidden field to preserve language context -->
+            <input type="hidden" name="lang" value={lang} />
             <div>
               <label
                 for="email"
@@ -151,7 +154,7 @@ if (errorParam) {
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               {t("signin.noAccount")}
               <a
-                href="/register"
+                href={translatePath("/register")}
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >{t("signin.signUp")}</a
               >

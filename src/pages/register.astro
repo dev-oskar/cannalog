@@ -1,6 +1,6 @@
 ---
 import { getLocale } from "astro-i18n-aut";
-import { useTranslations } from "../i18n/utils";
+import { useTranslations, useTranslatedPath } from "../i18n/utils";
 import type { Lang } from "../i18n/ui";
 import { authUtils } from "../lib/nhost";
 
@@ -9,16 +9,12 @@ import PublicLayout from "../layouts/PublicLayout.astro";
 
 const lang = getLocale(Astro.url);
 const t = useTranslations(lang as Lang);
+const translatePath = useTranslatedPath(lang as Lang);
 
 export const prerender = false; // Not needed in 'server' mode
 
-// Check for existing authentication - redirect if already signed in
-const accessToken = Astro.cookies.get("nhost-access-token")?.value;
-const userCookie = Astro.cookies.get("nhost-user")?.value;
-
-if (accessToken && userCookie) {
-  return Astro.redirect("/dashboard");
-}
+// Note: Authentication checks are handled by middleware.ts
+// The middleware will redirect authenticated users away from this page
 
 let error = "";
 let success = "";
@@ -57,19 +53,21 @@ if (Astro.request.method === "POST") {
     const result = await authUtils.signUp(email, password);
     console.log("Registration result:", result);
 
-    if (result.error) {
+    // Handle the different possible return types from authUtils.signUp
+    if ("error" in result && result.error) {
       console.error("Registration error details:", result.error);
       throw new Error(result.error.message || "Registration failed");
     }
 
-    // Check if registration was successful
-    // Nhost requires email verification, so we won't get a session immediately
-    if (!result.error) {
-      // Registration successful - user needs to verify email
-      success = t("register.successMessage");
-    } else {
-      throw new Error(t("register.errors.registrationFailed"));
+    // Check if the Nhost response indicates an error
+    if ("error" in result && result.error) {
+      throw new Error(
+        result.error.message || t("register.errors.registrationFailed")
+      );
     }
+
+    // Registration successful - user needs to verify email
+    success = t("register.successMessage");
   } catch (err) {
     if (err instanceof Error) {
       error = err.message;
@@ -99,19 +97,29 @@ if (Astro.request.method === "POST") {
           <h1 class="text-xl font-bold leading-tight tracking-tightmd:text-2xl">
             {t("register.heading")}
           </h1>
-          
-          {error && (
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-              {error}
-            </div>
-          )}
-          
-          {success && (
-            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-              {success}
-            </div>
-          )}
-          
+
+          {
+            error && (
+              <div
+                class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert"
+              >
+                {error}
+              </div>
+            )
+          }
+
+          {
+            success && (
+              <div
+                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert"
+              >
+                {success}
+              </div>
+            )
+          }
+
           <form class="space-y-4 md:space-y-6" method="POST">
             <div>
               <label
@@ -189,7 +197,7 @@ if (Astro.request.method === "POST") {
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               {t("register.alreadyHaveAccount")}
               <a
-                href="/signin"
+                href={translatePath("/signin")}
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >{t("register.loginHere")}</a
               >
