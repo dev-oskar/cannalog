@@ -7,6 +7,7 @@
     "register": "Zarejestruj się",
     "toggleTheme": "Przełącz motyw",
     "dashboard": "Panel",
+    "profile": "Profil",
     "signOut": "Wyloguj się"
   },
   "hero": {
@@ -175,5 +176,12 @@
     "termsAndConditions": "Regulamin",
     "privacyPolicy": "Polityka prywatności",
     "contact": "Kontakt"
+  },
+  "404": {
+    "title": "404 - Strona nie znaleziona",
+    "heading": "404",
+    "subtitle": "Czegoś tu brakuje.",
+    "description": "Przepraszamy, nie możemy znaleźć tej strony. Na stronie głównej znajdziesz wiele ciekawych rzeczy do odkrycia.",
+    "backButton": "Powrót na stronę główną"
   }
 }

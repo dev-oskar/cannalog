@@ -1,13 +1,9 @@
 ---
 import Layout from "../../layouts/DashboardLayout.astro";
 import { getSession, getUser } from "../../lib/auth";
+import { useI18n } from "../../integrations/i18n-globals";
 
-import { getLocale } from "astro-i18n-aut";
-import { useTranslations } from "../../i18n/utils";
-import type { Lang } from "../../i18n/ui";
-
-const lang = getLocale(Astro.url);
-const t = useTranslations(lang as Lang);
+const { t } = useI18n(Astro);
 
 // Get user session and user data
 // Note: Authentication is handled by middleware

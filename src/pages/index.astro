@@ -1,18 +1,14 @@
 ---
-import { getLocale } from "astro-i18n-aut";
-import { useTranslations } from "../i18n/utils";
-import type { Lang } from "../i18n/ui";
-
+import { useI18n } from "../integrations/i18n-globals";
 import PublicLayout from "../layouts/PublicLayout.astro";
 
-const lang = getLocale(Astro.url);
-const t = useTranslations(lang as Lang);
+const { lang, t } = useI18n(Astro);
 ---
 
 <PublicLayout
   locale={lang}
   title={t("hero.title")}
-  description="Welcome to CannaLog"
+  description={t("hero.subtitle")}
 >
   <!-- Hero Section -->
   <section class="py-20 md:py-32 dark:text-white">

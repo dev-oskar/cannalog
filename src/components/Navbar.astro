@@ -2,14 +2,9 @@
 import ColorModeSwitcher from "./ui/ColorModeSwitcher.astro";
 import Logo from "./ui/Logo.astro";
 import { getSession, getUser, isAuth } from "../lib/auth";
+import { useI18n } from "../integrations/i18n-globals";
 
-import { getLocale } from "astro-i18n-aut";
-import { useTranslations, useTranslatedPath } from "../i18n/utils";
-import type { Lang } from "../i18n/ui";
-
-const lang = getLocale(Astro.url);
-const t = useTranslations(lang as Lang);
-const translatePath = useTranslatedPath(lang as Lang);
+const { lang, t, translatePath } = useI18n(Astro);
 
 // Check authentication status using new server-side utilities
 const isAuthenticated = await isAuth(Astro.cookies);
@@ -66,10 +61,10 @@ const {
               {t("navbar.dashboard")}
             </a>
             <a
-              href={translatePath("/profile")}
+              href={translatePath("/dashboard/settings")}
               class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300 hidden sm:inline-block"
             >
-              Profile
+              {t("navbar.profile")}
             </a>
             <a
               href="/api/signout"

@@ -7,6 +7,7 @@
     "register": "Register",
     "toggleTheme": "Change theme",
     "dashboard": "Dashboard",
+    "profile": "Profile",
     "signOut": "Sign Out"
   },
   "hero": {
@@ -175,5 +176,12 @@
     "termsAndConditions": "Terms and conditions",
     "privacyPolicy": "Privacy Policy",
     "contact": "Contact"
+  },
+  "404": {
+    "title": "404 - Page Not Found",
+    "heading": "404",
+    "subtitle": "Something's missing.",
+    "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
+    "backButton": "Back to Homepage"
   }
 }
