@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/DashboardLayout.astro";
-import { requireAuth } from "../lib/auth";
+import { getSession, getUser } from "../lib/auth";
 
 import { getLocale } from "astro-i18n-aut";
 import { useTranslations } from "../i18n/utils";
@@ -9,21 +9,19 @@ import type { Lang } from "../i18n/ui";
 const lang = getLocale(Astro.url);
 const t = useTranslations(lang as Lang);
 
-// Check authentication and get user data
-const { user, accessToken, isAuthenticated } = requireAuth(
-  Astro.cookies,
-  Astro.url.pathname
-);
+// Get user session using the new server-side method
+// Note: Authentication is now handled by middleware, so this page
+// will only be reached if the user is authenticated
+const session = await getSession(Astro.cookies);
+const user = await getUser(Astro.cookies);
 ---
 
-<Layout user={user || undefined}>
+<Layout user={user}>
   <div class="p-4 sm:p-6 lg:p-8 space-y-6">
     <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
       <h1 class="text-2xl font-bold text-text-color">{t("dashboard.title")}</h1>
       <p class="text-text-color/80 mt-1">
-        {t("dashboard.welcomeBack")}{user?.name ? `, ${user.name}` : ""}{
-          t("dashboard.welcomeMessage")
-        }
+        {t("dashboard.welcomeBack")}{t("dashboard.welcomeMessage")}
       </p>
       {
         user?.email && (

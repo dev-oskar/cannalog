@@ -1,68 +1,95 @@
-import type { AstroCookies } from 'astro';
+import type { AstroCookies } from "astro";
+import { authUtils } from "./nhost";
+import { createNhostServerClient } from "./nhost-server";
 
-interface User {
-  name?: string;
-  email?: string;
-  id?: string;
-  [key: string]: any;
-}
-
-interface AuthResult {
-  isAuthenticated: boolean;
-  user: User | null;
-  accessToken: string | null;
+// Legacy function - using client-side authUtils
+export async function requireAuth() {
+  const session = await authUtils.getUserSession();
+  console.log("Session:", session);
+  if (session) {
+    return {
+      isAuthenticated: true,
+      user: session.user,
+      accessToken: session.accessToken,
+    };
+  } else {
+    return {
+      isAuthenticated: false,
+      user: null,
+      accessToken: null,
+    };
+  }
 }
 
 /**
- * Extracts and validates user authentication from Astro cookies
- * @param cookies - Astro cookies object
- * @returns Object containing authentication status, user data, and access token
+ * NEW: Server-side auth utilities for Astro components and pages
+ * These functions work in Astro's server-side rendering context
  */
-export function getAuthFromCookies(cookies: AstroCookies): AuthResult {
-  const accessToken = cookies.get("nhost-access-token")?.value;
-  const userCookie = cookies.get("nhost-user")?.value;
 
-  let user: User | null = null;
-  let isAuthenticated = false;
-
-  if (accessToken && userCookie) {
-    try {
-      user = JSON.parse(userCookie);
-      isAuthenticated = true;
-    } catch (error) {
-      // Handle parsing error silently
-      console.warn('Failed to parse user cookie:', error);
-    }
+/**
+ * Get the authenticated user session in Astro components
+ * Usage: const session = await getSession(Astro.cookies);
+ */
+export async function getSession(cookies: AstroCookies) {
+  try {
+    const nhost = await createNhostServerClient(cookies);
+    return nhost.getUserSession();
+  } catch (error) {
+    console.error("Error getting session:", error);
+    return null;
   }
-
-  return {
-    isAuthenticated,
-    user,
-    accessToken,
-  };
 }
 
 /**
- * Checks if user is authenticated and redirects to sign-in if not
- * @param cookies - Astro cookies object
- * @param redirectTo - URL to redirect to after successful authentication (optional)
- * @returns AuthResult if authenticated, throws redirect if not
+ * Get the authenticated user in Astro components
+ * Usage: const user = await getUser(Astro.cookies);
  */
-export function requireAuth(cookies: AstroCookies, redirectTo?: string): AuthResult {
-  const authResult = getAuthFromCookies(cookies);
-  
-  if (!authResult.isAuthenticated) {
-    const redirectUrl = redirectTo 
-      ? `/signin?error=authentication-required&redirectTo=${encodeURIComponent(redirectTo)}`
-      : '/signin?error=authentication-required';
-    
-    throw new Response(null, {
-      status: 302,
-      headers: {
-        Location: redirectUrl,
-      },
-    });
+export async function getUser(cookies: AstroCookies) {
+  try {
+    const session = await getSession(cookies);
+    return session?.user || null;
+  } catch (error) {
+    console.error("Error getting user:", error);
+    return null;
   }
+}
 
-  return authResult;
+/**
+ * Check if user is authenticated in Astro components
+ * Usage: const isAuthenticated = await isAuth(Astro.cookies);
+ */
+export async function isAuth(cookies: AstroCookies): Promise<boolean> {
+  try {
+    const session = await getSession(cookies);
+    return !!session && !!session.user;
+  } catch (error) {
+    console.error("Error checking auth:", error);
+    return false;
+  }
+}
+
+/**
+ * Require authentication - throw error if not authenticated
+ * Usage: await requireAuthServer(Astro.cookies);
+ */
+export async function requireAuthServer(cookies: AstroCookies) {
+  const authenticated = await isAuth(cookies);
+  if (!authenticated) {
+    throw new Error("Authentication required");
+  }
+  return await getSession(cookies);
+}
+
+/**
+ * Get user ID if authenticated
+ * Usage: const userId = await getUserId(Astro.cookies);
+ */
+export async function getUserId(cookies: AstroCookies): Promise<string | null> {
+  try {
+    const user = await getUser(cookies);
+    return user?.id || null;
+  } catch (error) {
+    console.error("Error getting user ID:", error);
+    return null;
+  }
 }

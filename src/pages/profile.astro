@@ -1,0 +1,104 @@
+---
+import Layout from "../layouts/DashboardLayout.astro";
+import { getSession, getUser } from "../lib/auth";
+
+import { getLocale } from "astro-i18n-aut";
+import { useTranslations } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+const lang = getLocale(Astro.url);
+const t = useTranslations(lang as Lang);
+
+// Get user session and user data
+// Note: Authentication is handled by middleware
+const session = await getSession(Astro.cookies);
+const user = await getUser(Astro.cookies);
+---
+
+<Layout user={user}>
+  <div class="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+      <h1 class="text-2xl font-bold text-text-color">{t("profile.title")}</h1>
+      <p class="text-text-color/80 mt-1">
+        {t("profile.subtitle")}
+      </p>
+    </div>
+
+    <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-text-color mb-4">
+        {t("profile.userInfo.title")}
+      </h2>
+      <div class="space-y-4">
+        <div class="flex flex-col">
+          <label class="text-text-color font-medium mb-1">
+            {t("profile.userInfo.displayName")}:
+          </label>
+          <span class="text-text-color/70 px-3 py-2 bg-primary/10 rounded-md">
+            {user?.displayName || t("profile.userInfo.notSet")}
+          </span>
+        </div>
+        <div class="flex flex-col">
+          <label class="text-text-color font-medium mb-1"
+            >{t("profile.userInfo.email")}:</label
+          >
+          <span class="text-text-color/70 px-3 py-2 bg-primary/10 rounded-md">
+            {user?.email || t("profile.userInfo.notAvailable")}
+          </span>
+        </div>
+        <div class="flex flex-col">
+          <label class="text-text-color font-medium mb-1"
+            >{t("profile.userInfo.userId")}:</label
+          >
+          <span
+            class="text-text-color/70 px-3 py-2 bg-primary/10 rounded-md font-mono text-sm"
+          >
+            {user?.id || t("profile.userInfo.notAvailable")}
+          </span>
+        </div>
+        <div class="flex flex-col">
+          <label class="text-text-color font-medium mb-1"
+            >{t("profile.userInfo.roles")}:</label
+          >
+          <span class="text-text-color/70 px-3 py-2 bg-primary/10 rounded-md">
+            {user?.roles?.join(", ") || t("profile.userInfo.none")}
+          </span>
+        </div>
+        <div class="flex flex-col">
+          <label class="text-text-color font-medium mb-1">
+            {t("profile.userInfo.emailVerified")}:
+          </label>
+          <span
+            class={`px-3 py-2 rounded-md font-semibold ${
+              user?.emailVerified
+                ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+            }`}
+          >
+            {
+              user?.emailVerified
+                ? t("profile.userInfo.verified")
+                : t("profile.userInfo.notVerified")
+            }
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-text-color mb-4">
+        {t("profile.sessionInfo.title")}
+      </h2>
+      <p class="text-text-color/60 text-sm mb-4">
+        {t("profile.sessionInfo.description")}
+      </p>
+      <div
+        class="bg-primary/5 border border-primary/20 rounded-lg p-4 overflow-auto"
+      >
+        <pre
+          class="text-xs text-text-color/70 whitespace-pre-wrap break-words">
+{JSON.stringify(session, null, 2)}
+        </pre>
+      </div>
+    </div>
+  </div>
+</Layout>

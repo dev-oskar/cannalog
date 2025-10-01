@@ -7,13 +7,6 @@ import LanguagePicker from "./ui/LanguagePicker.astro";
 const lang = getLocale(Astro.url);
 const t = useTranslations(lang as Lang);
 
-// Define the shape for user information
-export interface User {
-  name: string;
-  email: string;
-  avatarUrl: string;
-}
-
 // Define the shape for a simple navigation link
 export interface NavLink {
   href: string;
@@ -34,7 +27,7 @@ export interface NavDropdown {
 export type NavItem = NavLink | NavDropdown;
 
 export interface Props {
-  user?: User;
+  user: any;
   mainNavItems?: NavItem[];
   footerNavLinks?: NavLink[];
 }
@@ -107,32 +100,40 @@ const {
           src={user.avatarUrl}
           alt=`${user.name} avatar`
         />
-        <h5 class="mb-1 text-lg font-semibold text-text-color truncate w-full text-center">{user.name}</h5>
-        <span class="text-xs text-text-color/60 truncate w-full text-center mb-3">{user.email}</span>
+        <h5
+          class="mb-1 text-lg font-semibold text-text-color truncate w-full text-center"
+        >
+          {user.name}
+        </h5>
+        <span
+          class="text-xs text-text-color/60 truncate w-full text-center mb-3"
+          >{user.email}</span
+        >
         <form action="/api/signout" method="post" class="w-full">
           <button
             type="submit"
             class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-center text-text-color border border-tertiary/20 rounded-md hover:bg-secondary/10 focus:ring-2 focus:outline-none focus:ring-primary/50 transition-colors duration-200"
           >
-          <svg
-            class="w-4 h-4 me-2"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 18 16"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
-            ></path>
-          </svg>
-          {t("sidebar.logout")}
+            <svg
+              class="w-4 h-4 me-2"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 18 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
+              ></path>
+            </svg>
+            {t("sidebar.logout")}
           </button>
         </form>
-      </div>      <ul class="space-y-2 font-medium border-t border-tertiary/20 pt-4 mt-4">
+      </div>
+      <ul class="space-y-2 font-medium border-t border-tertiary/20 pt-4 mt-4">
         {
           mainNavItems.map((item) => (
             <li>
@@ -244,7 +245,7 @@ const {
           </li>
         ))
       }
-      
+
       <!-- Settings Section -->
       <li class="border-t border-tertiary/20 pt-2">
         <a
@@ -258,16 +259,15 @@ const {
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path 
-              fill-rule="evenodd" 
-              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" 
-              clip-rule="evenodd" 
-            />
+            <path
+              fill-rule="evenodd"
+              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+              clip-rule="evenodd"></path>
           </svg>
           <span class="ms-3">{t("sidebar.nav.settings")}</span>
         </a>
       </li>
-      
+
       <!-- Theme Switcher Section -->
       <li>
         <button
@@ -283,7 +283,9 @@ const {
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+            <path
+              d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+            ></path>
           </svg>
           <svg
             id="sidebar-theme-toggle-light-icon"
@@ -296,13 +298,12 @@ const {
             <path
               d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
               fill-rule="evenodd"
-              clip-rule="evenodd"
-            />
+              clip-rule="evenodd"></path>
           </svg>
           <span class="ms-3">{t("navbar.toggleTheme")}</span>
         </button>
       </li>
-      
+
       <!-- Language Picker Section -->
       <li>
         <button
@@ -318,11 +319,10 @@ const {
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path 
-              fill-rule="evenodd" 
-              d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z" 
-              clip-rule="evenodd" 
-            />
+            <path
+              fill-rule="evenodd"
+              d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z"
+              clip-rule="evenodd"></path>
           </svg>
           <span class="flex-1 ms-3 text-left">{t("sidebar.nav.language")}</span>
           <svg
@@ -335,8 +335,7 @@ const {
             <path
               fill-rule="evenodd"
               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
+              clip-rule="evenodd"></path>
           </svg>
         </button>
         <div id="language-dropdown" class="hidden pl-8 py-2">
@@ -349,8 +348,12 @@ const {
 
 <script>
   // Sidebar theme toggle functionality
-  var sidebarThemeToggleDarkIcon = document.getElementById("sidebar-theme-toggle-dark-icon");
-  var sidebarThemeToggleLightIcon = document.getElementById("sidebar-theme-toggle-light-icon");
+  var sidebarThemeToggleDarkIcon = document.getElementById(
+    "sidebar-theme-toggle-dark-icon"
+  );
+  var sidebarThemeToggleLightIcon = document.getElementById(
+    "sidebar-theme-toggle-light-icon"
+  );
 
   // Change the icons inside the button based on previous settings
   if (

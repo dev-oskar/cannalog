@@ -5,22 +5,10 @@ import type { Lang } from "../i18n/ui";
 import PublicLayout from "../layouts/PublicLayout.astro";
 import Logo from "../components/ui/Logo.astro";
 
-
 const lang = getLocale(Astro.url);
 const t = useTranslations(lang as Lang);
 
 const title = t("signin.title");
-
-// Check for existing authentication
-const accessToken = Astro.cookies.get("nhost-access-token")?.value;
-const userCookie = Astro.cookies.get("nhost-user")?.value;
-
-// Redirect if already signed in
-if (accessToken && userCookie) {
-  return Astro.redirect("/dashboard");
-}
-
-
 
 // Handle messages from URL params and form submission
 const url = new URL(Astro.request.url);
@@ -75,18 +63,33 @@ if (errorParam) {
           >
             {t("signin.heading")}
           </h1>
-          {error && (
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-              {error}
-            </div>
-          )}
-          
-          {message && (
-            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-              {message}
-            </div>
-          )}
-          <form class="space-y-4 md:space-y-6" action="/api/signin" method="post" id="signin-form">
+          {
+            error && (
+              <div
+                class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert"
+              >
+                {error}
+              </div>
+            )
+          }
+
+          {
+            message && (
+              <div
+                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert"
+              >
+                {message}
+              </div>
+            )
+          }
+          <form
+            class="space-y-4 md:space-y-6"
+            action="/api/signin"
+            method="post"
+            id="signin-form"
+          >
             <div>
               <label
                 for="email"
@@ -146,7 +149,8 @@ if (errorParam) {
               >{t("signin.signInButton")}</button
             >
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-              {t("signin.noAccount")} <a
+              {t("signin.noAccount")}
+              <a
                 href="/register"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >{t("signin.signUp")}</a

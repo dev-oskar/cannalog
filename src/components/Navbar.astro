@@ -1,6 +1,7 @@
 ---
 import ColorModeSwitcher from "./ui/ColorModeSwitcher.astro";
 import Logo from "./ui/Logo.astro";
+import { getSession, getUser, isAuth } from "../lib/auth";
 
 import { getLocale } from "astro-i18n-aut";
 import { useTranslations, useTranslatedPath } from "../i18n/utils";
@@ -10,19 +11,10 @@ const lang = getLocale(Astro.url);
 const t = useTranslations(lang as Lang);
 const translatePath = useTranslatedPath(lang as Lang);
 
-// Check authentication status
-const accessToken = Astro.cookies.get("nhost-access-token")?.value;
-const userCookie = Astro.cookies.get("nhost-user")?.value;
-const isAuthenticated = !!(accessToken && userCookie);
-
-let user = null;
-if (isAuthenticated && userCookie) {
-  try {
-    user = JSON.parse(userCookie);
-  } catch (error) {
-    console.error("Navbar: Error parsing user cookie:", error);
-  }
-}
+// Check authentication status using new server-side utilities
+const isAuthenticated = await isAuth(Astro.cookies);
+const user = await getUser(Astro.cookies);
+const session = await getSession(Astro.cookies);
 
 export interface NavLink {
   label: string;
@@ -64,33 +56,42 @@ const {
     </div>
     <div class="flex items-center space-x-2">
       <ColorModeSwitcher tooltip={t("navbar.toggleTheme")} />
-      {isAuthenticated ? (
-        <div class="flex items-center space-x-2">
-          <a
-            href={translatePath("/dashboard")}
-            class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300"
-          >
-            {t("navbar.dashboard")}
-          </a>
-          <a
-            href="/api/signout"
-            class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition duration-300"
-          >
-            {t("navbar.signOut")}
-          </a>
-        </div>
-      ) : (
-        <div class="flex items-center space-x-2">
-          <a
-            href={translatePath("/signin")}
-            class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300"
-            >{t("navbar.login")}</a
-          >
-          <a href={translatePath("/register")} class="btn-primary"
-            >{t("navbar.register")}</a
-          >
-        </div>
-      )}
+      {
+        isAuthenticated ? (
+          <div class="flex items-center space-x-2">
+            <a
+              href={translatePath("/dashboard")}
+              class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300"
+            >
+              {t("navbar.dashboard")}
+            </a>
+            <a
+              href={translatePath("/profile")}
+              class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300 hidden sm:inline-block"
+            >
+              Profile
+            </a>
+            <a
+              href="/api/signout"
+              class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition duration-300"
+            >
+              {t("navbar.signOut")}
+            </a>
+          </div>
+        ) : (
+          <div class="flex items-center space-x-2">
+            <a
+              href={translatePath("/signin")}
+              class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300"
+            >
+              {t("navbar.login")}
+            </a>
+            <a href={translatePath("/register")} class="btn-primary">
+              {t("navbar.register")}
+            </a>
+          </div>
+        )
+      }
     </div>
   </nav>
 </header>
