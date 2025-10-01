@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { authUtils } from "../../lib/nhost";
-import { DEFAULT_SESSION_KEY } from "@nhost/nhost-js/session";
+import nhostSessionPkg from "@nhost/nhost-js/session";
+const { DEFAULT_SESSION_KEY } = nhostSessionPkg;
 
 export const GET: APIRoute = async ({ cookies, redirect }) => {
   try {
