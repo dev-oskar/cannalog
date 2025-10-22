@@ -3,22 +3,21 @@ import type { APIRoute } from "astro";
 import { createNhostServerClient } from "../../../lib/nhost-server";
 import { getUserId } from "../../../lib/auth";
 
+interface Strain {
+  id: string;
+  name: string;
+  thc_content: number; // THC content in mg (e.g., 18% = 180mg)
+  cbd_content: number; // CBD content in mg (e.g., 0.2% = 20mg)
+  description: string;
+  is_public: boolean;
+  created_by: string;
+  created_at: string;
+  tags: string[];
+  img_path: string;
+}
+
 interface StrainMutationResponse {
-  insert_strains: {
-    affected_rows: number;
-    returning: Array<{
-      id: string;
-      name: string;
-      thc_percentage: number;
-      cbd_percentage: number;
-      description: string;
-      is_public: boolean;
-      created_by: string;
-      created_at: string;
-      tags: string[];
-      img_path: string;
-    }>;
-  };
+  insert_strains_one: Strain;
 }
 
 type GraphQLResponse = {
@@ -27,21 +26,26 @@ type GraphQLResponse = {
 };
 
 const INSERT_STRAIN_MUTATION = `
-mutation InsertStrains($name: String!, $thc_percentage: Int!, $cbd_percentage: Int!, $description: String!, $is_public: Boolean!, $created_by: uuid!, $img_path: String!) {
-  insert_strains(objects: {name: $name, thc_percentage: $thc_percentage, cbd_percentage: $cbd_percentage, description: $description, is_public: $is_public, created_by: $created_by, img_path: $img_path}) {
-    affected_rows
-    returning {
-      id
-      name
-      thc_percentage
-      cbd_percentage
-      description
-      is_public
-      created_by
-      created_at
-      tags
-      img_path
-    }
+mutation InsertStrains($name: String!, $thc_content: Int!, $cbd_content: Int!, $description: String!, $is_public: Boolean!, $created_by: uuid!, $img_path: String!) {
+  insert_strains_one(object: {
+    name: $name, 
+    thc_content: $thc_content, 
+    cbd_content: $cbd_content, 
+    description: $description, 
+    is_public: $is_public, 
+    created_by: $created_by, 
+    img_path: $img_path
+  }) {
+    id
+    name
+    thc_content
+    cbd_content
+    description
+    is_public
+    created_by
+    created_at
+    tags
+    img_path
   }
 }
 `;
@@ -53,13 +57,31 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const currentUser = await getUserId(cookies);
     console.log("Current User ID:", currentUser);
 
-    const thcContent = formData.get("thc-content")?.toString() || "0";
-    const cbdContent = formData.get("cbd-content")?.toString() || "0";
+    const thcPercentage = formData.get("thc-content")?.toString() || "0";
+    const cbdPercentage = formData.get("cbd-content")?.toString() || "0";
+
+    // Convert percentages to milligrams (multiply by 10 to convert to mg)
+    // e.g., 18% = 180mg, 0.2% = 20mg
+    const thcValue = Math.round(parseFloat(thcPercentage) * 10);
+    const cbdValue = Math.round(parseFloat(cbdPercentage) * 10);
+
+    // Validate the values
+    if (isNaN(thcValue) || isNaN(cbdValue)) {
+      return new Response(
+        JSON.stringify({
+          message: "Invalid THC or CBD percentage value",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
 
     const newVariables = {
       name: formData.get("name")?.toString() || "",
-      thc_percentage: parseFloat(thcContent),
-      cbd_percentage: parseFloat(cbdContent),
+      thc_content: thcValue,
+      cbd_content: cbdValue,
       description: formData.get("notes")?.toString() || "",
       created_by: currentUser,
       is_public: true,
@@ -96,7 +118,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    if (!data || !data.insert_strains) {
+    if (!data || !data.insert_strains_one) {
       console.error("No data returned from mutation");
       return new Response(
         JSON.stringify({
@@ -109,7 +131,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    const createdStrain = data.insert_strains.returning[0];
+    const createdStrain = data.insert_strains_one;
 
     // Return the successful response
     return new Response(
