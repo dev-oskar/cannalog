@@ -144,6 +144,7 @@
       "overview": "Przegląd",
       "features": "Funkcje",
       "strains": "Moje odmiany",
+      "newStrain": "Nowa odmiana",
       "sessions": "Sesje",
       "journal": "Dziennik",
       "analytics": "Statystyki",
@@ -185,5 +186,25 @@
     "subtitle": "Czegoś tu brakuje.",
     "description": "Przepraszamy, nie możemy znaleźć tej strony. Na stronie głównej znajdziesz wiele ciekawych rzeczy do odkrycia.",
     "backButton": "Powrót na stronę główną"
+  },
+  "newStrain": {
+    "title": "Dodaj nową odmianę",
+    "strainNameLabel": "Nazwa odmiany",
+    "strainPlaceholder": "Blue Dream",
+    "strainTypeLabel": "Typ odmiany",
+    "geneticsHybrid": "Hybryda",
+    "thcContentLabel": "Zawartość THC (%)",
+    "cbdContentLabel": "Zawartość CBD (%)",
+    "cannabinoidsLabel": "Kannabinoidy",
+    "terpenesLabel": "Terpeny",
+    "notesLabel": "Notatki",
+    "notesPlaceholder": "Powiedz coś o swoich wrażeniach, odczuciach, np. jak pachnie, jak wyglądają topy...",
+    "newStrainButton": "Dodaj odmianę",
+    "errors": {
+      "strainNameRequired": "Podaj nazwę odmiany",
+      "strainTypeRequired": "Wybierz typ odmiany",
+      "cannabinoidsRequired": "Podaj przynajmniej jeden kannabinoid",
+      "terpenesRequired": "Podaj przynajmniej jeden terpen"
+    }
   }
 }

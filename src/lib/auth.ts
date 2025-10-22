@@ -22,11 +22,6 @@ export async function requireAuth() {
 }
 
 /**
- * NEW: Server-side auth utilities for Astro components and pages
- * These functions work in Astro's server-side rendering context
- */
-
-/**
  * Get the authenticated user session in Astro components
  * Usage: const session = await getSession(Astro.cookies);
  */

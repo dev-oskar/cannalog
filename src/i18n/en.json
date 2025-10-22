@@ -144,6 +144,7 @@
       "overview": "Overview",
       "features": "Features",
       "strains": "My Strains",
+      "newStrain": "Add Strain",
       "sessions": "Sessions",
       "journal": "Journal",
       "analytics": "Analytics",
@@ -185,5 +186,25 @@
     "subtitle": "Something's missing.",
     "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
     "backButton": "Back to Homepage"
+  },
+  "newStrain": {
+    "title": "Add New Strain",
+    "strainNameLabel": "Strain Name",
+    "strainPlaceholder": "Blue Dream",
+    "strainTypeLabel": "Strain Type",
+    "geneticsHybrid": "Hybrid",
+    "thcContentLabel": "THC Content (%)",
+    "cbdContentLabel": "CBD Content (%)",
+    "cannabinoidsLabel": "Cannabinoids",
+    "terpenesLabel": "Terpenes",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Tasting notes, effects...",
+    "newStrainButton": "Add Strain",
+    "errors": {
+      "strainNameRequired": "Please enter a strain name",
+      "strainTypeRequired": "Please select a strain type",
+      "cannabinoidsRequired": "Please enter at least one cannabinoid",
+      "terpenesRequired": "Please enter at least one terpene"
+    }
   }
 }

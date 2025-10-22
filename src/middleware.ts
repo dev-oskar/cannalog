@@ -11,8 +11,9 @@ const publicRoutePatterns = [
   { path: "/register", exact: true },
   { path: "/verify-email", exact: true },
 
-  // API routes (handle their own auth if needed)
-  { path: "/api/", prefix: true },
+  // API routes that should be public
+  { path: "/api/signin", exact: true },
+  { path: "/api/signout", exact: true },
 
   // Static assets (for performance)
   { path: "/_astro/", prefix: true },
@@ -25,6 +26,16 @@ const publicRoutePatterns = [
  * Extract the path without language prefix for route checking
  */
 function getPathWithoutLang(pathname: string, lang: string): string {
+  // Always strip language prefix for API routes
+  if (pathname.includes("/api/")) {
+    const parts = pathname.split("/");
+    if (parts[1] === lang) {
+      parts.splice(1, 1); // Remove the language segment
+    }
+    return parts.join("/");
+  }
+
+  // Normal language handling for non-API routes
   if (lang === defaultLang) {
     return pathname;
   }
@@ -104,6 +115,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
       `[MIDDLEWARE] No session, redirecting to localized signin: ${localizedSigninPath} from: ${path}`
     );
     return context.redirect(`${localizedSigninPath}?error=auth-required`);
+  }
+
+  if (path.includes("/api/strains")) {
+    console.log(`[MIDDLEWARE] Strains API route detected: ${path}`);
   }
 
   // Session exists, allow access to protected route

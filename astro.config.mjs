@@ -27,17 +27,22 @@ export default defineConfig({
   build: {
     format: "file",
   },
-  integrations: [i18n({
-    locales,
-    defaultLocale,
-    redirectDefaultLocale: true,
-  }), sitemap({
-    i18n: {
+  integrations: [
+    i18n({
       locales,
       defaultLocale,
-    },
-    filter: filterSitemapByDefaultLocale({ defaultLocale }),
-  }), icon()],
+      redirectDefaultLocale: true,
+      exclude: ["pages/api/**/*"],
+    }),
+    sitemap({
+      i18n: {
+        locales,
+        defaultLocale,
+      },
+      filter: filterSitemapByDefaultLocale({ defaultLocale }),
+    }),
+    icon(),
+  ],
   output: "server",
   adapter: netlify(),
 });
