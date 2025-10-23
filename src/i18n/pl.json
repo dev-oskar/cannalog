@@ -187,6 +187,17 @@
     "description": "Przepraszamy, nie możemy znaleźć tej strony. Na stronie głównej znajdziesz wiele ciekawych rzeczy do odkrycia.",
     "backButton": "Powrót na stronę główną"
   },
+  "strains": {
+    "title": "Moje odmiany",
+    "addNew": "Dodaj nową odmianę",
+    "noStrains": "Nie masz jeszcze żadnych odmian",
+    "getStarted": "Zacznij dodając swoją pierwszą odmianę",
+    "private": "Prywatna",
+    "public": "Publiczna",
+    "notFound": "Nie znaleziono odmiany",
+    "description": "Opis",
+    "tags": "Tagi"
+  },
   "newStrain": {
     "title": "Dodaj nową odmianę",
     "strainNameLabel": "Nazwa odmiany",

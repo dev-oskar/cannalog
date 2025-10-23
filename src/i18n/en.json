@@ -187,6 +187,17 @@
     "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
     "backButton": "Back to Homepage"
   },
+  "strains": {
+    "title": "My Strains",
+    "addNew": "Add New Strain",
+    "noStrains": "No strains added yet",
+    "getStarted": "Get started by adding your first strain",
+    "private": "Private",
+    "public": "Public",
+    "notFound": "Strain not found",
+    "description": "Description",
+    "tags": "Tags"
+  },
   "newStrain": {
     "title": "Add New Strain",
     "strainNameLabel": "Strain Name",

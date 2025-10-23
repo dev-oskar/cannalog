@@ -1,0 +1,101 @@
+---
+import DashboardLayout from "../../../layouts/DashboardLayout.astro";
+import { useI18n } from "../../../integrations/i18n-globals";
+import { getUser } from "../../../lib/auth";
+const { t } = useI18n(Astro);
+const { id } = Astro.params;
+
+const user = await getUser(Astro.cookies);
+
+// Fetch strain data
+let strain;
+let error;
+
+try {
+  const response = await fetch(`${Astro.url.origin}/api/strains/get_one_strain?id=${id}`, {
+    headers: {
+      "Cookie": Astro.request.headers.get("cookie") || "",
+    },
+  });
+
+  const data = await response.json();
+  
+  if (!response.ok) {
+    error = data.message;
+  } else {
+    strain = data.strain;
+  }
+} catch (e) {
+  error = "Failed to load strain data";
+}
+---
+
+<DashboardLayout title={strain ? strain.name : t("strains.notFound")} user={user}>
+  <div class="max-w-4xl mx-auto p-4">
+    {error && (
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{error}</span>
+      </div>
+    )}
+    
+    {strain && (
+      <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <div class="space-y-6">
+          <!-- Strain Name -->
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+              {strain.name}
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              {new Date(strain.created_at).toLocaleDateString()}
+            </p>
+          </div>
+
+          <!-- THC and CBD Content -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">THC</h3>
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                {strain.thc_content}%
+              </p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">CBD</h3>
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                {strain.cbd_content}%
+              </p>
+            </div>
+          </div>
+
+          <!-- Description -->
+          {strain.description && (
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {t("strains.description")}
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                {strain.description}
+              </p>
+            </div>
+          )}
+
+          <!-- Tags -->
+          {strain.tags && strain.tags.length > 0 && (
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {t("strains.tags")}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {strain.tags.map((tag: string) => (
+                  <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+</DashboardLayout>
