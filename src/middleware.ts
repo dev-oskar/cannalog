@@ -14,6 +14,7 @@ const publicRoutePatterns = [
   // API routes that should be public
   { path: "/api/signin", exact: true },
   { path: "/api/signout", exact: true },
+  { path: "/api/signup", exact: true },
 
   // Static assets (for performance)
   { path: "/_astro/", prefix: true },
@@ -83,10 +84,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // even for public routes, so that session changes are detected
   const session = await handleNhostMiddleware(context.cookies);
 
-  console.log(
-    `[MIDDLEWARE] Session found: ${!!session}, User: ${!!session?.user}, Path: ${path}`
-  );
-
   // If it's a public route, check if we should redirect authenticated users
   if (isPublic) {
     console.log(`[MIDDLEWARE] Public route detected: ${path}`);
@@ -115,10 +112,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
       `[MIDDLEWARE] No session, redirecting to localized signin: ${localizedSigninPath} from: ${path}`
     );
     return context.redirect(`${localizedSigninPath}?error=auth-required`);
-  }
-
-  if (path.includes("/api/strains")) {
-    console.log(`[MIDDLEWARE] Strains API route detected: ${path}`);
   }
 
   // Session exists, allow access to protected route

@@ -13,19 +13,6 @@ const message = url.searchParams.get("message");
 const errorParam = url.searchParams.get("error");
 
 let error = errorParam || "";
-if (Astro.request.method === "POST") {
-  try {
-    const formData = await Astro.request.formData();
-    const email = formData.get("email")?.toString();
-    const password = formData.get("password")?.toString();
-
-    if (!email || !password) {
-      error = t("signin.errors.fillFields");
-    }
-  } catch (e) {
-    error = t("signin.errors.authFailed");
-  }
-}
 
 if (errorParam) {
   // Handle specific error codes with proper i18n

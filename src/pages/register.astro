@@ -1,75 +1,40 @@
 ---
 import { useI18n } from "../integrations/i18n-globals";
-import { authUtils } from "../lib/nhost";
-
 import Logo from "../components/ui/Logo.astro";
 import PublicLayout from "../layouts/PublicLayout.astro";
 
 const { lang, t, translatePath } = useI18n(Astro);
 
-export const prerender = false; // Not needed in 'server' mode
+export const prerender = false;
 
-// Note: Authentication checks are handled by middleware.ts
-// The middleware will redirect authenticated users away from this page
+// Handle error messages from URL params
+const url = new URL(Astro.request.url);
+const errorParam = url.searchParams.get("error");
+const message = url.searchParams.get("message");
 
 let error = "";
-let success = "";
 
-if (Astro.request.method === "POST") {
-  try {
-    const data = await Astro.request.formData();
-
-    if (!data) {
-      throw new Error(t("register.errors.noFormData"));
-    }
-
-    const email = data.get("email")?.toString();
-    const password = data.get("password")?.toString();
-    const confirmPassword = data.get("confirm-password")?.toString();
-    const terms = data.get("terms");
-
-    if (!email) {
-      throw new Error(t("register.errors.emailRequired"));
-    }
-
-    if (!password) {
-      throw new Error(t("register.errors.passwordRequired"));
-    }
-
-    if (password !== confirmPassword) {
-      throw new Error(t("register.errors.passwordsMismatch"));
-    }
-
-    if (terms !== "on") {
-      throw new Error(t("register.errors.termsRequired"));
-    }
-
-    // Register with Nhost
-    console.log("Attempting registration with:", { email });
-    const result = await authUtils.signUp(email, password);
-    console.log("Registration result:", result);
-
-    // Handle the different possible return types from authUtils.signUp
-    if ("error" in result && result.error) {
-      console.error("Registration error details:", result.error);
-      throw new Error(result.error.message || "Registration failed");
-    }
-
-    // Check if the Nhost response indicates an error
-    if ("error" in result && result.error) {
-      throw new Error(
-        result.error.message || t("register.errors.registrationFailed")
-      );
-    }
-
-    // Registration successful - user needs to verify email
-    success = t("register.successMessage");
-  } catch (err) {
-    if (err instanceof Error) {
-      error = err.message;
-    } else {
+if (errorParam) {
+  // Handle specific error codes with proper i18n
+  switch (errorParam) {
+    case "missing-fields":
+      error = t("register.errors.emailRequired");
+      break;
+    case "password-mismatch":
+      error = t("register.errors.passwordsMismatch");
+      break;
+    case "terms-required":
+      error = t("register.errors.termsRequired");
+      break;
+    case "registration-failed":
+      error = t("register.errors.registrationFailed");
+      break;
+    case "unexpected-error":
       error = t("register.errors.unexpectedError");
-    }
+      break;
+    default:
+      error = t("register.errors.unexpectedError");
+      break;
   }
 }
 ---
@@ -106,17 +71,23 @@ if (Astro.request.method === "POST") {
           }
 
           {
-            success && (
+            message && (
               <div
                 class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                 role="alert"
               >
-                {success}
+                {t("register.successMessage")}
               </div>
             )
           }
 
-          <form class="space-y-4 md:space-y-6" method="POST">
+          <form
+            class="space-y-4 md:space-y-6"
+            action="/api/signup"
+            method="POST"
+          >
+            <!-- Hidden field to preserve language context -->
+            <input type="hidden" name="lang" value={lang} />
             <div>
               <label
                 for="email"
