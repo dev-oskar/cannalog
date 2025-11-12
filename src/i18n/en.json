@@ -97,6 +97,35 @@
     "signInNow": "Sign In Now",
     "backToHome": "Back to Home"
   },
+  "sessions": {
+    "new": {
+      "title": "New Session Log",
+      "heading": "Log New Session",
+      "strain": "Strain",
+      "select_strain": "Select a strain",
+      "usage_method": "Usage Method",
+      "amount": "Amount",
+      "effects": "Effects",
+      "notes": "Notes",
+      "submit": "Save Session"
+    },
+    "methods": {
+      "smoke": "Smoke",
+      "vape": "Vape",
+      "edible": "Edible",
+      "oil": "Oil"
+    },
+    "effects": {
+      "relaxed": "Relaxed",
+      "energetic": "Energetic",
+      "creative": "Creative",
+      "focused": "Focused",
+      "sleepy": "Sleepy"
+    }
+  },
+  "common": {
+    "cancel": "Cancel"
+  },
   "signin": {
     "title": "Cannalog - Sign in",
     "heading": "Sign in to your account",

@@ -1,15 +1,13 @@
 ---
 import ColorModeSwitcher from "./ui/ColorModeSwitcher.astro";
 import Logo from "./ui/Logo.astro";
-import { getSession, getUser, isAuth } from "../lib/auth";
+import { authUtils } from "../lib/nhost";
 import { useI18n } from "../integrations/i18n-globals";
 
 const { lang, t, translatePath } = useI18n(Astro);
 
-// Check authentication status using new server-side utilities
-const isAuthenticated = await isAuth(Astro.cookies);
-const user = await getUser(Astro.cookies);
-const session = await getSession(Astro.cookies);
+const session = authUtils.getUserSession();
+const isAuthenticated = session != null;
 
 export interface NavLink {
   label: string;
@@ -74,6 +72,7 @@ const {
             </a>
           </div>
         ) : (
+          // Not authenticated
           <div class="flex items-center space-x-2">
             <a
               href={translatePath("/signin")}

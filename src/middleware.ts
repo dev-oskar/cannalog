@@ -1,7 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
-import { handleNhostMiddleware } from "./lib/nhost-server";
 import { getLangFromUrl, useTranslatedPath } from "./i18n/utils";
 import { defaultLang } from "./i18n/ui";
+import { authUtils } from "./lib/nhost";
 
 // Define route patterns that don't require authentication (without language prefix)
 const publicRoutePatterns = [
@@ -70,43 +70,25 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const lang = getLangFromUrl(context.url);
   const translatePath = useTranslatedPath(lang);
 
-  console.log(
-    `[MIDDLEWARE] Processing path: ${path}, detected language: ${lang}`
-  );
-
-  // Check if this is a public route or a public asset
   const isPublic = isPublicRoute(path, lang);
-
-  console.log(`[MIDDLEWARE] Is public route: ${isPublic}`);
-
-  // Handle Nhost authentication and token refresh
-  // Always call this to ensure session is up-to-date
-  // even for public routes, so that session changes are detected
-  const session = await handleNhostMiddleware(context.cookies);
+  const userSession = authUtils.getUserSession();
 
   // If it's a public route, check if we should redirect authenticated users
   if (isPublic) {
-    console.log(`[MIDDLEWARE] Public route detected: ${path}`);
-
     // For signin/register pages, redirect authenticated users to dashboard
     const pathWithoutLang = getPathWithoutLang(path, lang);
     if (
-      session &&
-      (pathWithoutLang === "/signin" || pathWithoutLang === "/register")
+      (userSession && pathWithoutLang === "/signin") ||
+      pathWithoutLang === "/register"
     ) {
       const localizedDashboardPath = translatePath("/dashboard");
-      console.log(
-        `[MIDDLEWARE] Authenticated user trying to access ${pathWithoutLang}, redirecting to: ${localizedDashboardPath}`
-      );
       return context.redirect(localizedDashboardPath);
     }
 
-    console.log(`[MIDDLEWARE] Allowing access to public route: ${path}`);
     return next();
   }
 
-  // If no session and not a public route, redirect to localized signin
-  if (!session) {
+  if (!userSession) {
     const localizedSigninPath = translatePath("/signin");
     console.log(
       `[MIDDLEWARE] No session, redirecting to localized signin: ${localizedSigninPath} from: ${path}`

@@ -97,6 +97,35 @@
     "signInNow": "Zaloguj się teraz",
     "backToHome": "Powrót do strony głównej"
   },
+  "sessions": {
+    "new": {
+      "title": "Nowa sesja",
+      "heading": "Zapisz nową sesję",
+      "strain": "Odmiana",
+      "select_strain": "Wybierz odmianę",
+      "usage_method": "Metoda użycia",
+      "amount": "Ilość",
+      "effects": "Efekty",
+      "notes": "Notatki",
+      "submit": "Zapisz sesję"
+    },
+    "methods": {
+      "smoke": "Palenie",
+      "vape": "Waporyzacja",
+      "edible": "Jedzenie",
+      "oil": "Olejek"
+    },
+    "effects": {
+      "relaxed": "Zrelaksowany",
+      "energetic": "Energiczny",
+      "creative": "Kreatywny",
+      "focused": "Skupiony",
+      "sleepy": "Senny"
+    }
+  },
+  "common": {
+    "cancel": "Anuluj"
+  },
   "signin": {
     "title": "CannaLog - Logowanie",
     "heading": "Zaloguj się",

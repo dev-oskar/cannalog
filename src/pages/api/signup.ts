@@ -67,18 +67,20 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(null, {
       status: 303,
       headers: {
-        Location: `${getTranslatedPath("/signin")}?message=registration-success`,
+        Location: `${getTranslatedPath(
+          "/signin"
+        )}?message=registration-success`,
       },
     });
   } catch (err) {
     // Log the error
     console.error("Unexpected error during registration:", err);
-    
+
     // Create a new URL object and get the language again since we're outside the try block
     const errorUrl = new URL(request.url);
     const errorLang = getLangFromUrl(errorUrl);
     const errorTranslatedPath = useTranslatedPath(errorLang);
-    
+
     return new Response(null, {
       status: 303,
       headers: {

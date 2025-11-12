@@ -1,10 +1,10 @@
 import type { APIRoute } from "astro";
-import { createNhostServerClient } from "../../lib/nhost-server";
 import { useTranslatedPath } from "../../i18n/utils";
 import { defaultLang } from "../../i18n/ui";
 import type { Lang } from "../../i18n/ui";
+import { authUtils } from "../../lib/nhost";
 
-export const POST: APIRoute = async ({ request, cookies, redirect }) => {
+export const POST: APIRoute = async ({ request, redirect }) => {
   try {
     console.log("[SIGNIN] Starting sign-in process...");
 
@@ -17,37 +17,17 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     const translatePath = useTranslatedPath(lang);
 
     if (!email || !password) {
-      console.log("[SIGNIN] Missing credentials");
       return redirect(`${translatePath("/signin")}?error=missing-credentials`);
     }
 
-    // Create server-side Nhost client that can set cookies
-    const nhost = await createNhostServerClient(cookies);
+    const response = await authUtils.signIn(email, password);
 
-    // Sign in using the server client
-    const result = await nhost.auth.signInEmailPassword({
-      email,
-      password,
-    });
-
-    console.log("[SIGNIN] Sign-in result received");
-
-    // Check if the signin was successful by checking for session
-    const session = nhost.getUserSession();
-    console.log("[SIGNIN] Session after signin:", {
-      hasSession: !!session,
-      hasUser: !!session?.user,
-      userId: session?.user?.id,
-    });
-
-    if (!session || !session.user) {
-      console.log("[SIGNIN] Sign-in failed: No session created");
+    if (!response.success) {
       return redirect(`${translatePath("/signin")}?error=signin-failed`);
     }
 
-    console.log(
-      "[SIGNIN] Sign-in successful, session cookies set, redirecting to localized dashboard..."
-    );
+    console.log("[SIGNIN] Sign-in successful");
+
     return redirect(translatePath("/dashboard"));
   } catch (error) {
     console.error("[SIGNIN] Unexpected error:", error);

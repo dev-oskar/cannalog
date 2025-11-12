@@ -1,20 +1,8 @@
 // src/pages/api/strains/add.ts
 import type { APIRoute } from "astro";
-import { createNhostServerClient } from "../../../lib/nhost-server";
-import { getUserId } from "../../../lib/auth";
-
-interface Strain {
-  id: string;
-  name: string;
-  thc_content: number; // THC content in mg (e.g., 18% = 180mg)
-  cbd_content: number; // CBD content in mg (e.g., 0.2% = 20mg)
-  description: string;
-  is_public: boolean;
-  created_by: string;
-  created_at: string;
-  tags: string[];
-  img_path: string;
-}
+import nhost from "../../../lib/nhost";
+import type { Strain } from "../../../types/db-types";
+import { authUtils } from "../../../lib/nhost";
 
 interface StrainMutationResponse {
   insert_strains_one: Strain;
@@ -50,12 +38,10 @@ mutation InsertStrains($name: String!, $thc_content: Int!, $cbd_content: Int!, $
 }
 `;
 
-export const POST: APIRoute = async ({ request, cookies }) => {
-  const nhost = await createNhostServerClient(cookies);
+export const POST: APIRoute = async ({ request }) => {
   try {
     const formData = await request.formData();
-    const currentUser = await getUserId(cookies);
-    console.log("Current User ID:", currentUser);
+    const currentUser = authUtils.getUserId();
 
     const thcPercentage = formData.get("thc-content")?.toString() || "0";
     const cbdPercentage = formData.get("cbd-content")?.toString() || "0";

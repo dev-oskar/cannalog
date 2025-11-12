@@ -3,23 +3,15 @@ import { defaultLang, ui, showDefaultLang, languages } from "../i18n/ui";
 import type { Lang, TranslationKey } from "../i18n/ui";
 
 /**
- * Comprehensive i18n utility - Senior Engineer's Solution
+ * TODO: check and test the logic and implementation thoroughly
+ * Comprehensive i18n utility - AI GENERATED
  * Usage: const i18n = useI18n(Astro);
- *
- * Provides everything needed for internationalization:
  * - i18n.t('key') - Translation function
  * - i18n.lang - Current language
  * - i18n.translatePath('/path') - Path translation with language prefix
  * - i18n.getUntranslatedPath() - Current path without language prefix
  * - i18n.languages - Available languages object
  * - i18n.isDefaultLang - Boolean check for default language
- *
- * Benefits:
- * - Single import, complete i18n solution
- * - Type-safe with full TypeScript support
- * - Zero runtime overhead
- * - Consistent API across all components
- * - Self-contained with all utilities included
  */
 
 interface I18nUtils {

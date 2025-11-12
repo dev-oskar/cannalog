@@ -1,14 +1,12 @@
-import { createClient, type NhostClient } from "@nhost/nhost-js";
+import { createClient } from "@nhost/nhost-js";
+import { FetchError } from "@nhost/nhost-js/fetch";
 
-// Client-side Nhost instance - this is the default client for browser usage
-// Uses localStorage by default for session storage
 const nhost = createClient({
   subdomain:
     import.meta.env.NHOST_SUBDOMAIN || process.env.NHOST_SUBDOMAIN || "local",
   region: import.meta.env.NHOST_REGION || process.env.NHOST_REGION || "local",
 });
 
-// Client-side auth utilities using the SDK methods (not fetch)
 export const authUtils = {
   async signUp(email: string, password: string) {
     try {
@@ -28,34 +26,49 @@ export const authUtils = {
     }
   },
 
-  async signIn(email: string, password: string) {
+  async signIn(email: string, password: string): Promise<{ success: boolean }> {
     try {
       const result = await nhost.auth.signInEmailPassword({
         email,
         password,
       });
 
-      return result;
-    } catch (error) {
-      console.error("Sign in error:", error);
+      if (!result.body.session) {
+        console.log("Sign in failed: No session created");
+        return { success: false };
+      }
+
+      return { success: true };
+    } catch (err) {
+      if (!(err instanceof FetchError)) {
+        throw err; // Re-throw if it's not a FetchError
+      }
+      console.log("Sign in error:", err);
       return {
-        error: {
-          message: error instanceof Error ? error.message : "Unknown error",
-        },
+        success: false,
       };
     }
   },
 
   async signOut() {
     try {
-      const result = await nhost.auth.signOut({ all: true }); // clear all sessions
-      return result;
-    } catch (error) {
-      console.error("Sign out error:", error);
+      const userSession = this.getUserSession();
+      if (!userSession) {
+        console.log("No active session found for sign-out");
+        return { success: false, message: "No active session" };
+      }
+      await nhost.auth.signOut({
+        refreshToken: userSession.refreshToken,
+        all: true,
+      }); // clear all sessions
+      return { success: true };
+    } catch (err) {
+      if (!(err instanceof FetchError)) {
+        throw err; // Re-throw if it's not a FetchError
+      }
+      console.log("Sign out error:", err);
       return {
-        error: {
-          message: error instanceof Error ? error.message : "Unknown error",
-        },
+        success: false,
       };
     }
   },
@@ -64,10 +77,21 @@ export const authUtils = {
     return nhost.getUserSession();
   },
 
-  getUser() {
-    return nhost.auth.getUser();
+  getUserId() {
+    const session = this.getUserSession();
+    return session?.user?.id || null;
+  },
+
+  async getUser() {
+    try {
+      const user = await nhost.auth.getUser();
+      return user.body;
+    } catch (err) {
+      if (!(err instanceof FetchError)) {
+        throw err; // Re-throw if it's not a FetchError
+      }
+    }
   },
 };
 
-// Export the client for direct usage if needed
 export default nhost;

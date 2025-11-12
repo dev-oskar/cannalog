@@ -1,14 +1,12 @@
 ---
 import Layout from "../../layouts/DashboardLayout.astro";
-import { getSession, getUser } from "../../lib/auth";
+import { authUtils } from "../../lib/nhost";
 import { useI18n } from "../../integrations/i18n-globals";
 
 const { t } = useI18n(Astro);
 
-// Get user session and user data
-// Note: Authentication is handled by middleware
-const session = await getSession(Astro.cookies);
-const user = await getUser(Astro.cookies);
+const session = authUtils.getUserSession();
+const user = await authUtils.getUser();
 ---
 
 <Layout user={user}>

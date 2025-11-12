@@ -1,9 +1,9 @@
 import type { APIRoute } from "astro";
-import { authUtils } from "../../lib/nhost";
-import { DEFAULT_SESSION_KEY } from "@nhost/nhost-js/session";
+// import { DEFAULT_SESSION_KEY } from "@nhost/nhost-js/session";
 import { getLangFromUrl, useTranslatedPath } from "../../i18n/utils";
-import { defaultLang } from "../../i18n/ui";
-import type { Lang } from "../../i18n/ui";
+import { defaultLang, type Lang } from "../../i18n/ui";
+
+import { authUtils } from "../../lib/nhost";
 
 export const GET: APIRoute = async ({ cookies, redirect, request }) => {
   try {
@@ -22,29 +22,11 @@ export const GET: APIRoute = async ({ cookies, redirect, request }) => {
     }
 
     const translatePath = useTranslatedPath(lang);
-
-    // Sign out using the SDK
     await authUtils.signOut();
 
-    // Clear the session cookie (this is the main cookie used by our server helpers)
-    cookies.delete(DEFAULT_SESSION_KEY, { path: "/" });
-
-    // Clear any legacy cookies that might exist
-    cookies.delete("nhost-access-token", { path: "/" });
-    cookies.delete("nhost-refresh-token", { path: "/" });
-    cookies.delete("nhost-user", { path: "/" });
-
-    return redirect(
-      `${translatePath("/")}?message=You have been signed out successfully`
-    );
+    return redirect(`${translatePath("/")}?message=signout-success`);
   } catch (error) {
-    console.error("[SIGNOUT] Error during signout:", error);
-    // Still clear cookies even if signout fails
-    cookies.delete(DEFAULT_SESSION_KEY, { path: "/" });
-    cookies.delete("nhost-access-token", { path: "/" });
-    cookies.delete("nhost-refresh-token", { path: "/" });
-    cookies.delete("nhost-user", { path: "/" });
-
+    console.error("[SIGNOUT] Sign-out error:", error);
     // Use default language for error case
     const translatePath = useTranslatedPath(defaultLang);
     return redirect(`${translatePath("/")}?error=signout-error`);

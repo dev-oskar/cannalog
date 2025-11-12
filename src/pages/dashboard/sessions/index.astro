@@ -2,37 +2,36 @@
 import DashboardLayout from "../../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../../integrations/i18n-globals";
 import CannabisIcon from "../../../components/ui/CannabisIcon.astro";
-import type { Strain } from "../../../types/db-types";
+import type { Session } from "../../../types/db-types";
+import { getUserSessions } from "../../../lib/queries.ts";
+
 import { authUtils } from "../../../lib/nhost";
-import { getUserStrains } from "../../../lib/queries";
 
 const { t } = useI18n(Astro);
 const user = await authUtils.getUser();
 
 // Fetch strains data
-let strains: Strain[] = [];
+let sessions: Session[] = [];
 let error;
 
 try {
-  strains = await getUserStrains();
+  sessions = await getUserSessions();
 } catch (e) {
   console.error(e);
-  error = "Failed to load strains data";
+  error = "Failed to load sessions data";
 }
 ---
 
-<DashboardLayout title={t("strains.title")} user={user}>
+<DashboardLayout title="Sessions" user={user}>
   <div class="max-w-7xl mx-auto p-4">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-        {t("strains.title")}
-      </h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Sessions</h1>
       <a
-        href="/dashboard/new-strain"
+        href="/dashboard/new-session"
         class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
       >
         <CannabisIcon class="w-5 h-5 mr-2" />
-        {t("strains.addNew")}
+        New session
       </a>
     </div>
 
@@ -48,7 +47,7 @@ try {
     }
 
     {
-      strains.length === 0 && !error && (
+      sessions.length === 0 && !error && (
         <div class="text-center py-12">
           <CannabisIcon class="mx-auto h-12 w-12 text-gray-400" />
           <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -63,57 +62,52 @@ try {
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {
-        strains.map((strain) => (
+        sessions.map((session) => (
           <a
-            href={`/dashboard/strains/${strain.id}`}
+            href={`/dashboard/strains/${session.strain_used}`}
             class="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow duration-200"
           >
             <div class="p-6">
               <div class="flex justify-between items-start">
                 <div>
                   <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    {strain.name}
+                    ID
                   </h2>
                   <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {new Date(strain.created_at).toLocaleDateString()}
+                    {session.strain_used}
                   </p>
                 </div>
-                {!strain.is_public && (
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                    {t("strains.private")}
-                  </span>
-                )}
               </div>
 
               <div class="mt-4 grid grid-cols-2 gap-4">
                 <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
                   <div class="text-sm text-gray-500 dark:text-gray-400">
-                    THC
+                    Created at
                   </div>
                   <div class="font-semibold text-gray-900 dark:text-white">
-                    {strain.thc_content}%
+                    {new Date(session.created_at).toLocaleDateString()}
                   </div>
                 </div>
                 <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
                   <div class="text-sm text-gray-500 dark:text-gray-400">
-                    CBD
+                    Usage Method
                   </div>
                   <div class="font-semibold text-gray-900 dark:text-white">
-                    {strain.cbd_content}%
+                    {session.usage_method}%
                   </div>
                 </div>
               </div>
 
-              {strain.tags && strain.tags.length > 0 && (
+              {session.effects && session.effects.length > 0 && (
                 <div class="mt-4 flex flex-wrap gap-2">
-                  {strain.tags.slice(0, 3).map((tag: string) => (
+                  {session.effects.slice(0, 3).map((tag: string) => (
                     <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
                       {tag}
                     </span>
                   ))}
-                  {strain.tags.length > 3 && (
+                  {session.effects.length > 3 && (
                     <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
-                      +{strain.tags.length - 3}
+                      +{session.effects.length - 3}
                     </span>
                   )}
                 </div>

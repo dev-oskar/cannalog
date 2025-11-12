@@ -1,12 +1,12 @@
 ---
 import { useI18n } from "../../integrations/i18n-globals";
-import { getUser } from "../../lib/auth";
+import { authUtils } from "../../lib/nhost";
 
 import Layout from "../../layouts/DashboardLayout.astro";
 
 const { t } = useI18n(Astro);
 
-const user = await getUser(Astro.cookies);
+const user = await authUtils.getUser();
 ---
 
 <Layout user={user}>
