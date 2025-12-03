@@ -8,7 +8,9 @@ const { title, description, locale } = Astro.props;
 
 <BaseLayout title={title} description={description} locale={locale}>
   <NavBar />
-  <main class="px-10 md:px-20 lg:px-80 justify-center">
+  <main
+    class="px-4 sm:px-6 md:px-12 lg:px-20 xl:px-80 max-w-7xl mx-auto justify-center"
+  >
     <slot />
   </main>
   <Footer />

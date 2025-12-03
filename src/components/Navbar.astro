@@ -9,25 +9,23 @@ const { t, translatePath } = useI18n(Astro);
 ---
 
 <header class="backdrop-blur-md sticky top-0 z-50">
-  <nav class="container mx-auto px-6 py-4">
-    <!-- Use a 3-column grid so the logo can sit centered while actions live on the right -->
-    <div class="grid grid-cols-3 items-center">
-      <!-- Left column: intentionally empty (nav links moved to footer) -->
-      <div></div>
+  <nav class="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+    <!-- Flexbox layout: logo left, actions right -->
+    <div class="flex justify-between items-center gap-2 sm:gap-4">
+      <!-- Logo: left, scales responsively -->
+      <a
+        href={translatePath("/")}
+        class="flex items-center transform scale-90 sm:scale-100 md:scale-110 flex-shrink-0"
+      >
+        <Logo />
+      </a>
 
-      <!-- Center column: Logo -->
-      <div class="flex justify-center">
-        <a
-          href={translatePath("/")}
-          class="flex items-center transform scale-110 sm:scale-125"
-        >
-          <Logo />
-        </a>
-      </div>
-      <!-- Right column: Color mode switcher and auth buttons -->
-      <div class="flex justify-end items-center space-x-2">
+      <!-- Actions: right, stay compact -->
+      <div
+        class="flex justify-end items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0"
+      >
         <ColorModeSwitcher tooltip={t("navbar.toggleTheme")} />
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center gap-1 sm:gap-2">
           <SecondaryButton
             link={translatePath("/signin")}
             text={t("navbar.login")}

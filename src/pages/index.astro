@@ -51,15 +51,19 @@ const cards = [
   description={t("hero.subtitle")}
 >
   <!-- Hero Section -->
-  <section class="py-20 md:py-32 lg:py-64">
-    <div class="container mx-auto px-6 text-center relative overflow-visible">
+  <section
+    class="mt-16 sm:mt-20 md:mt-32 lg:mt-64 mb-8 sm:mb-10 md:py-32 lg:py-64"
+  >
+    <div
+      class="container mx-auto px-4 sm:px-6 text-center relative overflow-visible"
+    >
       <div class="relative z-10">
         <h1
-          class="text-4xl md:text-6xl font-extrabold leading-tight mb-4"
+          class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4"
           set:html={t("hero.title")}
         />
         <p
-          class="text-lg md:text-xl max-w-3xl mx-auto mb-8"
+          class="text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl mx-auto mb-8"
           set:html={t("hero.subtitle")}
         />
         <PrimaryButton
@@ -68,7 +72,7 @@ const cards = [
         />
       </div>
       <Image
-        class="pointer-events-none select-none hidden sm:block absolute right-4 lg:right-12 bottom-0 transform rotate-3 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-2xl opacity-45 dark:opacity-35 z-0"
+        class="pointer-events-none select-none absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 md:right-0 bottom-0 transform rotate-3 max-w-[260px] sm:max-w-[300px] md:max-w-sm lg:max-w-2xl opacity-30 sm:opacity-40 md:opacity-45 dark:opacity-25 sm:dark:opacity-30 md:dark:opacity-35 z-0"
         src={meditation}
         alt="CannnaLog user meditating after tracking their cannabis usage"
         aria-hidden="true"
@@ -79,17 +83,20 @@ const cards = [
   <!-- Second section -->
   <section>
     <div
-      class="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6"
+      class="gap-8 sm:gap-12 lg:gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6"
     >
       <div class="font-light">
         <h2
-          class="mb-4 text-4xl tracking-tight font-extrabold"
+          class="mb-4 text-2xl sm:text-3xl md:text-4xl tracking-tight font-extrabold"
           set:html={t("features.title")}
         />
-        <p class="mb-4" set:html={t("features.paragraph1")} />
-        <p set:html={t("features.paragraph2")} />
+        <p
+          class="mb-4 text-sm sm:text-base"
+          set:html={t("features.paragraph1")}
+        />
+        <p class="text-sm sm:text-base" set:html={t("features.paragraph2")} />
       </div>
-      <div class="grid grid-cols-2 gap-4 mt-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
         <Image
           class="w-full rounded-lg"
           src={picture1}
@@ -108,16 +115,18 @@ const cards = [
     <div class="py-8 px-4 my-auto mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="w-full mx-auto max-w-screen-md mb-8 lg:mb-16 text-center">
         <h2
-          class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+          class="mb-4 text-2xl sm:text-3xl md:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
           {t("toolkit.title")}
         </h2>
-        <p class="text-gray-500 sm:text-xl dark:text-gray-400">
+        <p
+          class="text-sm sm:text-base md:text-lg text-gray-500 dark:text-gray-400"
+        >
           {t("toolkit.subtitle")}
         </p>
       </div>
       <div
-        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
+        class="space-y-6 sm:space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 lg:gap-12 md:space-y-0"
       >
         {
           cards.map((c) => (
@@ -132,11 +141,13 @@ const cards = [
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="mx-auto max-w-screen-sm text-center">
         <h2
-          class="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white"
+          class="mb-4 text-2xl sm:text-3xl md:text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white"
         >
           {t("cta.title")}
         </h2>
-        <p class="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
+        <p
+          class="mb-6 font-light text-sm sm:text-base md:text-lg text-gray-500 dark:text-gray-400"
+        >
           {t("cta.subtitle")}
         </p>
         <a
