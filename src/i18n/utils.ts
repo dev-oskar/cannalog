@@ -1,37 +1,102 @@
-import { defaultLang, ui, showDefaultLang } from "./ui";
+import { getLocale } from "astro-i18n-aut";
+import { defaultLang, ui, showDefaultLang, languages } from "./ui";
 import type { Lang, TranslationKey } from "./ui";
 
-export function getLangFromUrl(url: URL) {
+/**
+ * Comprehensive i18n utility module - consolidates all i18n logic
+ *
+ * Usage contexts:
+ * - Astro components/pages: const i18n = useI18n(Astro);
+ * - Middleware/utilities: const t = createTranslationFunction(lang);
+ */
+
+interface I18nUtils {
+  lang: Lang;
+  t: (key: TranslationKey) => string;
+  translatePath: (path: string, targetLang?: string) => string;
+  getUntranslatedPath: (pathname?: string) => string;
+  languages: typeof languages;
+  isDefaultLang: boolean;
+}
+
+/**
+ * Extract language from URL pathname
+ * @param url - URL object to parse
+ * @returns Language code if found in URL, otherwise default language
+ */
+export function getLangFromUrl(url: URL): Lang {
   const [, lang] = url.pathname.split("/");
-  if (lang in ui) return lang as keyof typeof ui;
+  if (lang in ui) return lang as Lang;
   return defaultLang;
 }
 
-export function useTranslatedPath(lang: keyof typeof ui) {
-  return function translatePath(path: string, l: string = lang) {
-    const langCode = l as Lang;
-    const isHash = path.startsWith('#');
+/**
+ * Create a translation function for a given language
+ * @param lang - Language code
+ * @returns Function that translates dot-notation keys to strings
+ */
+export function createTranslationFunction(lang: Lang | undefined) {
+  const currentLang = lang && ui[lang] ? lang : defaultLang;
+
+  return function t(key: TranslationKey): string {
+    const keys = key.split(".");
+    const text = keys.reduce(
+      (obj: any, currentKey: string) => obj?.[currentKey],
+      ui[currentLang]
+    );
+    return typeof text === "string" ? text : key;
+  };
+}
+
+/**
+ * Legacy alias for createTranslationFunction for backwards compatibility
+ * @deprecated Use createTranslationFunction instead
+ */
+export function useTranslations(lang: Lang | undefined) {
+  return createTranslationFunction(lang);
+}
+
+/**
+ * Create a path translator function for language-prefixed URLs
+ * @param lang - Current language code
+ * @returns Function that translates paths with appropriate language prefix
+ */
+export function createPathTranslator(lang: Lang) {
+  return function translatePath(
+    path: string,
+    targetLang: string = lang
+  ): string {
+    const langCode = targetLang as Lang;
+    const isHash = path.startsWith("#");
 
     if (!showDefaultLang && langCode === defaultLang) {
-      // Default language logic
-      if (isHash) {
-        return `/${path}`; // Returns /#about
-      }
+      if (isHash) return `/${path}`;
       const finalPath = path === "/" ? "" : path;
       return finalPath === "" ? "/" : finalPath;
     } else {
-      // Non-default language logic
       const langPrefix = `/${langCode}`;
-      if (isHash) {
-        return `${langPrefix}${path}`; // Returns /pl#about
-      }
+      if (isHash) return `${langPrefix}${path}`;
       const finalPath = path === "/" ? "" : path;
-      return `${langPrefix}${finalPath}`; // Returns /pl or /pl/about
+      return `${langPrefix}${finalPath}`;
     }
   };
 }
 
-export function getPathWithoutLang(pathname: string, lang: Lang) {
+/**
+ * Legacy wrapper for createPathTranslator for backwards compatibility
+ * @deprecated Use createPathTranslator instead
+ */
+export function useTranslatedPath(lang: keyof typeof ui) {
+  return createPathTranslator(lang);
+}
+
+/**
+ * Strip language prefix from pathname
+ * @param pathname - Full pathname potentially with language prefix
+ * @param lang - Current language code
+ * @returns Pathname without language prefix
+ */
+export function getPathWithoutLang(pathname: string, lang: Lang): string {
   if (lang === defaultLang) {
     return pathname;
   }
@@ -42,26 +107,27 @@ export function getPathWithoutLang(pathname: string, lang: Lang) {
   return pathname;
 }
 
-export function useTranslations(lang: Lang | undefined) {
-  // Fallback to the default language if the current one is not found
-  const currentLang = lang && ui[lang] ? lang : defaultLang;
+/**
+ * Comprehensive i18n hook for Astro components/pages
+ * Requires Astro context with access to the current URL
+ * @param Astro - Astro context object
+ * @returns I18n utilities object with lang, t, translatePath, etc.
+ */
+export function useI18n(Astro: any): I18nUtils {
+  const lang = getLangFromUrl(Astro.url);
+  const t = createTranslationFunction(lang);
+  const translatePath = createPathTranslator(lang);
+  const isDefaultLang = lang === defaultLang;
 
-  return function t(key: TranslationKey) {
-    // 1. Split the key by dots, e.g., 'hero.title' -> ['hero', 'title']
-    const keys = key.split(".");
-
-    // 2. Use reduce to walk through the nested JSON object
-    // It starts with the full translation object for the current language
-    // and drills down one key at a time.
-    const text = keys.reduce(
-      (obj: any, currentKey: string) => {
-        // If obj is not null/undefined and has the key, return the nested value
-        return obj?.[currentKey];
-      },
-      ui[currentLang] // Initial value is the entire language object (e.g., ui.pl)
-    );
-
-    // 3. If the text is found, return it. Otherwise, return the key as a fallback.
-    return typeof text === "string" ? text : key;
+  return {
+    lang,
+    t,
+    translatePath,
+    getUntranslatedPath: (customPathname?: string) => {
+      const pathname = customPathname || Astro.url.pathname;
+      return getPathWithoutLang(pathname, lang);
+    },
+    languages,
+    isDefaultLang,
   };
 }

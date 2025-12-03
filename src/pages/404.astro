@@ -1,6 +1,6 @@
 ---
 import PublicLayout from "../layouts/PublicLayout.astro";
-import { useI18n } from "../integrations/i18n-globals";
+import { useI18n } from "../i18n/utils";
 
 const { lang, t, translatePath } = useI18n(Astro);
 const title = t("404.title");
