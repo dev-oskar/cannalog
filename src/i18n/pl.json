@@ -20,6 +20,10 @@
     "paragraph1": "CannaLog to więcej niż zwykły dzienniczek - to Twój przewodnik po świecie konopi. Łączymy odmiany, dawki i Twoje samopoczucie w jedną całość. Zamiast zgadywać, będziesz podejmować świadome decyzje, które naprawdę wpłyną na Twoje życie.",
     "paragraph2": "Dowiedz się, które terpeny rozpędzają Twoją kreatywność, a które pomagają zasnąć. Nasze narzędzia pomogą Ci stworzyć rutynę idealnie dopasowaną do Twoich potrzeb."
   },
+  "doctors": {
+    "title": "Mostek Danych Klinicznych",
+    "description": "Generuj jasne, ustrukturyzowane raporty, które zamieniają Twoje subiektywne doświadczenie w **obiektywne dane medyczne**. Ta krytyczna pętla sprzężenia zwrotnego dostarcza Twojemu lekarzowi przepisującemu dowody potrzebne do bezpieczniejszego, bardziej precyzyjnego przepisywania i spersonalizowanej opieki."
+  },
   "toolkit": {
     "title": "Narzędzia dla Twojego zdrowia",
     "subtitle": "CannaLog to więcej niż aplikacja - to Twój cyfrowy asystent, który pomoże Ci zrozumieć i ulepszyć Twoje doświadczenia z konopiami. Prosto i skutecznie.",
@@ -207,7 +211,16 @@
   "footer": {
     "termsAndConditions": "Regulamin",
     "privacyPolicy": "Polityka prywatności",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "product": "Produkt",
+    "download": "Pobierz",
+    "blog": "Blog",
+    "followUs": "Obserwuj nas",
+    "instagram": "Instagram",
+    "twitter": "Twitter (X)",
+    "legal": "Prawo",
+    "disclaimer": "Zastrzeżenie",
+    "copyright": "© {year} CannaLog™. Wszystkie prawa zastrzeżone."
   },
   "404": {
     "title": "404 - Strona nie znaleziona",
