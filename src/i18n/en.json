@@ -11,47 +11,51 @@
     "signOut": "Sign Out"
   },
   "hero": {
-    "title": "Your Personal Cannabis Journey, Demystified.",
-    "subtitle": "CannaLog is a mindful companion for tracking, understanding, and optimizing your cannabis experiences. Gain insights, find what works for you, and cultivate well-being.",
-    "ctaButton": "Start Logging for Free"
+    "title": "<span class='text-primary-700 dark:text-secondary-300'>Your Cannabis </span> experience",
+    "subtitle": "CannaLog transforms guesswork into <strong>insight</strong>. Easily track, understand, and fine-tune your cannabis use to achieve intentional, positive results.",
+    "ctaButton": "Sign up free"
   },
   "features": {
-    "title": "Your Journey, Illuminated",
-    "paragraph1": "CannaLog is more than a journal; it's your personal cartographer for the cannabis landscape. We help you connect the dots between cultivar, dosage, and your state of mind, transforming subjective feelings into actionable insights. By mindfully charting your sessions, you move beyond guesswork and start making intentional choices that truly enhance your well-being.",
-    "paragraph2": "Discover which terpenes uplift your creativity or what timing promotes restful sleep. Our intuitive tools empower you to build a personalized routine that is both effective and mindful."
+    "title": "From Guesswork to Control",
+    "paragraph1": "Stop the trial-and-error. CannaLog is your personal lab, mapping the exact connection between strain, dosage, and your outcome. By charting your sessions with precision, you gain the clarity needed to manage conditions, reduce side effects, and finally use cannabis with confidence.",
+    "paragraph2": "Discover your perfect profile: which terpenes enhance focus, what timing guarantees restful sleep, and how to maintain consistency for optimal well-being. This is mindful science applied to your personal routine."
+  },
+  "doctors": {
+    "title": "Clinical Data Bridge",
+    "description": "Generate clear, structured reports that transform your subjective experience into **objective medical data**. This critical feedback loop provides your prescribing doctor with the evidence needed for safer, more precise prescribing and personalized care."
   },
   "toolkit": {
-    "title": "A Toolkit for Your Well-being",
-    "subtitle": "CannaLog is more than an app; it's a powerful companion designed to help you track, understand, and optimize your personal cannabis experience with clarity and ease.",
+    "title": "The Simple Toolkit for Serious Clarity",
+    "subtitle": "CannaLog is your companion, designed to make complex tracking simple and actionable. Focus on your well-being, we handle the data.",
     "logging": {
-      "title": "Mindful Session Logging",
-      "description": "Easily record every detail—from cultivar and dosage to your mood and activities. Track what matters to you in just a few taps."
+      "title": "Effortless Session Logging",
+      "description": "Log everything that matters—cultivar, dosage, method, and results—in seconds. Our design prioritizes speed and simplicity, making tracking feel intuitive, not tedious."
     },
     "insights": {
-      "title": "Personalized Insights",
-      "description": "Uncover your personal patterns. Our smart analytics help you understand which strains and doses best suit your wellness goals, from sleep to creativity."
+      "title": "Personalized Insights & Trends",
+      "description": "Uncover your unique patterns. Our analytics show you what truly works, correlating strains, cannabinoid content, and dosage with your most desired (and unwanted) effects."
     },
     "explore": {
-      "title": "Explore & Discover",
-      "description": "Dive into our extensive library to learn about different strains, cannabinoids, and terpenes. Find new products that align with your desired effects."
+      "title": "Strain & Terpene Library",
+      "description": "Deepen your understanding. Explore our library to research potential effects, common uses, and terpene profiles to make educated choices before you log."
     },
     "tracking": {
-      "title": "Symptom Tracking",
-      "description": "Monitor how cannabis affects specific symptoms or conditions. See your progress over time with clear, easy-to-read charts and summaries."
+      "title": "Adverse Effect & Symptom Tracking",
+      "description": "Move beyond basic logging. Track specific symptoms and unwanted side effects (like anxiety or paranoia) to optimize your routine and safely share reliable data with your doctor."
     },
     "security": {
-      "title": "Secure & Private",
-      "description": "Your journal is your own. Your data is encrypted and stored securely, ensuring your personal cannabis journey remains completely private."
+      "title": "Private & Secure, Always",
+      "description": "Your medical journey is confidential. We use end-to-end encryption and secure storage. Your personal data is for your eyes only—it is never shared."
     },
     "reminders": {
-      "title": "Custom Reminders",
-      "description": "Stay consistent with your wellness routine. Set custom reminders to log your sessions, take your dosage, or simply take a moment to reflect."
+      "title": "Tolerance Break Planner",
+      "description": "Maintain sensitivity and prevent tolerance creep. Our planning tool tracks your usage density and provides personalized, actionable prompts to encourage mindful, effective breaks."
     }
   },
   "cta": {
-    "title": "Start for free today!",
-    "subtitle": "There's no catch - it's completely free to get started. No credit card required.",
-    "button": "Try now!"
+    "title": "Gain Control Today. It's Free.",
+    "subtitle": "Zero risk, zero commitment. Start building your data profile now and begin optimizing your personal wellness journey.",
+    "button": "Start Logging Now"
   },
   "register": {
     "title": "Join CannaLog Today",
@@ -205,9 +209,18 @@
     }
   },
   "footer": {
-    "termsAndConditions": "Terms and conditions",
+    "termsAndConditions": "Terms & Conditions",
     "privacyPolicy": "Privacy Policy",
-    "contact": "Contact"
+    "contact": "Contact",
+    "product": "Product",
+    "download": "Download",
+    "blog": "Blog",
+    "followUs": "Follow us",
+    "instagram": "Instagram",
+    "twitter": "Twitter (X)",
+    "legal": "Legal",
+    "disclaimer": "Disclaimer",
+    "copyright": "© {year} CannaLog™. All Rights Reserved."
   },
   "404": {
     "title": "404 - Page Not Found",

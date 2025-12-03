@@ -1,8 +1,48 @@
 ---
 import { useI18n } from "../integrations/i18n-globals";
 import PublicLayout from "../layouts/PublicLayout.astro";
+import Card from "../components/ui/Card.astro";
+import { Image } from "astro:assets";
 
-const { lang, t } = useI18n(Astro);
+import picture1 from "../assets/gemini_3.png";
+import picture2 from "../assets/gemini_4.png";
+import meditation from "../assets/meditation.png";
+import PrimaryButton from "../components/ui/PrimaryButton.astro";
+
+const { lang, t, translatePath } = useI18n(Astro);
+
+const cards = [
+  {
+    icon: "tabler:file-text",
+    title: t("toolkit.logging.title"),
+    description: t("toolkit.logging.description"),
+  },
+  {
+    icon: "tabler:chart-dots-3",
+    title: t("toolkit.insights.title"),
+    description: t("toolkit.insights.description"),
+  },
+  {
+    icon: "tabler:books",
+    title: t("toolkit.explore.title"),
+    description: t("toolkit.explore.description"),
+  },
+  {
+    icon: "tabler:heart",
+    title: t("toolkit.tracking.title"),
+    description: t("toolkit.tracking.description"),
+  },
+  {
+    icon: "tabler:lock-check",
+    title: t("toolkit.security.title"),
+    description: t("toolkit.security.description"),
+  },
+  {
+    icon: "tabler:bell-ringing",
+    title: t("toolkit.reminders.title"),
+    description: t("toolkit.reminders.description"),
+  },
+];
 ---
 
 <PublicLayout
@@ -11,54 +51,62 @@ const { lang, t } = useI18n(Astro);
   description={t("hero.subtitle")}
 >
   <!-- Hero Section -->
-  <section class="py-20 md:py-32 dark:text-white">
-    <div class="container mx-auto px-6 text-center">
-      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
-        {t("hero.title")}
-      </h1>
-      <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8">
-        {t("hero.subtitle")}
-      </p>
-      <a
-        href="#"
-        class="inline-block bg-primary-600 hover:bg-primary-700 px-8 py-4 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition duration-300 dark:bg-secondary-500 dark:text-white"
-      >
-        {t("hero.ctaButton")}
-      </a>
+  <section class="py-20 md:py-32 lg:py-64">
+    <div class="container mx-auto px-6 text-center relative overflow-visible">
+      <div class="relative z-10">
+        <h1
+          class="text-4xl md:text-6xl font-extrabold leading-tight mb-4"
+          set:html={t("hero.title")}
+        />
+        <p
+          class="text-lg md:text-xl max-w-3xl mx-auto mb-8"
+          set:html={t("hero.subtitle")}
+        />
+        <PrimaryButton
+          link={translatePath("/register")}
+          text={t("hero.ctaButton")}
+        />
+      </div>
+      <Image
+        class="pointer-events-none select-none hidden sm:block absolute right-4 lg:right-12 bottom-0 transform rotate-3 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-2xl opacity-45 dark:opacity-35 z-0"
+        src={meditation}
+        alt="CannnaLog user meditating after tracking their cannabis usage"
+        aria-hidden="true"
+        loading="lazy"
+      />
     </div>
   </section>
-  <section class="">
+  <!-- Second section -->
+  <section>
     <div
       class="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6"
     >
       <div class="font-light">
-        <h2 class="mb-4 text-4xl tracking-tight font-extrabold">
-          {t("features.title")}
-        </h2>
-        <p class="mb-4">
-          {t("features.paragraph1")}
-        </p>
-        <p>
-          {t("features.paragraph2")}
-        </p>
+        <h2
+          class="mb-4 text-4xl tracking-tight font-extrabold"
+          set:html={t("features.title")}
+        />
+        <p class="mb-4" set:html={t("features.paragraph1")} />
+        <p set:html={t("features.paragraph2")} />
       </div>
       <div class="grid grid-cols-2 gap-4 mt-8">
-        <img
+        <Image
           class="w-full rounded-lg"
-          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-2.png"
-          alt="office content 1"
+          src={picture1}
+          alt="Cannalog gemini AI generated picture of a CannaLog user"
         />
-        <img
+        <Image
           class="mt-4 w-full lg:mt-10 rounded-lg"
-          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-1.png"
-          alt="office content 2"
+          src={picture2}
+          alt="Cannalog gemini AI generated picture of a CannaLog user"
         />
       </div>
     </div>
   </section>
+  <!-- Cards section -->
   <section class="">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-      <div class="max-w-screen-md mb-8 lg:mb-16">
+    <div class="py-8 px-4 my-auto mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+      <div class="w-full mx-auto max-w-screen-md mb-8 lg:mb-16 text-center">
         <h2
           class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
@@ -71,139 +119,16 @@ const { lang, t } = useI18n(Astro);
       <div
         class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
       >
-        <div>
-          <div
-            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900"
-          >
-            <svg
-              class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-primary-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              ><path
-                fill-rule="evenodd"
-                d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                clip-rule="evenodd"></path></svg
-            >
-          </div>
-          <h3 class="mb-2 text-xl font-bold dark:text-white">
-            {t("toolkit.logging.title")}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400">
-            {t("toolkit.logging.description")}
-          </p>
-        </div>
-        <div>
-          <div
-            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900"
-          >
-            <svg
-              class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-primary-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              ><path
-                d="M5 3a2 2 0 00-2 2v1.5a2.5 2.5 0 005 0V5a2 2 0 00-2-2H5zM5 8.5a2.5 2.5 0 000 5V15a2 2 0 002 2h1.5a2.5 2.5 0 000-5H7a2 2 0 00-2-2H5v1.5zM15 3a2 2 0 00-2 2v1.5a2.5 2.5 0 005 0V5a2 2 0 00-2-2h-1zM10 8.5a2.5 2.5 0 000 5V15a2 2 0 002 2h1.5a2.5 2.5 0 000-5H12a2 2 0 00-2-2h-1.5V8.5z"
-              ></path></svg
-            >
-          </div>
-          <h3 class="mb-2 text-xl font-bold dark:text-white">
-            {t("toolkit.insights.title")}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400">
-            {t("toolkit.insights.description")}
-          </p>
-        </div>
-        <div>
-          <div
-            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900"
-          >
-            <svg
-              class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-primary-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              ><path
-                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"
-              ></path></svg
-            >
-          </div>
-          <h3 class="mb-2 text-xl font-bold dark:text-white">
-            {t("toolkit.explore.title")}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400">
-            {t("toolkit.explore.description")}
-          </p>
-        </div>
-        <div>
-          <div
-            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900"
-          >
-            <svg
-              class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-primary-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              ><path
-                fill-rule="evenodd"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                clip-rule="evenodd"></path></svg
-            >
-          </div>
-          <h3 class="mb-2 text-xl font-bold dark:text-white">
-            {t("toolkit.tracking.title")}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400">
-            {t("toolkit.tracking.description")}
-          </p>
-        </div>
-        <div>
-          <div
-            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900"
-          >
-            <svg
-              class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-primary-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              ><path
-                fill-rule="evenodd"
-                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                clip-rule="evenodd"></path></svg
-            >
-          </div>
-          <h3 class="mb-2 text-xl font-bold dark:text-white">
-            {t("toolkit.security.title")}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400">
-            {t("toolkit.security.description")}
-          </p>
-        </div>
-        <div>
-          <div
-            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900"
-          >
-            <svg
-              class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-primary-300"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              ><path
-                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
-              ></path></svg
-            >
-          </div>
-          <h3 class="mb-2 text-xl font-bold dark:text-white">
-            {t("toolkit.reminders.title")}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400">
-            {t("toolkit.reminders.description")}
-          </p>
-        </div>
+        {
+          cards.map((c) => (
+            <Card icon={c.icon} title={c.title} description={c.description} />
+          ))
+        }
       </div>
     </div>
   </section>
-  <section class="">
+  <!-- Second CTA section -->
+  <section>
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
       <div class="mx-auto max-w-screen-sm text-center">
         <h2

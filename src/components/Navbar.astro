@@ -1,91 +1,44 @@
 ---
 import ColorModeSwitcher from "./ui/ColorModeSwitcher.astro";
 import Logo from "./ui/Logo.astro";
-import { authUtils } from "../lib/nhost";
 import { useI18n } from "../integrations/i18n-globals";
+import PrimaryButton from "./ui/PrimaryButton.astro";
+import SecondaryButton from "./ui/SecondaryButton.astro";
 
-const { lang, t, translatePath } = useI18n(Astro);
-
-const session = authUtils.getUserSession();
-const isAuthenticated = session != null;
-
-export interface NavLink {
-  label: string;
-  href: string;
-}
-
-export interface Props {
-  navLinks?: NavLink[];
-}
-
-const {
-  navLinks = [
-    {
-      label: t("navbar.mission"),
-      href: `${translatePath("#mission")}`,
-    },
-    { label: t("navbar.about"), href: `${translatePath("#about")}` },
-    { label: t("navbar.contact"), href: `${translatePath("#contact")}` },
-  ],
-} = Astro.props;
+const { t, translatePath } = useI18n(Astro);
 ---
 
 <header class="backdrop-blur-md sticky top-0 z-50">
-  <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-    <a href={translatePath("/")} class="flex items-center">
-      <Logo />
-    </a>
-    <div class="hidden md:flex items-center space-x-8">
-      {
-        navLinks.map((link) => (
-          <a
-            href={link.href}
-            class="hover:underline hover:underline-offset-2 transition duration-300"
-          >
-            {link.label}
-          </a>
-        ))
-      }
-    </div>
-    <div class="flex items-center space-x-2">
-      <ColorModeSwitcher tooltip={t("navbar.toggleTheme")} />
-      {
-        isAuthenticated ? (
-          <div class="flex items-center space-x-2">
-            <a
-              href={translatePath("/dashboard")}
-              class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300"
-            >
-              {t("navbar.dashboard")}
-            </a>
-            <a
-              href={translatePath("/dashboard/settings")}
-              class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300 hidden sm:inline-block"
-            >
-              {t("navbar.profile")}
-            </a>
-            <a
-              href="/api/signout"
-              class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition duration-300"
-            >
-              {t("navbar.signOut")}
-            </a>
-          </div>
-        ) : (
-          // Not authenticated
-          <div class="flex items-center space-x-2">
-            <a
-              href={translatePath("/signin")}
-              class="px-4 py-2 text-navy dark:text-white font-medium rounded-lg hover:bg-navy/10 dark:hover:bg-white/10 transition duration-300"
-            >
-              {t("navbar.login")}
-            </a>
-            <a href={translatePath("/register")} class="btn-primary">
-              {t("navbar.register")}
-            </a>
-          </div>
-        )
-      }
+  <nav class="container mx-auto px-6 py-4">
+    <!-- Use a 3-column grid so the logo can sit centered while actions live on the right -->
+    <div class="grid grid-cols-3 items-center">
+      <!-- Left column: intentionally empty (nav links moved to footer) -->
+      <div></div>
+
+      <!-- Center column: Logo -->
+      <div class="flex justify-center">
+        <a
+          href={translatePath("/")}
+          class="flex items-center transform scale-110 sm:scale-125"
+        >
+          <Logo />
+        </a>
+      </div>
+      <!-- Right column: Color mode switcher and auth buttons -->
+      <div class="flex justify-end items-center space-x-2">
+        <ColorModeSwitcher tooltip={t("navbar.toggleTheme")} />
+        <div class="flex items-center space-x-2">
+          <SecondaryButton
+            link={translatePath("/signin")}
+            text={t("navbar.login")}
+          />
+
+          <PrimaryButton
+            text={t("navbar.register")}
+            link={translatePath("/register")}
+          />
+        </div>
+      </div>
     </div>
   </nav>
 </header>

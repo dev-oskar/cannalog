@@ -1,0 +1,28 @@
+---
+import { Icon } from "astro-icon/components";
+
+/*
+	Reusable Card component
+
+	Props:
+		- icon: string (name passed to Icon component)
+		- title: string (rendered title)
+		- description: string (rendered description)
+
+	Keep this component small and layout-only so it can be reused in other pages.
+*/
+const { icon, title, description } = Astro.props;
+---
+
+<div>
+  <div
+    class="flex justify-center items-center mb-4 h-10 w-10 mx-auto rounded-full bg-primary-300 lg:h-12 lg:w-12 dark:bg-primary-800"
+  >
+    <Icon
+      name={icon}
+      class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-primary-400"
+    />
+  </div>
+  <h3 class="mb-2 text-center text-xl font-bold dark:text-white">{title}</h3>
+  <p class="text-center text-gray-500 dark:text-gray-400">{description}</p>
+</div>

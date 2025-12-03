@@ -2,16 +2,11 @@
 import "../styles/global.css";
 import "flowbite";
 
-export interface Props {
-  title?: string;
-  description?: string;
-  locale?: string;
-}
 const { title, description, locale } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={locale || "pl"}>
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />

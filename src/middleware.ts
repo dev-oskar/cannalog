@@ -1,6 +1,11 @@
 import { defineMiddleware } from "astro:middleware";
-import { getLangFromUrl, useTranslatedPath } from "./i18n/utils";
+import {
+  getLangFromUrl,
+  useTranslatedPath,
+  getPathWithoutLang as getPathWithoutLangHelper,
+} from "./i18n/utils";
 import { defaultLang } from "./i18n/ui";
+import type { Lang } from "./i18n/ui";
 import { authUtils } from "./lib/nhost";
 
 // Define route patterns that don't require authentication (without language prefix)
@@ -24,34 +29,39 @@ const publicRoutePatterns = [
 ];
 
 /**
- * Extract the path without language prefix for route checking
+ * Build a canonical path without language segments and normalize it.
+ * - decodes URI
+ * - strips trailing slash (unless root)
+ * - strips language prefix if present (handles default language too)
+ * - ensures API routes like /pl/api/... normalize to /api/...
  */
-function getPathWithoutLang(pathname: string, lang: string): string {
-  // Always strip language prefix for API routes
-  if (pathname.includes("/api/")) {
-    const parts = pathname.split("/");
-    if (parts[1] === lang) {
-      parts.splice(1, 1); // Remove the language segment
-    }
-    return parts.join("/");
+function canonicalPath(pathname: string, lang: Lang): string {
+  if (!pathname) return "/";
+
+  // decode and normalize trailing slash
+  let path = decodeURI(pathname);
+  if (path.length > 1 && path.endsWith("/")) {
+    path = path.slice(0, -1);
   }
 
-  // Normal language handling for non-API routes
-  if (lang === defaultLang) {
-    return pathname;
-  }
   const langPrefix = `/${lang}`;
-  if (pathname.startsWith(langPrefix)) {
-    return pathname.substring(langPrefix.length) || "/";
+
+  // If it starts with a language prefix, remove it (always — this handles defaultLang variants)
+  if (path.startsWith(langPrefix)) {
+    path = path.substring(langPrefix.length) || "/";
+  } else {
+    // fall back to canonical shared helper to handle other cases
+    path = getPathWithoutLangHelper(path, lang);
   }
-  return pathname;
+
+  return path;
 }
 
 /**
- * Check if a path should be publicly accessible (checking the path without language prefix)
+ * Check if a path should be publicly accessible (matching against canonical path)
  */
-function isPublicRoute(pathname: string, lang: string): boolean {
-  const pathWithoutLang = getPathWithoutLang(pathname, lang);
+function isPublicRoute(pathname: string, lang: Lang): boolean {
+  const pathWithoutLang = canonicalPath(pathname, lang);
 
   return publicRoutePatterns.some((pattern) => {
     if (pattern.exact) {
@@ -67,7 +77,7 @@ function isPublicRoute(pathname: string, lang: string): boolean {
 export const onRequest = defineMiddleware(async (context, next) => {
   // Get the current path and extract language
   const path = context.url.pathname;
-  const lang = getLangFromUrl(context.url);
+  const lang = getLangFromUrl(context.url) as Lang;
   const translatePath = useTranslatedPath(lang);
 
   const isPublic = isPublicRoute(path, lang);
@@ -76,10 +86,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // If it's a public route, check if we should redirect authenticated users
   if (isPublic) {
     // For signin/register pages, redirect authenticated users to dashboard
-    const pathWithoutLang = getPathWithoutLang(path, lang);
+    const pathWithoutLang = canonicalPath(path, lang);
+
+    // NOTE: only redirect away when a user session is present — the previous code
+    // accidentally redirected unauthenticated users to dashboard because of
+    // a faulty operator precedence in the condition.
     if (
-      (userSession && pathWithoutLang === "/signin") ||
-      pathWithoutLang === "/register"
+      userSession &&
+      (pathWithoutLang === "/signin" || pathWithoutLang === "/register")
     ) {
       const localizedDashboardPath = translatePath("/dashboard");
       return context.redirect(localizedDashboardPath);

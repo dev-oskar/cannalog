@@ -1,6 +1,9 @@
 ---
 import Logo from "./ui/Logo.astro";
 import LanguagePicker from "./ui/LanguagePicker.astro";
+import { useI18n } from "../integrations/i18n-globals";
+
+const { lang, t, translatePath } = useI18n(Astro);
 ---
 
 <footer class="p-4 sm:p-6">
@@ -16,7 +19,7 @@ import LanguagePicker from "./ui/LanguagePicker.astro";
           <h2
             class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
           >
-            Language
+            {t("sidebar.nav.language")}
           </h2>
           <LanguagePicker />
         </div>
@@ -24,17 +27,17 @@ import LanguagePicker from "./ui/LanguagePicker.astro";
           <h2
             class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
           >
-            Product
+            {t("footer.product")}
           </h2>
           <ul class="text-gray-600 dark:text-gray-400">
             <li class="mb-4">
-              <a href="#" class="hover:underline">Features</a>
+              <a href="#" class="hover:underline">{t("features.title")}</a>
             </li>
             <li class="mb-4">
-              <a href="#" class="hover:underline">Download</a>
+              <a href="#" class="hover:underline">{t("footer.download")}</a>
             </li>
             <li>
-              <a href="#" class="hover:underline">Blog</a>
+              <a href="#" class="hover:underline">{t("footer.blog")}</a>
             </li>
           </ul>
         </div>
@@ -42,14 +45,14 @@ import LanguagePicker from "./ui/LanguagePicker.astro";
           <h2
             class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
           >
-            Follow us
+            {t("footer.followUs")}
           </h2>
           <ul class="text-gray-600 dark:text-gray-400">
             <li class="mb-4">
-              <a href="#" class="hover:underline">Instagram</a>
+              <a href="#" class="hover:underline">{t("footer.instagram")}</a>
             </li>
             <li>
-              <a href="#" class="hover:underline">Twitter (X)</a>
+              <a href="#" class="hover:underline">{t("footer.twitter")}</a>
             </li>
           </ul>
         </div>
@@ -57,17 +60,20 @@ import LanguagePicker from "./ui/LanguagePicker.astro";
           <h2
             class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
           >
-            Legal
+            {t("footer.legal")}
           </h2>
           <ul class="text-gray-600 dark:text-gray-400">
             <li class="mb-4">
-              <a href="#" class="hover:underline">Privacy Policy</a>
+              <a href="#" class="hover:underline">{t("footer.privacyPolicy")}</a
+              >
             </li>
             <li class="mb-4">
-              <a href="#" class="hover:underline">Terms &amp; Conditions</a>
+              <a href="#" class="hover:underline"
+                >{t("footer.termsAndConditions")}</a
+              >
             </li>
             <li>
-              <a href="#" class="hover:underline">Disclaimer</a>
+              <a href="#" class="hover:underline">{t("footer.disclaimer")}</a>
             </li>
           </ul>
         </div>
@@ -75,9 +81,8 @@ import LanguagePicker from "./ui/LanguagePicker.astro";
     </div>
     <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
     <div class="sm:flex sm:items-center sm:justify-between">
-      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400"
-        >© 2025 <a href="#" class="hover:underline">CannaLog™</a>. All Rights
-        Reserved.
+      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+        {t("footer.copyright").replace("{year}", "2025")}
       </span>
       <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
         <a

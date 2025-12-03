@@ -7,6 +7,7 @@ export interface Session {
   amount: number;
   notes?: string;
   effects?: string[];
+  rating?: number; // 1 to 5 scale
 }
 
 export interface Strain {

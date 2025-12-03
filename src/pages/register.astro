@@ -1,7 +1,7 @@
 ---
 import { useI18n } from "../integrations/i18n-globals";
-import Logo from "../components/ui/Logo.astro";
-import PublicLayout from "../layouts/PublicLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
 
 const { lang, t, translatePath } = useI18n(Astro);
 
@@ -39,23 +39,21 @@ if (errorParam) {
 }
 ---
 
-<PublicLayout
+<BaseLayout
   title={t("register.title")}
   description={t("register.description")}
   locale={lang}
 >
-  <section class="">
+  <Navbar />
+  <section class="min-h-screen w-screen flex items-center justify-center">
     <div
-      class="flex flex-col items-center justify-center my-4 px-6 py-8 mx-auto md:h-fit lg:py-0"
+      class="flex flex-col items-center justify-center px-6 py-8 w-full max-w-screen-md mx-auto"
     >
-      <a href="#" class="flex items-center mb-6 text-2xl font-semibold">
-        <Logo />
-      </a>
-      <div
-        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-lg xl:p-0"
-      >
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 class="text-xl font-bold leading-tight tracking-tightmd:text-2xl">
+      <div class="w-full rounded-lg shadow dark:border sm:max-w-lg xl:p-0">
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8 max-w-full overflow-auto">
+          <h1
+            class="text-xl font-bold leading-tight tracking-tight md:text-2xl"
+          >
             {t("register.heading")}
           </h1>
 
@@ -100,7 +98,8 @@ if (errorParam) {
                 id="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder={t("register.emailPlaceholder")}
-                required="true"
+                required
+                autofocus
               />
             </div>
             <div>
@@ -115,7 +114,7 @@ if (errorParam) {
                 id="password"
                 placeholder={t("register.passwordPlaceholder")}
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required="true"
+                required
               />
             </div>
             <div>
@@ -124,14 +123,13 @@ if (errorParam) {
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >{t("register.confirmPasswordLabel")}</label
               >
-              <!-- type="confirm-password" -->
               <input
                 type="password"
                 name="confirm-password"
                 id="confirm-password"
                 placeholder={t("register.confirmPasswordPlaceholder")}
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required="true"
+                required
               />
             </div>
             <div class="flex items-start">
@@ -142,7 +140,7 @@ if (errorParam) {
                   aria-describedby="terms"
                   type="checkbox"
                   class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                  required="true"
+                  required
                 />
               </div>
               <div class="ml-3 text-sm">
@@ -174,4 +172,4 @@ if (errorParam) {
       </div>
     </div>
   </section>
-</PublicLayout>
+</BaseLayout>
