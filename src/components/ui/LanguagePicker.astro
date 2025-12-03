@@ -1,26 +1,36 @@
 ---
 import { languages, type Lang } from "../../i18n/ui";
-import { useTranslatedPath, getPathWithoutLang } from "../../i18n/utils";
-import { getLocale } from "astro-i18n-aut";
+import { useI18n } from "../../i18n/utils";
 
-const currentLang = getLocale(Astro.url) as Lang;
-const translatePath = useTranslatedPath(currentLang);
+const {
+  lang: currentLang,
+  translatePath,
+  getUntranslatedPath,
+} = useI18n(Astro);
 
-// Get the current path without the language prefix
-const untranslatedPath = getPathWithoutLang(Astro.url.pathname, currentLang);
+// Path without the language prefix so we can build translated URLs
+const untranslatedPath = getUntranslatedPath();
+
+const entries = Object.entries(languages);
 ---
 
-<ul class="space-y-1">
-  {
-    Object.entries(languages).map(([targetLang, label]) => (
-      <li>
-        <a 
-          href={translatePath(untranslatedPath, targetLang)}
-          class="block px-3 py-2 text-sm text-text-color hover:bg-secondary/10 rounded-md transition-colors duration-200"
+<div class="w-full">
+  <label for="lang-select" class="sr-only">Change language</label>
+  <select
+    id="lang-select"
+    class="w-full bg-transparent border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2 text-sm text-text-color focus:outline-none focus:ring-2 focus:ring-primary"
+    onchange="(function(e){ if(e.target.value) window.location.href = e.target.value; })(event)"
+    aria-label="Select language"
+  >
+    {
+      entries.map(([code, label]) => (
+        <option
+          value={translatePath(untranslatedPath, code)}
+          selected={code === currentLang}
         >
           {label}
-        </a>
-      </li>
-    ))
-  }
-</ul>
+        </option>
+      ))
+    }
+  </select>
+</div>
