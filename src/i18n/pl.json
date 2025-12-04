@@ -155,6 +155,7 @@
     "description": "Witamy w Twoim osobistym panelu podróży z konopiami. Tutaj możesz śledzić swoje sesje, przeglądać statystyki i zarządzać swoim profilem.",
     "welcomeBack": "Witaj ponownie",
     "welcomeMessage": "! Oto przegląd Twojego CannaLog.",
+    "lastSession": "Czas od ostatniej sesji",
     "signedInAs": "Zalogowany jako:",
     "recentEntries": {
       "title": "Ostatnie wpisy",

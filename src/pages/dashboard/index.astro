@@ -2,71 +2,55 @@
 import DashboardLayout from "../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../i18n/utils";
 import { authUtils } from "../../lib/nhost";
+import Tile from "../../components/dashboard/Tile.astro";
+import { getTimeSinceLastSession } from "../../lib/queries.ts";
 
-const { t } = useI18n(Astro);
+const { t, lang } = useI18n(Astro);
 
 const user = await authUtils.getUser();
-console.log("Dashboard user:", user);
+
+const timeSinceLastSession = await getTimeSinceLastSession(lang);
 ---
 
 <DashboardLayout user={user}>
   <div class="p-4 sm:p-6 lg:p-8 space-y-6">
     <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
       <h1 class="text-2xl font-bold text-text-color">{t("dashboard.title")}</h1>
+      {
+        timeSinceLastSession && (
+          <h3 class="text-sm text-text-color/60 mt-1">
+            {t("dashboard.lastSession")}: {timeSinceLastSession}
+          </h3>
+        )
+      }
       <p class="text-text-color/80 mt-1">
         {t("dashboard.welcomeBack")}{t("dashboard.welcomeMessage")}
       </p>
-      {
-        user?.email && (
-          <p class="text-sm text-text-color/60 mt-2">
-            {t("dashboard.signedInAs")} {user.email}
-          </p>
-        )
-      }
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Example Card 1 -->
-      <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold text-text-color mb-3">
-          {t("dashboard.recentEntries.title")}
-        </h2>
-        <p class="text-text-color/80">
-          {t("dashboard.recentEntries.description")}
-        </p>
-        <button
-          type="button"
-          class="mt-4 text-white bg-primary-600 hover:bg-primary-600-darker focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
-        >
-          {t("dashboard.recentEntries.button")}
-        </button>
-      </div>
+      <Tile
+        title={t("dashboard.recentEntries.title")}
+        description={t("dashboard.recentEntries.description")}
+        buttonText={t("dashboard.recentEntries.button")}
+        variant="primary"
+      />
 
-      <!-- Example Card 2 -->
-      <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold text-text-color mb-3">
-          {t("dashboard.inventory.title")}
-        </h2>
-        <p class="text-text-color/80">
-          {t("dashboard.inventory.description")}
-        </p>
-        <button
-          type="button"
-          class="mt-4 text-text-color border border-primary hover:bg-primary-600-light focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
-        >
-          {t("dashboard.inventory.button")}
-        </button>
-      </div>
+      <Tile
+        title={t("dashboard.inventory.title")}
+        description={t("dashboard.inventory.description")}
+        buttonText={t("dashboard.inventory.button")}
+        variant="secondary"
+      />
 
-      <!-- Example Card 3 -->
-      <div class="bg-card-bg-color p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold text-text-color mb-3">
-          {t("dashboard.discover.title")}
-        </h2>
-        <p class="text-text-color/80">
-          {t("dashboard.discover.description")}
-        </p>
-      </div>
+      <Tile
+        title={t("dashboard.discover.title")}
+        description={t("dashboard.discover.description")}
+      />
+
+      <Tile variant="primary">
+        <p>Twoja stara</p>
+      </Tile>
     </div>
   </div>
 </DashboardLayout>

@@ -1,0 +1,38 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  buttonText?: string | null;
+  variant?: "primary" | "secondary";
+}
+
+const {
+  title = "",
+  description = "",
+  buttonText = null,
+  variant = "primary",
+} = Astro.props as Props;
+---
+
+<div class="bg-card-bg-color p-6 rounded-lg shadow-md">
+  {title && <h2 class="text-xl font-semibold text-text-color mb-3">{title}</h2>}
+
+  {description && <p class="text-text-color/80">{description}</p>}
+
+  {
+    buttonText && (
+      <button
+        type="button"
+        class={
+          variant === "primary"
+            ? "mt-4 text-white bg-primary-600 hover:bg-primary-600-darker focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
+            : "mt-4 text-text-color border border-primary hover:bg-primary-600-light focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-300"
+        }
+      >
+        {buttonText}
+      </button>
+    )
+  }
+
+  <slot />
+</div>

@@ -157,6 +157,7 @@
     "description": "Welcome to your personal cannabis journey dashboard. Here you can track your sessions, view insights, and manage your profile.",
     "welcomeBack": "Welcome back",
     "welcomeMessage": "! Here's an overview of your CannaLog.",
+    "lastSession": "Time since last session",
     "signedInAs": "Signed in as:",
     "recentEntries": {
       "title": "Recent Entries",
