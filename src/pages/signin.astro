@@ -1,9 +1,10 @@
 ---
 import { useI18n } from "../i18n/utils";
-import PublicLayout from "../layouts/PublicLayout.astro";
-import Logo from "../components/ui/Logo.astro";
+import AuthLayout from "../layouts/AuthLayout.astro";
 
 const { lang, t, translatePath } = useI18n(Astro);
+
+export const prerender = false;
 
 const title = t("signin.title");
 
@@ -27,26 +28,21 @@ if (errorParam) {
 }
 ---
 
-<PublicLayout title={title}>
-  <section>
+<AuthLayout title={title}>
+  <section class="min-h-screen w-screen flex items-center justify-start pt-6">
     <div
-      class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
+      class="flex flex-col items-center px-6 py-2 w-full max-w-screen-md mx-auto"
     >
-      <a
-        href="#"
-        class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-      >
-        <Logo />
-      </a>
       <div
-        class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+        class="w-full rounded-lg shadow bg-primary-300 dark:bg-secondary-500 sm:max-w-lg xl:p-0 -mt-12"
       >
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <div class="p-4 space-y-4 md:space-y-6 sm:p-6 max-w-full overflow-auto">
           <h1
-            class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
+            class="text-xl font-bold leading-tight tracking-tight md:text-2xl"
           >
             {t("signin.heading")}
           </h1>
+
           {
             error && (
               <div
@@ -68,6 +64,7 @@ if (errorParam) {
               </div>
             )
           }
+
           <form
             class="space-y-4 md:space-y-6"
             action="/api/signin"
@@ -76,69 +73,70 @@ if (errorParam) {
           >
             <!-- Hidden field to preserve language context -->
             <input type="hidden" name="lang" value={lang} />
+
             <div>
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >{t("signin.emailLabel")}</label
               >
+                {t("signin.emailLabel")}
+              </label>
               <input
                 type="email"
                 name="email"
                 id="email"
-                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder={t("signin.emailPlaceholder")}
-                required=""
+                required
+                autofocus
               />
             </div>
+
             <div>
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >{t("signin.passwordLabel")}</label
               >
+                {t("signin.passwordLabel")}
+              </label>
               <input
                 type="password"
                 name="password"
                 id="password"
                 placeholder={t("signin.passwordPlaceholder")}
-                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
               />
             </div>
+
             <div class="flex items-center justify-between">
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    type="checkbox"
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                  />
-                </div>
-              </div>
               <a
                 href="#"
                 class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >{t("signin.forgotPassword")}</a
               >
+                {t("signin.forgotPassword")}
+              </a>
             </div>
+
             <button
               type="submit"
-              class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >{t("signin.signInButton")}</button
+              class="w-full text-white bg-primary-700 dark:bg-primary-600 hover:cursor-pointer box-border border border-transparent hover:bg-primary-800 dark:hover:bg-primary-700 focus:ring-4 focus:ring-primary-600 shadow-xs font-medium leading-4 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm whitespace-nowrap focus:outline-none"
             >
+              {t("signin.signInButton")}
+            </button>
+
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               {t("signin.noAccount")}
               <a
                 href={translatePath("/register")}
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >{t("signin.signUp")}</a
               >
+                {t("signin.signUp")}
+              </a>
             </p>
           </form>
         </div>
       </div>
     </div>
   </section>
-</PublicLayout>
+</AuthLayout>
