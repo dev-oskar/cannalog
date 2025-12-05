@@ -3,6 +3,8 @@ import DashboardLayout from "../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../i18n/utils";
 import { authUtils } from "../../lib/nhost";
 import { getUserStrains } from "../../lib/queries";
+import { Icon } from "astro-icon/components";
+import VapeIcon from "../../assets/vape.svg";
 
 const { t } = useI18n(Astro);
 // Get user's strains for the strain selector
@@ -49,6 +51,30 @@ const user = await authUtils.getUser();
           <option value="edible">{t("sessions.methods.edible")}</option>
           <option value="oil">{t("sessions.methods.oil")}</option>
         </select>
+      </div>
+
+      <div>
+        <label for="usage_method" class="block text-sm font-medium mb-2">
+          {t("sessions.new.usage_method")}
+        </label>
+        <div class="flex w-full justify-between gap-4">
+          <div class="text-center">
+            <Icon name="la:joint" class="h-20 w-20 rounded-4xl" />
+            <label>Joint</label>
+          </div>
+          <div class="text-center">
+            <Icon name="la:cookie" class="h-20 w-20 rounded-4xl" />
+            <label>Edible</label>
+          </div>
+          <div class="text-center">
+            <VapeIcon class="h-20 w-20 rounded-4xl" />
+            <label>Vape</label>
+          </div>
+          <div class="text-center">
+            <Icon name="la:oil-can" class="h-20 w-20 rounded-4xl" />
+            <label>Oil</label>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -255,7 +281,7 @@ const user = await authUtils.getUser();
 
         // Redirect after a brief delay to show success message
         setTimeout(() => {
-          window.location.href = `/dashboard/strains/${strainId}`;
+          window.location.href = `/dashboard/sessions/${strainId}`;
         }, 1000);
       } catch (error) {
         console.error("Error:", error);

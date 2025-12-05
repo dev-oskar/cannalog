@@ -4,13 +4,14 @@ import { useI18n } from "../../../i18n/utils";
 import CannabisIcon from "../../../components/ui/CannabisIcon.astro";
 import type { Session } from "../../../types/db-types";
 import { getUserSessions } from "../../../lib/queries.ts";
-
 import { authUtils } from "../../../lib/nhost";
+import PrimaryButton from "../../../components/ui/PrimaryButton.astro";
+import SessionListItem from "../../../components/dashboard/SessionListItem.astro";
 
-const { t } = useI18n(Astro);
+const { t, lang } = useI18n(Astro);
 const user = await authUtils.getUser();
 
-// Fetch strains data
+// Fetch sessions data
 let sessions: Session[] = [];
 let error;
 
@@ -23,18 +24,25 @@ try {
 ---
 
 <DashboardLayout title="Sessions" user={user}>
-  <div class="max-w-7xl mx-auto p-4">
+  <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+    <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Sessions</h1>
-      <a
-        href="/dashboard/new-session"
-        class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+      <h1
+        class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
       >
-        <CannabisIcon class="w-5 h-5 mr-2" />
-        New session
-      </a>
+        Sessions
+      </h1>
+      <div class="hidden sm:block">
+        <PrimaryButton link="/dashboard/new-session" text="New session" />
+      </div>
     </div>
 
+    <!-- CTA for mobile -->
+    <div class="sm:hidden mb-6">
+      <PrimaryButton link="/dashboard/new-session" text="New session" block />
+    </div>
+
+    <!-- Error State -->
     {
       error && (
         <div
@@ -46,76 +54,36 @@ try {
       )
     }
 
+    <!-- Main Content: Sessions List or Empty State -->
     {
-      sessions.length === 0 && !error && (
-        <div class="text-center py-12">
-          <CannabisIcon class="mx-auto h-12 w-12 text-gray-400" />
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
-            {t("strains.noStrains")}
-          </h3>
-          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {t("strains.getStarted")}
-          </p>
+      sessions.length > 0 && !error ? (
+        <div class="flow-root">
+          <ul role="list" class="space-y-4">
+            {sessions.map((session) => (
+              <li>
+                <SessionListItem session={session} lang={lang} />
+              </li>
+            ))}
+          </ul>
         </div>
-      )
+      ) : !error ? (
+        <!-- Empty State -->
+        <div class="text-center py-16 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg">
+          <CannabisIcon class="mx-auto h-12 w-12 text-gray-400" />
+          <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+            No sessions recorded
+          </h3>
+          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Get started by creating a new session.
+          </p>
+          <div class="mt-6">
+            <PrimaryButton
+              link="/dashboard/new-session"
+              text="New session"
+            />
+          </div>
+        </div>
+      ) : null
     }
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {
-        sessions.map((session) => (
-          <a
-            href={`/dashboard/strains/${session.strain_used}`}
-            class="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow duration-200"
-          >
-            <div class="p-6">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    ID
-                  </h2>
-                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {session.strain_used}
-                  </p>
-                </div>
-              </div>
-
-              <div class="mt-4 grid grid-cols-2 gap-4">
-                <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    Created at
-                  </div>
-                  <div class="font-semibold text-gray-900 dark:text-white">
-                    {new Date(session.created_at).toLocaleDateString()}
-                  </div>
-                </div>
-                <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    Usage Method
-                  </div>
-                  <div class="font-semibold text-gray-900 dark:text-white">
-                    {session.usage_method}%
-                  </div>
-                </div>
-              </div>
-
-              {session.effects && session.effects.length > 0 && (
-                <div class="mt-4 flex flex-wrap gap-2">
-                  {session.effects.slice(0, 3).map((tag: string) => (
-                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                      {tag}
-                    </span>
-                  ))}
-                  {session.effects.length > 3 && (
-                    <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
-                      +{session.effects.length - 3}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          </a>
-        ))
-      }
-    </div>
   </div>
 </DashboardLayout>

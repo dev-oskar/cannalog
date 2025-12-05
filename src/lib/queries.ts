@@ -1,7 +1,6 @@
 import type { Session, Strain } from "../types/db-types";
 import nhost, { authUtils } from "./nhost";
-import { formatDistanceToNow } from "date-fns";
-import { pl } from "date-fns/locale/pl";
+import { formatTimeSince } from "./utils";
 
 export async function getUserSessions(): Promise<Session[]> {
   const currentUser = authUtils.getUserId();
@@ -172,14 +171,5 @@ export async function getTimeSinceLastSession(
     return null; // No sessions found
   }
 
-  const formatTimeSince = (isoDateString: string): string => {
-    const pastDate = new Date(isoDateString);
-
-    return formatDistanceToNow(pastDate, {
-      addSuffix: true,
-      locale: lang === "pl" ? pl : undefined,
-    });
-  };
-
-  return formatTimeSince(data.sessions[0].created_at);
+  return formatTimeSince(data.sessions[0].created_at, lang);
 }

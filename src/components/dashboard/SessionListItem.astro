@@ -1,0 +1,122 @@
+---
+import CannabisIcon from "../ui/CannabisIcon.astro";
+import type { Session } from "../../types/db-types";
+import { formatTimeSince } from "../../lib/utils.ts";
+import type { Lang } from "../../i18n/ui";
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  session: Session;
+  lang: Lang;
+}
+
+const { session, lang }: Props = Astro.props;
+
+const usageMethodDisplayNames: { [key: string]: string } = {
+  vape: "Vaporized",
+  smoke: "Smoked",
+  edible: "Edible",
+  oil: "Oil",
+};
+---
+
+<a
+  href={`/dashboard/sessions/${session.session_id}`}
+  class="block bg-primary-100 dark:bg-secondary-800 rounded-lg shadow-md hover:shadow-lg hover:bg-primary-50 dark:hover:bg-secondary-700 transition-all duration-200 ease-in-out"
+>
+  <div class="p-4 sm:p-6">
+    <div class="flex items-center space-x-4">
+      <div class="flex-shrink-0">
+        <div
+          class="w-14 h-14 flex items-center justify-center bg-primary-200 dark:bg-primary-900/50 rounded-full"
+        >
+          {
+            session.usage_method === "vape" ? (
+              <Icon
+                name="akar-icons:vape-kit"
+                class="h-9 w-9 text-primary-600 dark:text-primary-400"
+              />
+            ) : session.usage_method === "smoke" ? (
+              <Icon
+                name="la:joint"
+                class="h-9 w-9 text-primary-600 dark:text-primary-400"
+              />
+            ) : session.usage_method === "edible" ? (
+              <Icon
+                name="la:cookie"
+                class="h-9 w-9 text-primary-600 dark:text-primary-400"
+              />
+            ) : session.usage_method === "oil" ? (
+              <Icon
+                name="la:oil-can"
+                class="h-9 w-9 text-primary-600 dark:text-primary-400"
+              />
+            ) : (
+              <CannabisIcon class="h-9 w-9 text-primary-600 dark:text-primary-400" />
+            )
+          }
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p
+          class="text-sm font-semibold text-primary-600 dark:text-primary-400 truncate"
+        >
+          Session
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 truncate">
+          {formatTimeSince(session.created_at, lang)}
+        </p>
+        {session.amount && (
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            {session.amount}mg
+          </p>
+        )}
+      </div>
+      <div class="hidden md:block text-right">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Usage Method</p>
+        <p class="font-medium text-gray-900 dark:text-white">
+          {usageMethodDisplayNames[session.usage_method] || session.usage_method}
+        </p>
+      </div>
+      <div class="flex-shrink-0">
+        <svg
+          class="h-5 w-5 text-gray-400"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"></path>
+        </svg>
+      </div>
+    </div>
+    {
+      session.notes && (
+        <div class="mt-4 sm:pl-20">
+          <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+            {session.notes}
+          </p>
+        </div>
+      )
+    }
+    {
+      session.effects && session.effects.length > 0 && (
+        <div class="mt-4 sm:pl-20 flex flex-wrap gap-2">
+          {session.effects.slice(0, 5).map((tag: string) => (
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+              {tag}
+            </span>
+          ))}
+          {session.effects.length > 5 && (
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200">
+              +{session.effects.length - 5} more
+            </span>
+          )}
+        </div>
+      )
+    }
+  </div>
+</a>
