@@ -1,8 +1,7 @@
 // src/pages/api/strains/add.ts
 import type { APIRoute } from "astro";
-import nhost from "../../../lib/nhost";
+import { createNhostServerClient } from "../../../lib/nhost";
 import type { Strain } from "../../../types/db-types";
-import { authUtils } from "../../../lib/nhost";
 
 interface StrainMutationResponse {
   insert_strains_one: Strain;
@@ -38,10 +37,21 @@ mutation InsertStrains($name: String!, $thc_content: Int!, $cbd_content: Int!, $
 }
 `;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
+    const nhost = await createNhostServerClient(cookies);
+    // Explicitly cast to any to avoid TypeScript errors with NhostClient type
+    const session = (nhost.auth as any).getSession();
+    const currentUser = session?.user?.id;
+
+    if (!currentUser) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+
     const formData = await request.formData();
-    const currentUser = authUtils.getUserId();
 
     const thcPercentage = formData.get("thc-content")?.toString() || "0";
     const cbdPercentage = formData.get("cbd-content")?.toString() || "0";

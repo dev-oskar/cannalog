@@ -1,10 +1,10 @@
 import type { APIRoute } from "astro";
-import { authUtils } from "../../lib/nhost";
+import { createNhostServerClient } from "../../lib/nhost";
 import { getLangFromUrl, useTranslatedPath } from "../../i18n/utils";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     const formData = await request.formData();
     const url = new URL(request.url);
@@ -48,10 +48,12 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Attempt registration with Nhost
-    const result = await authUtils.signUp(email, password);
+    const nhost = await createNhostServerClient(cookies);
+    // Explicitly cast to any to avoid TypeScript errors with NhostClient type
+    const result = await (nhost.auth as any).signUp({ email, password });
 
     // Handle registration errors
-    if ("error" in result && result.error) {
+    if (result.error) {
       console.error("Registration error:", result.error);
       return new Response(null, {
         status: 303,

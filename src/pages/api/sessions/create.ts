@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import type { Session } from "../../../types/db-types";
-import { authUtils } from "../../../lib/nhost";
-import nhost from "../../../lib/nhost";
+import { createNhostServerClient } from "../../../lib/nhost";
 
 interface SessionMutationResponse {
   insert_sessions_one: Session;
@@ -34,9 +33,13 @@ mutation InsertSessions($created_by: uuid!, $strain_used: uuid!, $usage_method: 
 }
 `;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    const userId = authUtils.getUserId();
+    const nhost = await createNhostServerClient(cookies);
+    // Explicitly cast to any to avoid TypeScript errors with NhostClient type
+    const session = (nhost.auth as any).getSession();
+    const userId = session?.user?.id;
+
     if (!userId) {
       return new Response(JSON.stringify({ message: "Unauthorized" }), {
         status: 401,
