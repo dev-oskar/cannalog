@@ -4,19 +4,20 @@ import { useI18n } from "../../../i18n/utils";
 import CannabisIcon from "../../../components/ui/CannabisIcon.astro";
 import type { Session } from "../../../types/db-types";
 import { getUserSessions } from "../../../lib/queries.ts";
-import { authUtils } from "../../../lib/nhost";
 import PrimaryButton from "../../../components/ui/PrimaryButton.astro";
 import SessionListItem from "../../../components/dashboard/SessionListItem.astro";
+import { createNhostServerClient } from "../../../lib/nhost";
 
-const { t, lang } = useI18n(Astro);
-const user = await authUtils.getUser();
+const { t, lang } = useI18n(Astro.url);
+const { user } = Astro.locals;
+const nhost = await createNhostServerClient(Astro.cookies);
 
 // Fetch sessions data
 let sessions: Session[] = [];
 let error;
 
 try {
-  sessions = await getUserSessions();
+  sessions = user ? await getUserSessions(nhost, user.id) : [];
 } catch (e) {
   console.error(e);
   error = "Failed to load sessions data";

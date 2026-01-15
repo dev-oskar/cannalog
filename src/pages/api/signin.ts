@@ -1,10 +1,10 @@
 import type { APIRoute } from "astro";
-import { useTranslatedPath } from "../../i18n/utils";
+import { createPathTranslator } from "../../i18n/utils";
 import { defaultLang } from "../../i18n/ui";
 import type { Lang } from "../../i18n/ui";
-import { authUtils } from "../../lib/nhost";
+import { createNhostServerClient } from "../../lib/nhost";
 
-export const POST: APIRoute = async ({ request, redirect }) => {
+export const POST: APIRoute = async ({ request, redirect, cookies }) => {
   try {
     console.log("[SIGNIN] Starting sign-in process...");
 
@@ -14,15 +14,16 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const lang = (formData.get("lang")?.toString() || defaultLang) as Lang;
 
     // Create translation function for this language
-    const translatePath = useTranslatedPath(lang);
+    const translatePath = createPathTranslator(lang);
 
     if (!email || !password) {
       return redirect(`${translatePath("/signin")}?error=missing-credentials`);
     }
 
-    const response = await authUtils.signIn(email, password);
+    const nhost = await createNhostServerClient(cookies);
+    const response = await nhost.auth.signInEmailPassword({ email, password });
 
-    if (!response.success) {
+    if (!response.body?.session) {
       return redirect(`${translatePath("/signin")}?error=signin-failed`);
     }
 
@@ -34,7 +35,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
     // Use default language for error case since we might not have form data
-    const translatePath = useTranslatedPath(defaultLang);
+    const translatePath = createPathTranslator(defaultLang);
     return redirect(
       `${translatePath(
         "/signin"

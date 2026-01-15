@@ -2,7 +2,7 @@
 import { useI18n } from "../i18n/utils";
 import AuthLayout from "../layouts/AuthLayout.astro";
 
-const { lang, t, translatePath } = useI18n(Astro);
+const { lang, t, translatePath } = useI18n(Astro.url);
 
 export const prerender = false;
 

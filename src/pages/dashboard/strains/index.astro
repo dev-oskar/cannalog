@@ -3,18 +3,19 @@ import DashboardLayout from "../../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../../i18n/utils";
 import CannabisIcon from "../../../components/ui/CannabisIcon.astro";
 import type { Strain } from "../../../types/db-types";
-import { authUtils } from "../../../lib/nhost";
+import { createNhostServerClient } from "../../../lib/nhost";
 import { getUserStrains } from "../../../lib/queries";
 
-const { t } = useI18n(Astro);
-const user = await authUtils.getUser();
+const { t } = useI18n(Astro.url);
+const { user } = Astro.locals;
+const nhost = await createNhostServerClient(Astro.cookies);
 
 // Fetch strains data
 let strains: Strain[] = [];
 let error;
 
 try {
-  strains = await getUserStrains();
+  strains = user ? await getUserStrains(nhost, user.id) : [];
 } catch (e) {
   console.error(e);
   error = "Failed to load strains data";

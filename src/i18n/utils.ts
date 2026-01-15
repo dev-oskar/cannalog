@@ -110,11 +110,11 @@ export function getPathWithoutLang(pathname: string, lang: Lang): string {
 /**
  * Comprehensive i18n hook for Astro components/pages
  * Requires Astro context with access to the current URL
- * @param Astro - Astro context object
+ * @param url - URL object to parse
  * @returns I18n utilities object with lang, t, translatePath, etc.
  */
-export function useI18n(Astro: any): I18nUtils {
-  const lang = getLangFromUrl(Astro.url);
+export function useI18n(url: URL): I18nUtils {
+  const lang = getLangFromUrl(url);
   const t = createTranslationFunction(lang);
   const translatePath = createPathTranslator(lang);
   const isDefaultLang = lang === defaultLang;
@@ -124,7 +124,7 @@ export function useI18n(Astro: any): I18nUtils {
     t,
     translatePath,
     getUntranslatedPath: (customPathname?: string) => {
-      const pathname = customPathname || Astro.url.pathname;
+      const pathname = customPathname || url.pathname;
       return getPathWithoutLang(pathname, lang);
     },
     languages,

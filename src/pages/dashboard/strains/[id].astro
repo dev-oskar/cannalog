@@ -1,25 +1,26 @@
 ---
 import DashboardLayout from "../../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../../i18n/utils";
-import { authUtils } from "../../../lib/nhost";
+import { createNhostServerClient } from "../../../lib/nhost";
 import { getStrainById } from "../../../lib/queries.ts";
 import type { Strain } from "../../../types/db-types";
 
-const { t } = useI18n(Astro);
+const { t } = useI18n(Astro.url);
 const { id } = Astro.params;
 
 if (!id) {
   throw new Error("Strain ID is required");
 }
 
-const user = await authUtils.getUser();
+const { user } = Astro.locals;
+const nhost = await createNhostServerClient(Astro.cookies);
 
 // Fetch strain data
 let strain: Strain | null = null;
 let error;
 
 try {
-  strain = await getStrainById(id);
+  strain = await getStrainById(nhost, id);
 } catch (e) {
   error = "Failed to load strain data";
 }

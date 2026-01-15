@@ -1,15 +1,16 @@
 ---
 import DashboardLayout from "../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../i18n/utils";
-import { authUtils } from "../../lib/nhost";
 import Tile from "../../components/dashboard/Tile.astro";
-import { getTimeSinceLastSession } from "../../lib/queries.ts";
+import { getTimeSinceLastSession } from "../../lib/queries";
 
-const { t, lang } = useI18n(Astro);
+import { createNhostServerClient } from "../../lib/nhost";
 
-const user = await authUtils.getUser();
+const { t, lang } = useI18n(Astro.url);
+const { user } = Astro.locals;
 
-const timeSinceLastSession = await getTimeSinceLastSession(lang);
+const nhost = await createNhostServerClient(Astro.cookies);
+const timeSinceLastSession = await getTimeSinceLastSession(nhost, lang);
 ---
 
 <DashboardLayout user={user}>

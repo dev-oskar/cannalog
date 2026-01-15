@@ -9,7 +9,7 @@ import picture2 from "../assets/gemini_4.png";
 import meditation from "../assets/meditation.png";
 import PrimaryButton from "../components/ui/PrimaryButton.astro";
 
-const { lang, t, translatePath } = useI18n(Astro);
+const { lang, t, translatePath } = useI18n(Astro.url);
 
 const cards = [
   {

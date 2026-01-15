@@ -1,12 +1,13 @@
 import { defineMiddleware } from "astro:middleware";
 import {
   getLangFromUrl,
-  useTranslatedPath,
+  createPathTranslator,
   getPathWithoutLang as getPathWithoutLangHelper,
 } from "./i18n/utils";
 import { defaultLang } from "./i18n/ui";
 import type { Lang } from "./i18n/ui";
-import { authUtils } from "./lib/nhost";
+// import { authUtils } from "./lib/nhost";
+import { handleNhostMiddleware } from "./lib/nhost";
 
 // Define route patterns that don't require authentication (without language prefix)
 const publicRoutePatterns = [
@@ -78,39 +79,52 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Get the current path and extract language
   const path = context.url.pathname;
   const lang = getLangFromUrl(context.url) as Lang;
-  const translatePath = useTranslatedPath(lang);
+  const translatePath = createPathTranslator(lang);
 
   const isPublic = isPublicRoute(path, lang);
-  const userSession = authUtils.getUserSession();
+  const session = await handleNhostMiddleware(context.cookies);
 
   // If it's a public route, check if we should redirect authenticated users
   if (isPublic) {
     // For signin/register pages, redirect authenticated users to dashboard
     const pathWithoutLang = canonicalPath(path, lang);
 
-    // NOTE: only redirect away when a user session is present — the previous code
-    // accidentally redirected unauthenticated users to dashboard because of
-    // a faulty operator precedence in the condition.
+    // NOTE: only redirect away when a user session is present
     if (
-      userSession &&
+      session &&
       (pathWithoutLang === "/signin" || pathWithoutLang === "/register")
     ) {
       const localizedDashboardPath = translatePath("/dashboard");
       return context.redirect(localizedDashboardPath);
     }
 
+    // If session exists, populate locals even for public routes (e.g. for header)
+    if (session) {
+      context.locals.session = session;
+      context.locals.user = session.user;
+    } else {
+      context.locals.session = null;
+      context.locals.user = null;
+    }
+
     return next();
   }
 
-  if (!userSession) {
+  if (!session) {
     const localizedSigninPath = translatePath("/signin");
     console.log(
       `[MIDDLEWARE] No session, redirecting to localized signin: ${localizedSigninPath} from: ${path}`
     );
+    // Ensure locals are null
+    context.locals.user = null;
+    context.locals.session = null;
     return context.redirect(`${localizedSigninPath}?error=auth-required`);
   }
 
   // Session exists, allow access to protected route
   console.log(`[MIDDLEWARE] Session exists, allowing access to: ${path}`);
+  context.locals.session = session;
+  context.locals.user = session.user;
+  
   return next();
 });

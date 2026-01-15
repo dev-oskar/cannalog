@@ -6,7 +6,7 @@ const {
   lang: currentLang,
   translatePath,
   getUntranslatedPath,
-} = useI18n(Astro);
+} = useI18n(Astro.url);
 
 // Path without the language prefix so we can build translated URLs
 const untranslatedPath = getUntranslatedPath();

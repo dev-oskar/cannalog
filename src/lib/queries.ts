@@ -1,11 +1,12 @@
 import type { Session, Strain } from "../types/db-types";
-import nhost, { authUtils } from "./nhost";
 import { formatTimeSince } from "./utils";
+import type { NhostClient } from "@nhost/nhost-js";
 
-export async function getUserSessions(): Promise<Session[]> {
-  const currentUser = authUtils.getUserId();
-
-  if (!currentUser) {
+export async function getUserSessions(
+  nhost: NhostClient,
+  userId: string
+): Promise<Session[]> {
+  if (!userId) {
     return [];
   }
 
@@ -24,7 +25,7 @@ export async function getUserSessions(): Promise<Session[]> {
 
   const response = await nhost.graphql.request({
     query: GET_USER_SESSIONS_QUERY,
-    variables: { userId: currentUser },
+    variables: { userId: userId },
   });
 
   const data = (response as any).body?.data;
@@ -40,10 +41,11 @@ export async function getUserSessions(): Promise<Session[]> {
   return sessions;
 }
 
-export async function getUserStrains(): Promise<Strain[]> {
-  const currentUser = authUtils.getUserId();
-
-  if (!currentUser) {
+export async function getUserStrains(
+  nhost: NhostClient,
+  userId: string
+): Promise<Strain[]> {
+  if (!userId) {
     return [];
   }
 
@@ -74,7 +76,7 @@ query GetUserStrains($userId: uuid!) {
 
   const response = await nhost.graphql.request({
     query: GET_USER_STRAINS_QUERY,
-    variables: { userId: currentUser },
+    variables: { userId: userId },
   });
 
   const data = (response as any).body?.data;
@@ -97,14 +99,12 @@ query GetUserStrains($userId: uuid!) {
   // }));
 }
 
-export async function getStrainById(strainId: string): Promise<Strain | null> {
-  const currentUser = authUtils.getUserId();
+export async function getStrainById(
+  nhost: NhostClient,
+  strainId: string
+): Promise<Strain | null> {
   if (!strainId) {
     console.error("Strain ID is required");
-    return null;
-  }
-
-  if (!currentUser) {
     return null;
   }
 
@@ -144,6 +144,7 @@ export async function getStrainById(strainId: string): Promise<Strain | null> {
 }
 
 export async function getTimeSinceLastSession(
+  nhost: NhostClient,
   lang: string
 ): Promise<string | null> {
   const GET_TIME_SINCE_LAST_SESS = `query GetLastSessionTime {

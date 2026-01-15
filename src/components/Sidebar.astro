@@ -3,7 +3,7 @@ import { Icon } from "astro-icon/components";
 import { useI18n } from "../i18n/utils";
 
 // Single line i18n setup - everything included!
-const i18n = useI18n(Astro);
+const i18n = useI18n(Astro.url);
 
 export interface Props {
   user: {
@@ -216,7 +216,7 @@ const displayName = user.displayName || user.email;
                 <a
                   href={i18n.translatePath(
                     i18n.getUntranslatedPath(),
-                    targetLang
+                    targetLang,
                   )}
                   class={`block px-3 py-2 text-sm rounded-md transition-colors duration-200 ${
                     targetLang === i18n.lang
@@ -251,7 +251,7 @@ const displayName = user.displayName || user.email;
     const sidebarElement = document.getElementById("sidebar");
     const sidebarToggle = document.getElementById("sidebar-toggle");
     const mobileSidebarToggle = document.getElementById(
-      "mobile-sidebar-toggle"
+      "mobile-sidebar-toggle",
     );
     const collapseIcon = document.getElementById("sidebar-collapse-icon");
     const expandIcon = document.getElementById("sidebar-expand-icon");
@@ -343,7 +343,7 @@ const displayName = user.displayName || user.email;
       window.dispatchEvent(
         new CustomEvent("sidebarStateChange", {
           detail: { collapsed },
-        })
+        }),
       );
     }
 
@@ -411,10 +411,10 @@ const displayName = user.displayName || user.email;
 
     // Theme toggle functionality
     const themeToggleDarkIcon = document.getElementById(
-      "theme-toggle-dark-icon"
+      "theme-toggle-dark-icon",
     );
     const themeToggleLightIcon = document.getElementById(
-      "theme-toggle-light-icon"
+      "theme-toggle-light-icon",
     );
     const themeToggleBtn = document.getElementById("sidebar-theme-toggle");
 
@@ -436,7 +436,7 @@ const displayName = user.displayName || user.email;
     function initializeTheme() {
       const savedTheme = localStorage.getItem("color-theme");
       const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
+        "(prefers-color-scheme: dark)",
       ).matches;
 
       if (savedTheme === "dark" || (!savedTheme && prefersDark)) {

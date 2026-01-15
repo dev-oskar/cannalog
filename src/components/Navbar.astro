@@ -5,7 +5,7 @@ import { useI18n } from "../i18n/utils";
 import PrimaryButton from "./ui/PrimaryButton.astro";
 import SecondaryButton from "./ui/SecondaryButton.astro";
 
-const { t, translatePath } = useI18n(Astro);
+const { t, translatePath } = useI18n(Astro.url);
 ---
 
 <header class="backdrop-blur-md sticky top-0 z-50">

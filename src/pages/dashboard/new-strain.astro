@@ -1,12 +1,9 @@
 ---
 import { useI18n } from "../../i18n/utils";
-import { authUtils } from "../../lib/nhost";
+const { t } = useI18n(Astro.url);
 
+const { user } = Astro.locals;
 import Layout from "../../layouts/DashboardLayout.astro";
-
-const { t } = useI18n(Astro);
-
-const user = await authUtils.getUser();
 ---
 
 <Layout user={user}>
