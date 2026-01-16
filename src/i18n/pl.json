@@ -82,7 +82,9 @@
       "passwordsMismatch": "Hasła się nie zgadzają",
       "termsRequired": "Musisz zaakceptować regulamin",
       "registrationFailed": "Coś poszło nie tak - spróbuj jeszcze raz",
-      "unexpectedError": "Wystąpił błąd"
+      "passwordTooShort": "Hasło jest za krótkie",
+      "unexpectedError": "Wystąpił błąd",
+      "emailAlreadyInUse": "Email jest już w użyciu"
     }
   },
   "confirm": {

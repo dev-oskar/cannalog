@@ -31,6 +31,12 @@ if (errorParam) {
     case "unexpected-error":
       error = t("register.errors.unexpectedError");
       break;
+    case "password-too-short":
+      error = t("register.errors.passwordTooShort");
+      break;
+    case "email-already-in-use":
+      error = t("register.errors.emailAlreadyInUse");
+      break;
     default:
       error = t("register.errors.unexpectedError");
       break;

@@ -1,15 +1,19 @@
 import type { APIRoute } from "astro";
 import { createNhostServerClient } from "../../lib/nhost";
-import { getLangFromUrl, useTranslatedPath } from "../../i18n/utils";
+import { getLangFromUrl, createPathTranslator } from "../../i18n/utils";
+import type { FetchError } from "@nhost/nhost-js/fetch";
+import type { ErrorResponse } from "@nhost/nhost-js/auth";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, cookies }) => {
+  // Helpers for redirects
+  const url = new URL(request.url);
+  const lang = getLangFromUrl(url);
+  const getTranslatedPath = createPathTranslator(lang);
+
   try {
     const formData = await request.formData();
-    const url = new URL(request.url);
-    const lang = getLangFromUrl(url);
-    const getTranslatedPath = useTranslatedPath(lang);
 
     // Get form data
     const email = formData.get("email")?.toString();
@@ -49,44 +53,38 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     // Attempt registration with Nhost
     const nhost = await createNhostServerClient(cookies);
-    // Explicitly cast to any to avoid TypeScript errors with NhostClient type
-    const result = await (nhost.auth as any).signUp({ email, password });
+    
+    const response = await nhost.auth.signUpEmailPassword({ email, password });
 
-    // Handle registration errors
-    if (result.error) {
-      console.error("Registration error:", result.error);
+    if (response.body?.session) {
+      // Registration successful - redirect to signin with success message
       return new Response(null, {
         status: 303,
         headers: {
-          Location: `${getTranslatedPath(
-            "/register"
-          )}?error=registration-failed`,
+          Location: `${getTranslatedPath("/signin")}?message=registration-success`,
         },
       });
+    } else {
+        // Fallback if no session is returned but no error was thrown (e.g. email verification required with no auto-login)
+        return new Response(null, {
+            status: 303,
+            headers: {
+                Location: `${getTranslatedPath("/signin")}?message=check-email`,
+            },
+        });
     }
 
-    // Registration successful - redirect to signin with success message
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: `${getTranslatedPath(
-          "/signin"
-        )}?message=registration-success`,
-      },
-    });
   } catch (err) {
-    // Log the error
-    console.error("Unexpected error during registration:", err);
+    const error = err as FetchError<ErrorResponse>;
+    console.error("Registration error:", error);
 
-    // Create a new URL object and get the language again since we're outside the try block
-    const errorUrl = new URL(request.url);
-    const errorLang = getLangFromUrl(errorUrl);
-    const errorTranslatedPath = useTranslatedPath(errorLang);
-
+    // Prefer using the error code from the body if available, otherwise fallback to message or generic error
+    const errorCode = error.body?.error || error.message || "unexpected-error";
+    
     return new Response(null, {
       status: 303,
       headers: {
-        Location: `${errorTranslatedPath("/register")}?error=unexpected-error`,
+        Location: `${getTranslatedPath("/register")}?error=${encodeURIComponent(errorCode)}`,
       },
     });
   }

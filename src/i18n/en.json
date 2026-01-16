@@ -84,7 +84,9 @@
       "passwordsMismatch": "Passwords do not match",
       "termsRequired": "You must accept the terms and conditions",
       "registrationFailed": "Registration failed - please try again",
-      "unexpectedError": "An unexpected error occurred"
+      "passwordTooShort": "Password is too short",
+      "unexpectedError": "An unexpected error occurred",
+      "emailAlreadyInUse": "Email already in use"
     }
   },
   "confirm": {
