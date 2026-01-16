@@ -1,0 +1,314 @@
+---
+import DashboardLayout from "../../../layouts/DashboardLayout.astro";
+import { useI18n } from "../../../i18n/utils";
+import { createNhostServerClient } from "../../../lib/nhost";
+import { getUserStrains } from "../../../lib/queries";
+import { Icon } from "astro-icon/components";
+
+const { t } = useI18n(Astro.url);
+const { user } = Astro.locals;
+const nhost = await createNhostServerClient(Astro.cookies);
+
+// Get user's strains for the strain selector
+const userStrains = user ? await getUserStrains(nhost, user.id) : [];
+---
+
+<DashboardLayout title={t("sessions.new.title")} user={user}>
+    <div class="max-w-2xl mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-6">{t("sessions.new.heading")}</h1>
+
+        <form id="sessionForm" class="space-y-6">
+            <div>
+                <label for="strain" class="block text-sm font-medium mb-2">
+                    {t("sessions.new.strain")}
+                </label>
+                <select
+                    id="strain"
+                    name="strain"
+                    required
+                    class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2"
+                >
+                    <option value="">{t("sessions.new.select_strain")}</option>
+                    {
+                        userStrains.map((strain) => (
+                            <option value={strain.id}>{strain.name}</option>
+                        ))
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label
+                    for="usage_method"
+                    class="block text-sm font-medium mb-2"
+                >
+                    {t("sessions.new.usage_method")}
+                </label>
+                <select
+                    id="usage_method"
+                    name="usage_method"
+                    required
+                    class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2"
+                >
+                    <option value="smoke">{t("sessions.methods.smoke")}</option>
+                    <option value="vape">{t("sessions.methods.vape")}</option>
+                    <option value="edible"
+                        >{t("sessions.methods.edible")}</option
+                    >
+                    <option value="oil">{t("sessions.methods.oil")}</option>
+                </select>
+            </div>
+
+            <div>
+                <label
+                    for="usage_method"
+                    class="block text-sm font-medium mb-2"
+                >
+                    {t("sessions.new.usage_method")}
+                </label>
+                <div class="flex w-full justify-between gap-4">
+                    <div class="text-center">
+                        <Icon name="la:joint" class="h-20 w-20 rounded-4xl" />
+                        <label>Joint</label>
+                    </div>
+                    <div class="text-center">
+                        <Icon name="la:cookie" class="h-20 w-20 rounded-4xl" />
+                        <label>Edible</label>
+                    </div>
+                    <div class="text-center">
+                        <label>Vape</label>
+                    </div>
+                    <div class="text-center">
+                        <Icon name="la:oil-can" class="h-20 w-20 rounded-4xl" />
+                        <label>Oil</label>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label for="amount" class="block text-sm font-medium mb-2">
+                    {t("sessions.new.amount")} (mg)
+                </label>
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    min="1"
+                    required
+                    class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2"
+                />
+            </div>
+
+            <div>
+                <label for="effects" class="block text-sm font-medium mb-2">
+                    {t("sessions.new.effects")}
+                </label>
+                <div class="flex flex-wrap gap-2" id="effectsContainer">
+                    {
+                        [
+                            "relaxed",
+                            "energetic",
+                            "creative",
+                            "focused",
+                            "sleepy",
+                        ].map((effect) => (
+                            <label class="inline-flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="effects"
+                                    value={effect}
+                                    class="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <span class="ml-2">
+                                    {t(`sessions.effects.${effect}`)}
+                                </span>
+                            </label>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div>
+                <label for="notes" class="block text-sm font-medium mb-2">
+                    {t("sessions.new.notes")}
+                </label>
+                <textarea
+                    id="notes"
+                    name="notes"
+                    rows="3"
+                    class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2"
+                ></textarea>
+            </div>
+
+            <div
+                id="formError"
+                class="hidden mb-4 p-4 text-red-700 bg-red-100 dark:bg-red-900 dark:text-red-100 rounded-lg"
+                role="alert"
+            >
+                <p class="font-medium"></p>
+            </div>
+
+            <div class="flex justify-end gap-4">
+                <button
+                    type="button"
+                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    onclick="window.history.back()"
+                    id="cancelButton"
+                >
+                    {t("common.cancel")}
+                </button>
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    id="submitButton"
+                >
+                    <span>{t("sessions.new.submit")}</span>
+                    <span id="submitSpinner" class="hidden">
+                        <svg
+                            class="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("sessionForm");
+        const submitButton = document.getElementById(
+            "submitButton",
+        ) as HTMLButtonElement;
+        const submitSpinner = document.getElementById("submitSpinner");
+        const cancelButton = document.getElementById(
+            "cancelButton",
+        ) as HTMLButtonElement;
+        const formError = document.getElementById("formError");
+
+        // Show error message
+        function showError(message: string) {
+            if (formError) {
+                const errorText = formError.querySelector("p");
+                if (errorText) {
+                    errorText.textContent = message;
+                }
+                formError.classList.remove("hidden");
+                formError.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+        }
+
+        // Reset form state
+        function resetFormState() {
+            submitButton.disabled = false;
+            submitSpinner?.classList.add("hidden");
+            cancelButton.disabled = false;
+        }
+
+        // Set loading state
+        function setLoadingState() {
+            submitButton.disabled = true;
+            submitSpinner?.classList.remove("hidden");
+            cancelButton.disabled = true;
+            formError?.classList.add("hidden");
+        }
+
+        form?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            setLoadingState();
+
+            const formData = new FormData(e.target as HTMLFormElement);
+
+            // Validate required fields
+            const strainId = formData.get("strain");
+            const usageMethod = formData.get("usage_method");
+            const amountStr = formData.get("amount");
+
+            if (!strainId || !usageMethod || !amountStr) {
+                showError("Please fill in all required fields");
+                resetFormState();
+                return;
+            }
+
+            const amount = parseInt(amountStr as string);
+            if (isNaN(amount) || amount <= 0) {
+                showError("Please enter a valid amount");
+                resetFormState();
+                return;
+            }
+
+            const effects = formData.getAll("effects");
+
+            try {
+                const response = await fetch("/api/sessions/create", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        strain_used: strainId,
+                        usage_method: usageMethod,
+                        amount: amount,
+                        effects: effects.length > 0 ? effects : null,
+                        notes: formData.get("notes") || null,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || "Failed to create session");
+                }
+
+                // Show success feedback before redirect
+                formError?.classList.remove("hidden");
+                formError?.classList.remove(
+                    "bg-red-100",
+                    "text-red-700",
+                    "dark:bg-red-900",
+                    "dark:text-red-100",
+                );
+                formError?.classList.add(
+                    "bg-green-100",
+                    "text-green-700",
+                    "dark:bg-green-900",
+                    "dark:text-green-100",
+                );
+                if (formError?.querySelector("p")) {
+                    formError.querySelector("p")!.textContent =
+                        "Session logged successfully!";
+                }
+
+                // Redirect after a brief delay to show success message
+                setTimeout(() => {
+                    window.location.href = `/dashboard/sessions/${strainId}`;
+                }, 1000);
+            } catch (error) {
+                console.error("Error:", error);
+                showError(
+                    error instanceof Error
+                        ? error.message
+                        : "Failed to create session. Please try again.",
+                );
+                resetFormState();
+            }
+        });
+    </script>
+</DashboardLayout>

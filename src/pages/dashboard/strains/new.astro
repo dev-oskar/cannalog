@@ -1,0 +1,109 @@
+---
+import Layout from "../../../layouts/DashboardLayout.astro";
+import { useI18n } from "../../../i18n/utils";
+
+const { t } = useI18n(Astro.url);
+const { user } = Astro.locals;
+---
+
+<Layout user={user}>
+    <main class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+            {t("newStrain.title")}
+        </h2>
+
+        <form method="POST" action="/api/strains/add" class="space-y-4">
+            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                <div class="sm:col-span-2">
+                    <label for="name" class="text-sm font-medium">
+                        {t("newStrain.strainNameLabel")}
+                    </label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        required
+                        minlength="2"
+                        placeholder={t("newStrain.strainPlaceholder")}
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="thc-content"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >{t("newStrain.thcContentLabel")}</label
+                    >
+                    <input
+                        type="number"
+                        name="thc-content"
+                        id="thc-content"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        step="0.1"
+                        placeholder="18"
+                        required="false"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="cbd-content"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >{t("newStrain.cbdContentLabel")}</label
+                    >
+                    <input
+                        type="number"
+                        name="cbd-content"
+                        id="cbd-content"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="2"
+                        step="0.1"
+                        required="false"
+                    />
+                </div>
+                <div class="w-full">
+                    <div>
+                        <label
+                            for="genetics"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >{t("newStrain.strainTypeLabel")}</label
+                        >
+                        <select
+                            id="genetics"
+                            name="genetics"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        >
+                            <option selected="hybrid"
+                                >{t("newStrain.strainTypeLabel")}</option
+                            >
+                            <option value="sativa">Sativa</option>
+                            <option value="indica">Indica</option>
+                            <option value="hybrid"
+                                >{t("newStrain.geneticsHybrid")}</option
+                            >
+                        </select>
+                    </div>
+                </div>
+                <div class="sm:col-span-2">
+                    <label
+                        for="notes"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >{t("newStrain.notesLabel")}</label
+                    >
+                    <textarea
+                        id="notes"
+                        name="notes"
+                        rows="8"
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder={t("newStrain.notesPlaceholder")}
+                    ></textarea>
+                </div>
+            </div>
+            <button
+                type="submit"
+                class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+            >
+                {t("newStrain.newStrainButton")}
+            </button>
+        </form>
+    </main>
+</Layout>

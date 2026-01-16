@@ -1,41 +1,7 @@
 // src/pages/api/strains/add.ts
 import type { APIRoute } from "astro";
 import { createNhostServerClient } from "../../../lib/nhost";
-import type { Strain } from "../../../types/db-types";
-
-interface StrainMutationResponse {
-  insert_strains_one: Strain;
-}
-
-type GraphQLResponse = {
-  data?: StrainMutationResponse;
-  error?: Error;
-};
-
-const INSERT_STRAIN_MUTATION = `
-mutation InsertStrains($name: String!, $thc_content: Int!, $cbd_content: Int!, $description: String!, $is_public: Boolean!, $created_by: uuid!, $img_path: String!) {
-  insert_strains_one(object: {
-    name: $name, 
-    thc_content: $thc_content, 
-    cbd_content: $cbd_content, 
-    description: $description, 
-    is_public: $is_public, 
-    created_by: $created_by, 
-    img_path: $img_path
-  }) {
-    id
-    name
-    thc_content
-    cbd_content
-    description
-    is_public
-    created_by
-    created_at
-    tags
-    img_path
-  }
-}
-`;
+import { createStrain, type CreateStrainInput } from "../../../lib/mutations";
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
@@ -74,7 +40,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    const newVariables = {
+    const input: CreateStrainInput = {
       name: formData.get("name")?.toString() || "",
       thc_content: thcValue,
       cbd_content: cbdValue,
@@ -84,62 +50,33 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       img_path: "",
     };
 
-    console.log("New Strain Variables:", newVariables);
-
-    // Execute the mutation using nhost.graphql.request
-    const response = await nhost.graphql.request<GraphQLResponse>({
-      query: INSERT_STRAIN_MUTATION,
-      variables: newVariables,
-    });
-
-    // Access the data from response.body
-    const data = (response as any).body?.data;
-    const errors = (response as any).body?.errors;
-
-    console.log("GraphQL Data:", data);
-    console.log("GraphQL Errors:", errors);
-
-    const error = errors ? new Error(JSON.stringify(errors)) : null;
-    if (error) {
-      console.error("GraphQL Error:", error);
-      return new Response(
-        JSON.stringify({
-          message: "GraphQL Mutation Failed",
-          error: error.message,
-        }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+    try {
+        const createdStrain = await createStrain(nhost, input);
+        
+        // Return the successful response
+        return new Response(
+          JSON.stringify({
+            message: "Strain created successfully!",
+            strain: createdStrain,
+          }),
+          {
+            status: 201, // 201 Created
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+    } catch (mutationError: any) {
+        console.error("Mutation Error:", mutationError);
+        return new Response(
+            JSON.stringify({
+              message: "GraphQL Mutation Failed",
+              error: mutationError.message || "Failed to create strain",
+            }),
+            {
+              status: 400,
+              headers: { "Content-Type": "application/json" },
+            }
+        );
     }
-
-    if (!data || !data.insert_strains_one) {
-      console.error("No data returned from mutation");
-      return new Response(
-        JSON.stringify({
-          message: "Failed to create strain - no data returned",
-        }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
-    const createdStrain = data.insert_strains_one;
-
-    // Return the successful response
-    return new Response(
-      JSON.stringify({
-        message: "Strain created successfully!",
-        strain: createdStrain,
-      }),
-      {
-        status: 201, // 201 Created
-        headers: { "Content-Type": "application/json" },
-      }
-    );
   } catch (e) {
     console.error("API Route Error:", e);
     return new Response(
