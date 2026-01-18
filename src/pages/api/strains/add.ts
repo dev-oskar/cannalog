@@ -3,18 +3,18 @@ import type { APIRoute } from "astro";
 import { createNhostServerClient } from "../../../lib/nhost";
 import { createStrain, type CreateStrainInput } from "../../../lib/mutations";
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   try {
     const nhost = await createNhostServerClient(cookies);
     // Explicitly cast to any to avoid TypeScript errors with NhostClient type
-    const session = (nhost.auth as any).getSession();
+    const session = nhost.getUserSession();
     const currentUser = session?.user?.id;
 
     if (!currentUser) {
-        return new Response(JSON.stringify({ message: "Unauthorized" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" },
-        });
+      return new Response(JSON.stringify({ message: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     const formData = await request.formData();
@@ -36,7 +36,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -51,31 +51,21 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     };
 
     try {
-        const createdStrain = await createStrain(nhost, input);
-        
-        // Return the successful response
-        return new Response(
-          JSON.stringify({
-            message: "Strain created successfully!",
-            strain: createdStrain,
-          }),
-          {
-            status: 201, // 201 Created
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+      const createdStrain = await createStrain(nhost, input);
+
+      return redirect(`/dashboard/strains/${createdStrain.id}`);
     } catch (mutationError: any) {
-        console.error("Mutation Error:", mutationError);
-        return new Response(
-            JSON.stringify({
-              message: "GraphQL Mutation Failed",
-              error: mutationError.message || "Failed to create strain",
-            }),
-            {
-              status: 400,
-              headers: { "Content-Type": "application/json" },
-            }
-        );
+      console.error("Mutation Error:", mutationError);
+      return new Response(
+        JSON.stringify({
+          message: "GraphQL Mutation Failed",
+          error: mutationError.message || "Failed to create strain",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
   } catch (e) {
     console.error("API Route Error:", e);
@@ -84,7 +74,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   }
 };

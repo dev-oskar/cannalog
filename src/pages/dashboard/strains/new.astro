@@ -1,109 +1,681 @@
 ---
 import Layout from "../../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../../i18n/utils";
+// import Logo from "../../../assets/cannabis-logo.svg";
+import { Icon } from "astro-icon/components";
 
 const { t } = useI18n(Astro.url);
 const { user } = Astro.locals;
 ---
 
 <Layout user={user}>
-    <main class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-            {t("newStrain.title")}
+  <div id="wizard-container" class="wizard-container">
+    <div class="m-auto">
+      <h1>{t("newStrain.title")}</h1>
+    </div>
+    <!-- Step 1: Strain Name -->
+    <div class="wizard-step active" data-step="1">
+      <div class="wizard-content">
+        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
+        <Icon name="tabler:cannabis" class="wizard-logo" />
+        <h2 class="wizard-question">
+          {t("newStrain.strainNameLabel")}
         </h2>
+        <div class="wizard-progress">Step 1 of 5</div>
+      </div>
+      <div class="wizard-input-area">
+        <input
+          type="text"
+          id="wizard-name"
+          class="wizard-input"
+          placeholder={t("newStrain.strainPlaceholder")}
+          data-field="name"
+          autocomplete="off"
+        />
+        <button
+          type="button"
+          class="wizard-btn wizard-btn-primary"
+          data-action="next"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
 
-        <form method="POST" action="/api/strains/add" class="space-y-4">
-            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                <div class="sm:col-span-2">
-                    <label for="name" class="text-sm font-medium">
-                        {t("newStrain.strainNameLabel")}
-                    </label>
-                    <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        required
-                        minlength="2"
-                        placeholder={t("newStrain.strainPlaceholder")}
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
-                </div>
-                <div>
-                    <label
-                        for="thc-content"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >{t("newStrain.thcContentLabel")}</label
-                    >
-                    <input
-                        type="number"
-                        name="thc-content"
-                        id="thc-content"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        step="0.1"
-                        placeholder="18"
-                        required="false"
-                    />
-                </div>
-                <div>
-                    <label
-                        for="cbd-content"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >{t("newStrain.cbdContentLabel")}</label
-                    >
-                    <input
-                        type="number"
-                        name="cbd-content"
-                        id="cbd-content"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="2"
-                        step="0.1"
-                        required="false"
-                    />
-                </div>
-                <div class="w-full">
-                    <div>
-                        <label
-                            for="genetics"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >{t("newStrain.strainTypeLabel")}</label
-                        >
-                        <select
-                            id="genetics"
-                            name="genetics"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        >
-                            <option selected="hybrid"
-                                >{t("newStrain.strainTypeLabel")}</option
-                            >
-                            <option value="sativa">Sativa</option>
-                            <option value="indica">Indica</option>
-                            <option value="hybrid"
-                                >{t("newStrain.geneticsHybrid")}</option
-                            >
-                        </select>
-                    </div>
-                </div>
-                <div class="sm:col-span-2">
-                    <label
-                        for="notes"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >{t("newStrain.notesLabel")}</label
-                    >
-                    <textarea
-                        id="notes"
-                        name="notes"
-                        rows="8"
-                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder={t("newStrain.notesPlaceholder")}
-                    ></textarea>
-                </div>
-            </div>
-            <button
-                type="submit"
-                class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-            >
-                {t("newStrain.newStrainButton")}
-            </button>
-        </form>
-    </main>
+    <!-- Step 2: Strain Type -->
+    <div class="wizard-step" data-step="2">
+      <div class="wizard-content">
+        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
+        <Icon name="tabler:cannabis" class="wizard-logo" />
+        <h2 class="wizard-question">
+          {t("newStrain.strainTypeLabel")}
+        </h2>
+        <div class="wizard-progress">Step 2 of 5</div>
+      </div>
+      <div class="wizard-input-area">
+        <div class="wizard-button-group">
+          <button type="button" class="wizard-option-btn" data-value="sativa">
+            <span class="option-emoji">🌿</span>
+            <span class="option-label">Sativa</span>
+          </button>
+          <button type="button" class="wizard-option-btn" data-value="indica">
+            <span class="option-emoji">🍃</span>
+            <span class="option-label">Indica</span>
+          </button>
+          <button type="button" class="wizard-option-btn" data-value="hybrid">
+            <span class="option-emoji">🌱</span>
+            <span class="option-label">{t("newStrain.geneticsHybrid")}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: THC Content -->
+    <div class="wizard-step" data-step="3">
+      <div class="wizard-content">
+        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
+        <Icon name="tabler:cannabis" class="wizard-logo" />
+        <h2 class="wizard-question">
+          {t("newStrain.thcContentLabel")}
+        </h2>
+        <div class="wizard-progress">Step 3 of 5</div>
+      </div>
+      <div class="wizard-input-area">
+        <div class="wizard-number-control">
+          <button type="button" class="wizard-num-btn" data-action="decrease">
+            <span>−</span>
+          </button>
+          <input
+            type="number"
+            id="wizard-thc"
+            class="wizard-number-input"
+            value="0"
+            step="0.5"
+            min="0"
+            max="100"
+            data-field="thc-content"
+          />
+          <button type="button" class="wizard-num-btn" data-action="increase">
+            <span>+</span>
+          </button>
+        </div>
+        <div class="wizard-number-label">% THC</div>
+        <button
+          type="button"
+          class="wizard-btn wizard-btn-primary"
+          data-action="next"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: CBD Content -->
+    <div class="wizard-step" data-step="4">
+      <div class="wizard-content">
+        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
+        <Icon name="tabler:cannabis" class="wizard-logo" />
+        <h2 class="wizard-question">
+          {t("newStrain.cbdContentLabel")}
+        </h2>
+        <div class="wizard-progress">Step 4 of 5</div>
+      </div>
+      <div class="wizard-input-area">
+        <div class="wizard-number-control">
+          <button type="button" class="wizard-num-btn" data-action="decrease">
+            <span>−</span>
+          </button>
+          <input
+            type="number"
+            id="wizard-cbd"
+            class="wizard-number-input"
+            value="0"
+            step="0.5"
+            min="0"
+            max="100"
+            data-field="cbd-content"
+          />
+          <button type="button" class="wizard-num-btn" data-action="increase">
+            <span>+</span>
+          </button>
+        </div>
+        <div class="wizard-number-label">% CBD</div>
+        <button
+          type="button"
+          class="wizard-btn wizard-btn-primary"
+          data-action="next"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 5: Notes (Optional) -->
+    <div class="wizard-step" data-step="5">
+      <div class="wizard-content">
+        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
+        <Icon name="tabler:cannabis" class="wizard-logo" />
+        <h2 class="wizard-question">{t("newStrain.notesLabel")}</h2>
+        <div class="wizard-progress">Step 5 of 5</div>
+      </div>
+      <div class="wizard-input-area">
+        <textarea
+          id="wizard-notes"
+          class="wizard-textarea"
+          placeholder={t("newStrain.notesPlaceholder")}
+          rows="4"
+          data-field="notes"></textarea>
+        <div class="wizard-final-buttons">
+          <button
+            type="button"
+            class="wizard-btn wizard-btn-secondary"
+            data-action="skip"
+          >
+            Skip
+          </button>
+          <button
+            type="button"
+            class="wizard-btn wizard-btn-primary"
+            data-action="submit"
+          >
+            {t("newStrain.newStrainButton")}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden form for actual submission -->
+    <form
+      id="wizard-form"
+      method="POST"
+      action="/api/strains/add"
+      style="display: none;"
+    >
+      <input type="hidden" name="name" id="form-name" />
+      <input type="hidden" name="genetics" id="form-genetics" />
+      <input type="hidden" name="thc-content" id="form-thc" />
+      <input type="hidden" name="cbd-content" id="form-cbd" />
+      <input type="hidden" name="notes" id="form-notes" />
+    </form>
+  </div>
+
+  <style>
+    .wizard-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .wizard-step {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .wizard-step.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .wizard-step.prev {
+      transform: translateX(-100%);
+    }
+
+    .wizard-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .wizard-logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 2rem;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .wizard-question {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .wizard-progress {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .wizard-input-area {
+      width: 100%;
+      max-width: 500px;
+      padding: 2rem;
+      background: white;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .wizard-input {
+      width: 100%;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.125rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.2s;
+      background: #f9fafb;
+    }
+
+    .wizard-input:focus {
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .wizard-textarea {
+      width: 100%;
+      padding: 1.25rem 1.5rem;
+      font-size: 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.2s;
+      background: #f9fafb;
+      resize: none;
+      font-family: inherit;
+      margin-bottom: 1rem;
+    }
+
+    .wizard-textarea:focus {
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .wizard-btn {
+      width: 100%;
+      padding: 1.25rem 2rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 1rem;
+    }
+
+    .wizard-btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .wizard-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+    }
+
+    .wizard-btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .wizard-btn-secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .wizard-btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    .wizard-button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .wizard-option-btn {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+
+    .wizard-option-btn:hover {
+      border-color: #667eea;
+      background: white;
+      transform: translateX(4px);
+    }
+
+    .wizard-option-btn.selected {
+      border-color: #667eea;
+      background: linear-gradient(
+        135deg,
+        rgba(102, 126, 234, 0.1) 0%,
+        rgba(118, 75, 162, 0.1) 100%
+      );
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .option-emoji {
+      font-size: 2rem;
+    }
+
+    .option-label {
+      color: #1f2937;
+    }
+
+    .wizard-number-control {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .wizard-num-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #667eea;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wizard-num-btn:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+      transform: scale(1.1);
+    }
+
+    .wizard-num-btn:active {
+      transform: scale(0.95);
+    }
+
+    .wizard-number-input {
+      width: 120px;
+      padding: 1rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      border: none;
+      background: transparent;
+      color: #1f2937;
+      outline: none;
+    }
+
+    .wizard-number-input::-webkit-inner-spin-button,
+    .wizard-number-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .wizard-number-label {
+      text-align: center;
+      font-size: 1rem;
+      color: #6b7280;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .wizard-final-buttons {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .wizard-logo {
+        width: 80px;
+        height: 80px;
+      }
+
+      .wizard-question {
+        font-size: 1.5rem;
+      }
+
+      .wizard-number-input {
+        font-size: 2rem;
+      }
+    }
+  </style>
+
+  <script>
+    class FocusedWizard {
+      constructor() {
+        this.currentStep = 1;
+        this.totalSteps = 5;
+        this.data = {};
+        this.init();
+      }
+
+      init() {
+        this.attachEventListeners();
+        this.focusCurrentInput();
+      }
+
+      attachEventListeners() {
+        // Next/Continue buttons
+        document.querySelectorAll('[data-action="next"]').forEach((btn) => {
+          btn.addEventListener("click", () => this.nextStep());
+        });
+
+        // Skip button
+        document
+          .querySelector('[data-action="skip"]')
+          ?.addEventListener("click", () => {
+            this.nextStep();
+          });
+
+        // Submit button
+        document
+          .querySelector('[data-action="submit"]')
+          ?.addEventListener("click", () => {
+            this.submit();
+          });
+
+        // Option buttons (Step 2: Genetics)
+        document.querySelectorAll(".wizard-option-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const value = e.currentTarget.dataset.value;
+            this.data.genetics = value;
+
+            // Visual feedback
+            document
+              .querySelectorAll(".wizard-option-btn")
+              .forEach((b) => b.classList.remove("selected"));
+            e.currentTarget.classList.add("selected");
+
+            // Auto-advance after selection
+            setTimeout(() => this.nextStep(), 300);
+          });
+        });
+
+        // Number controls (+/- buttons)
+        document.querySelectorAll(".wizard-num-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const action = e.currentTarget.dataset.action;
+            const input = e.currentTarget.parentElement.querySelector("input");
+            const step = parseFloat(input.step) || 0.5;
+            let value = parseFloat(input.value) || 0;
+
+            if (action === "increase") {
+              value += step;
+            } else if (action === "decrease") {
+              value = Math.max(0, value - step);
+            }
+
+            input.value = value.toFixed(1);
+          });
+        });
+
+        // Enter key navigation
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            if (this.currentStep === this.totalSteps) {
+              this.submit();
+            } else {
+              this.nextStep();
+            }
+          }
+        });
+
+        // Store input values
+        document.querySelectorAll("[data-field]").forEach((input) => {
+          input.addEventListener("input", (e) => {
+            const field = e.target.dataset.field;
+            this.data[field] = e.target.value;
+          });
+        });
+      }
+
+      nextStep() {
+        // Validate current step
+        if (!this.validateStep()) {
+          return;
+        }
+
+        // Collect data from current step
+        this.collectStepData();
+
+        if (this.currentStep < this.totalSteps) {
+          this.goToStep(this.currentStep + 1);
+        }
+      }
+
+      goToStep(stepNumber) {
+        const currentStepEl = document.querySelector(
+          `[data-step="${this.currentStep}"]`,
+        );
+        const nextStepEl = document.querySelector(
+          `[data-step="${stepNumber}"]`,
+        );
+
+        if (!nextStepEl) return;
+
+        // Remove active class and add prev class
+        currentStepEl.classList.remove("active");
+        currentStepEl.classList.add("prev");
+
+        // Add active class to next step
+        setTimeout(() => {
+          nextStepEl.classList.add("active");
+          nextStepEl.classList.remove("prev");
+          this.currentStep = stepNumber;
+          this.focusCurrentInput();
+        }, 50);
+      }
+
+      validateStep() {
+        if (this.currentStep === 1) {
+          const nameInput = document.getElementById("wizard-name");
+          if (!nameInput.value || nameInput.value.length < 2) {
+            nameInput.focus();
+            nameInput.style.borderColor = "#ef4444";
+            setTimeout(() => {
+              nameInput.style.borderColor = "";
+            }, 1000);
+            return false;
+          }
+        }
+        return true;
+      }
+
+      collectStepData() {
+        const currentStepEl = document.querySelector(
+          `[data-step="${this.currentStep}"]`,
+        );
+        const inputs = currentStepEl.querySelectorAll("[data-field]");
+
+        inputs.forEach((input) => {
+          const field = input.dataset.field;
+          this.data[field] = input.value;
+        });
+      }
+
+      focusCurrentInput() {
+        setTimeout(() => {
+          const currentStepEl = document.querySelector(
+            `[data-step="${this.currentStep}"]`,
+          );
+          const input = currentStepEl.querySelector(
+            'input:not([type="hidden"]), textarea',
+          );
+          if (input && this.currentStep !== 2) {
+            // Skip auto-focus for button selection step
+            input.focus();
+          }
+        }, 450); // Wait for transition
+      }
+
+      submit() {
+        // Collect final step data
+        this.collectStepData();
+
+        // Populate hidden form
+        document.getElementById("form-name").value = this.data.name || "";
+        document.getElementById("form-genetics").value =
+          this.data.genetics || "hybrid";
+        document.getElementById("form-thc").value =
+          this.data["thc-content"] || "0";
+        document.getElementById("form-cbd").value =
+          this.data["cbd-content"] || "0";
+        document.getElementById("form-notes").value = this.data.notes || "";
+
+        // Submit the form
+        document.getElementById("wizard-form").submit();
+      }
+    }
+
+    // Initialize wizard
+    new FocusedWizard();
+  </script>
 </Layout>

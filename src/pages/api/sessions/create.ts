@@ -7,10 +7,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     const nhost = await createNhostServerClient(cookies);
     // Explicitly cast to any to avoid TypeScript errors with NhostClient type
-    const session = (nhost.auth as any).getSession();
-    const userId = session?.user?.id;
+    const session = nhost.getUserSession();
+    const currentUser = session?.user?.id;
 
-    if (!userId) {
+    if (!currentUser) {
       return new Response(JSON.stringify({ message: "Unauthorized" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
@@ -26,12 +26,12 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
     const input: CreateSessionInput = {
-      created_by: userId,
+      created_by: currentUser,
       strain_used: body.strain_used,
       usage_method: body.usage_method,
       amount: body.amount,
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     try {
       const newSession = await createSession(nhost, input);
-      
+
       return new Response(
         JSON.stringify({
           session: newSession,
@@ -50,19 +50,20 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         {
           status: 201,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     } catch (mutationError: any) {
-        console.error("Mutation Error:", mutationError);
-        return new Response(
-            JSON.stringify({ message: mutationError.message || "Failed to create session" }),
-            {
-                status: 400,
-                headers: { "Content-Type": "application/json" }
-            }
-        );
+      console.error("Mutation Error:", mutationError);
+      return new Response(
+        JSON.stringify({
+          message: mutationError.message || "Failed to create session",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
-    
   } catch (e) {
     console.error("API Route Error: \n", e);
     return new Response(
@@ -70,7 +71,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   }
 };
