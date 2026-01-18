@@ -9,32 +9,45 @@ const { user } = Astro.locals;
 ---
 
 <Layout user={user}>
-  <div id="wizard-container" class="wizard-container">
-    <div class="m-auto">
-      <h1>{t("newStrain.title")}</h1>
-    </div>
+  <div
+    id="wizard-container"
+    class="fixed top-0 left-0 w-screen h-screen bg-gradient-to-br from-primary-800 to-primary-600 dark:from-secondary-700 dark:to-secondary-400 overflow-hidden"
+  >
+    <!-- TODO: Add wizard title - user needs to know what they're doing -->
     <!-- Step 1: Strain Name -->
-    <div class="wizard-step active" data-step="1">
-      <div class="wizard-content">
-        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
-        <Icon name="tabler:cannabis" class="wizard-logo" />
-        <h2 class="wizard-question">
+    <div
+      class="absolute top-0 left-0 w-full h-full flex flex-col justify-between items-center opacity-0 translate-x-full transition-all duration-400 ease-in-out pointer-events-none"
+      data-step="1"
+    >
+      <div
+        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+      >
+        <div
+          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+        >
+          <Icon name="tabler:cannabis" class="w-full h-full" />
+        </div>
+        <h2
+          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+        >
           {t("newStrain.strainNameLabel")}
         </h2>
-        <div class="wizard-progress">Step 1 of 5</div>
+        <div class="text-sm text-primary-50/80 font-medium">Step 1 of 5</div>
       </div>
-      <div class="wizard-input-area">
+      <div
+        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+      >
         <input
           type="text"
           id="wizard-name"
-          class="wizard-input"
+          class="w-full p-5 text-lg border-2 border-primary-200 rounded-xl outline-none transition-all bg-primary-50 focus:border-primary-600 focus:bg-primary-50 focus:shadow-lg dark:bg-secondary-50 dark:border-secondary-200 dark:focus:border-secondary-600"
           placeholder={t("newStrain.strainPlaceholder")}
           data-field="name"
           autocomplete="off"
         />
         <button
           type="button"
-          class="wizard-btn wizard-btn-primary"
+          class="w-full p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all mt-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
           data-action="next"
         >
           Continue
@@ -43,66 +56,116 @@ const { user } = Astro.locals;
     </div>
 
     <!-- Step 2: Strain Type -->
-    <div class="wizard-step" data-step="2">
-      <div class="wizard-content">
-        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
-        <Icon name="tabler:cannabis" class="wizard-logo" />
-        <h2 class="wizard-question">
+    <div
+      class="absolute top-0 left-0 w-full h-full flex flex-col justify-between items-center opacity-0 translate-x-full transition-all duration-400 ease-in-out pointer-events-none"
+      data-step="2"
+    >
+      <div
+        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+      >
+        <div
+          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+        >
+          <Icon name="tabler:cannabis" class="w-full h-full" />
+        </div>
+        <h2
+          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+        >
           {t("newStrain.strainTypeLabel")}
         </h2>
-        <div class="wizard-progress">Step 2 of 5</div>
+        <div class="text-sm text-primary-50/80 font-medium">Step 2 of 5</div>
       </div>
-      <div class="wizard-input-area">
-        <div class="wizard-button-group">
-          <button type="button" class="wizard-option-btn" data-value="sativa">
-            <span class="option-emoji">🌿</span>
-            <span class="option-label">Sativa</span>
+      <div
+        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+      >
+        <div class="flex flex-col gap-4">
+          <button
+            type="button"
+            class="flex items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
+            data-value="sativa"
+          >
+            <span class="text-2xl">🌿</span>
+            <span class="text-primary-900 dark:text-secondary-900">Sativa</span>
           </button>
-          <button type="button" class="wizard-option-btn" data-value="indica">
-            <span class="option-emoji">🍃</span>
-            <span class="option-label">Indica</span>
+          <button
+            type="button"
+            class="flex items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
+            data-value="indica"
+          >
+            <span class="text-2xl">🍃</span>
+            <span class="text-primary-900 dark:text-secondary-900">Indica</span>
           </button>
-          <button type="button" class="wizard-option-btn" data-value="hybrid">
-            <span class="option-emoji">🌱</span>
-            <span class="option-label">{t("newStrain.geneticsHybrid")}</span>
+          <button
+            type="button"
+            class="flex items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
+            data-value="hybrid"
+          >
+            <span class="text-2xl">🌱</span>
+            <span class="text-primary-900 dark:text-secondary-900"
+              >{t("newStrain.geneticsHybrid")}</span
+            >
           </button>
         </div>
       </div>
     </div>
 
     <!-- Step 3: THC Content -->
-    <div class="wizard-step" data-step="3">
-      <div class="wizard-content">
-        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
-        <Icon name="tabler:cannabis" class="wizard-logo" />
-        <h2 class="wizard-question">
+    <div
+      class="absolute top-0 left-0 w-full h-full flex flex-col justify-between items-center opacity-0 translate-x-full transition-all duration-400 ease-in-out pointer-events-none"
+      data-step="3"
+    >
+      <div
+        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+      >
+        <div
+          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+        >
+          <Icon name="tabler:cannabis" class="w-full h-full" />
+        </div>
+        <h2
+          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+        >
           {t("newStrain.thcContentLabel")}
         </h2>
-        <div class="wizard-progress">Step 3 of 5</div>
+        <div class="text-sm text-primary-50/80 font-medium">Step 3 of 5</div>
       </div>
-      <div class="wizard-input-area">
-        <div class="wizard-number-control">
-          <button type="button" class="wizard-num-btn" data-action="decrease">
+      <div
+        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+      >
+        <div class="flex items-center justify-center gap-6 mb-2">
+          <button
+            type="button"
+            class="w-16 h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
+            data-action="decrease"
+          >
             <span>−</span>
           </button>
           <input
             type="number"
             id="wizard-thc"
-            class="wizard-number-input"
+            class="w-30 p-4 text-4xl font-bold text-center border-none bg-transparent text-primary-900 dark:text-secondary-900 outline-none sm:text-2xl"
             value="0"
             step="0.5"
             min="0"
             max="100"
             data-field="thc-content"
           />
-          <button type="button" class="wizard-num-btn" data-action="increase">
+          <button
+            type="button"
+            class="w-16 h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
+            data-action="increase"
+          >
             <span>+</span>
           </button>
         </div>
-        <div class="wizard-number-label">% THC</div>
+        <div
+          class="text-center text-base text-primary-500 dark:text-secondary-500 mb-4 font-medium"
+        >
+          % THC
+        </div>
         <button
           type="button"
-          class="wizard-btn wizard-btn-primary"
+          class="w-full p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all mt-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
           data-action="next"
         >
           Continue
@@ -111,38 +174,62 @@ const { user } = Astro.locals;
     </div>
 
     <!-- Step 4: CBD Content -->
-    <div class="wizard-step" data-step="4">
-      <div class="wizard-content">
-        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
-        <Icon name="tabler:cannabis" class="wizard-logo" />
-        <h2 class="wizard-question">
+    <div
+      class="absolute top-0 left-0 w-full h-full flex flex-col justify-between items-center opacity-0 translate-x-full transition-all duration-400 ease-in-out pointer-events-none"
+      data-step="4"
+    >
+      <div
+        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+      >
+        <div
+          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+        >
+          <Icon name="tabler:cannabis" class="w-full h-full" />
+        </div>
+        <h2
+          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+        >
           {t("newStrain.cbdContentLabel")}
         </h2>
-        <div class="wizard-progress">Step 4 of 5</div>
+        <div class="text-sm text-primary-50/80 font-medium">Step 4 of 5</div>
       </div>
-      <div class="wizard-input-area">
-        <div class="wizard-number-control">
-          <button type="button" class="wizard-num-btn" data-action="decrease">
+      <div
+        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+      >
+        <div class="flex items-center justify-center gap-6 mb-2">
+          <button
+            type="button"
+            class="w-16 h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
+            data-action="decrease"
+          >
             <span>−</span>
           </button>
           <input
             type="number"
             id="wizard-cbd"
-            class="wizard-number-input"
+            class="w-30 p-4 text-4xl font-bold text-center border-none bg-transparent text-primary-900 dark:text-secondary-900 outline-none sm:text-2xl"
             value="0"
             step="0.5"
             min="0"
             max="100"
             data-field="cbd-content"
           />
-          <button type="button" class="wizard-num-btn" data-action="increase">
+          <button
+            type="button"
+            class="w-16 h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
+            data-action="increase"
+          >
             <span>+</span>
           </button>
         </div>
-        <div class="wizard-number-label">% CBD</div>
+        <div
+          class="text-center text-base text-primary-500 dark:text-secondary-500 mb-4 font-medium"
+        >
+          % CBD
+        </div>
         <button
           type="button"
-          class="wizard-btn wizard-btn-primary"
+          class="w-full p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all mt-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
           data-action="next"
         >
           Continue
@@ -151,31 +238,45 @@ const { user } = Astro.locals;
     </div>
 
     <!-- Step 5: Notes (Optional) -->
-    <div class="wizard-step" data-step="5">
-      <div class="wizard-content">
-        <!-- <img src={Logo.src} alt="Cannabis Logo" class="wizard-logo" /> -->
-        <Icon name="tabler:cannabis" class="wizard-logo" />
-        <h2 class="wizard-question">{t("newStrain.notesLabel")}</h2>
-        <div class="wizard-progress">Step 5 of 5</div>
+    <div
+      class="absolute top-0 left-0 w-full h-full flex flex-col justify-between items-center opacity-0 translate-x-full transition-all duration-400 ease-in-out pointer-events-none"
+      data-step="5"
+    >
+      <div
+        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+      >
+        <div
+          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+        >
+          <Icon name="tabler:cannabis" class="w-full h-full" />
+        </div>
+        <h2
+          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+        >
+          {t("newStrain.notesLabel")}
+        </h2>
+        <div class="text-sm text-primary-50/80 font-medium">Step 5 of 5</div>
       </div>
-      <div class="wizard-input-area">
+      <div
+        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+      >
         <textarea
           id="wizard-notes"
-          class="wizard-textarea"
+          class="w-full p-5 text-base border-2 border-primary-200 dark:border-secondary-200 rounded-xl outline-none transition-all bg-primary-50 dark:bg-secondary-50 resize-none font-inherit mb-4 focus:border-primary-600 dark:focus:border-secondary-600 focus:bg-primary-50 dark:focus:bg-secondary-50 focus:shadow-lg text-primary-900 dark:text-secondary-900"
           placeholder={t("newStrain.notesPlaceholder")}
           rows="4"
           data-field="notes"></textarea>
-        <div class="wizard-final-buttons">
+        <div class="grid grid-cols-3 gap-4 mt-4">
           <button
             type="button"
-            class="wizard-btn wizard-btn-secondary"
+            class="p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-primary-200 dark:bg-secondary-200 text-primary-700 dark:text-secondary-700 hover:bg-primary-300 dark:hover:bg-secondary-300"
             data-action="skip"
           >
             Skip
           </button>
           <button
             type="button"
-            class="wizard-btn wizard-btn-primary"
+            class="col-span-2 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
             data-action="submit"
           >
             {t("newStrain.newStrainButton")}
@@ -199,294 +300,6 @@ const { user } = Astro.locals;
     </form>
   </div>
 
-  <style>
-    .wizard-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .wizard-step {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      opacity: 0;
-      transform: translateX(100%);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: none;
-    }
-
-    .wizard-step.active {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: auto;
-    }
-
-    .wizard-step.prev {
-      transform: translateX(-100%);
-    }
-
-    .wizard-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .wizard-logo {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 2rem;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%,
-      100% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-    }
-
-    .wizard-question {
-      font-size: 2rem;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .wizard-progress {
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.8);
-      font-weight: 500;
-    }
-
-    .wizard-input-area {
-      width: 100%;
-      max-width: 500px;
-      padding: 2rem;
-      background: white;
-      border-radius: 24px 24px 0 0;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .wizard-input {
-      width: 100%;
-      padding: 1.25rem 1.5rem;
-      font-size: 1.125rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      outline: none;
-      transition: all 0.2s;
-      background: #f9fafb;
-    }
-
-    .wizard-input:focus {
-      border-color: #667eea;
-      background: white;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
-
-    .wizard-textarea {
-      width: 100%;
-      padding: 1.25rem 1.5rem;
-      font-size: 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      outline: none;
-      transition: all 0.2s;
-      background: #f9fafb;
-      resize: none;
-      font-family: inherit;
-      margin-bottom: 1rem;
-    }
-
-    .wizard-textarea:focus {
-      border-color: #667eea;
-      background: white;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
-
-    .wizard-btn {
-      width: 100%;
-      padding: 1.25rem 2rem;
-      font-size: 1.125rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 1rem;
-    }
-
-    .wizard-btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-
-    .wizard-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
-    }
-
-    .wizard-btn-primary:active {
-      transform: translateY(0);
-    }
-
-    .wizard-btn-secondary {
-      background: #e5e7eb;
-      color: #374151;
-    }
-
-    .wizard-btn-secondary:hover {
-      background: #d1d5db;
-    }
-
-    .wizard-button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .wizard-option-btn {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.25rem 1.5rem;
-      background: #f9fafb;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 1.125rem;
-      font-weight: 500;
-    }
-
-    .wizard-option-btn:hover {
-      border-color: #667eea;
-      background: white;
-      transform: translateX(4px);
-    }
-
-    .wizard-option-btn.selected {
-      border-color: #667eea;
-      background: linear-gradient(
-        135deg,
-        rgba(102, 126, 234, 0.1) 0%,
-        rgba(118, 75, 162, 0.1) 100%
-      );
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
-
-    .option-emoji {
-      font-size: 2rem;
-    }
-
-    .option-label {
-      color: #1f2937;
-    }
-
-    .wizard-number-control {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      justify-content: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .wizard-num-btn {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 2px solid #e5e7eb;
-      background: #f9fafb;
-      font-size: 2rem;
-      font-weight: 600;
-      color: #667eea;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wizard-num-btn:hover {
-      background: #667eea;
-      color: white;
-      border-color: #667eea;
-      transform: scale(1.1);
-    }
-
-    .wizard-num-btn:active {
-      transform: scale(0.95);
-    }
-
-    .wizard-number-input {
-      width: 120px;
-      padding: 1rem;
-      font-size: 2.5rem;
-      font-weight: 700;
-      text-align: center;
-      border: none;
-      background: transparent;
-      color: #1f2937;
-      outline: none;
-    }
-
-    .wizard-number-input::-webkit-inner-spin-button,
-    .wizard-number-input::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    .wizard-number-label {
-      text-align: center;
-      font-size: 1rem;
-      color: #6b7280;
-      margin-bottom: 1rem;
-      font-weight: 500;
-    }
-
-    .wizard-final-buttons {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    @media (max-width: 640px) {
-      .wizard-logo {
-        width: 80px;
-        height: 80px;
-      }
-
-      .wizard-question {
-        font-size: 1.5rem;
-      }
-
-      .wizard-number-input {
-        font-size: 2rem;
-      }
-    }
-  </style>
-
   <script>
     class FocusedWizard {
       constructor() {
@@ -498,7 +311,7 @@ const { user } = Astro.locals;
 
       init() {
         this.attachEventListeners();
-        this.focusCurrentInput();
+        this.setActiveStep(1);
       }
 
       attachEventListeners() {
@@ -522,16 +335,30 @@ const { user } = Astro.locals;
           });
 
         // Option buttons (Step 2: Genetics)
-        document.querySelectorAll(".wizard-option-btn").forEach((btn) => {
+        document.querySelectorAll("[data-value]").forEach((btn) => {
           btn.addEventListener("click", (e) => {
             const value = e.currentTarget.dataset.value;
             this.data.genetics = value;
 
             // Visual feedback
             document
-              .querySelectorAll(".wizard-option-btn")
-              .forEach((b) => b.classList.remove("selected"));
-            e.currentTarget.classList.add("selected");
+              .querySelectorAll("[data-value]")
+              .forEach((b) =>
+                b.classList.remove(
+                  "border-primary-600",
+                  "bg-gradient-to-r",
+                  "from-primary-50",
+                  "to-secondary-50",
+                  "shadow-md",
+                ),
+              );
+            e.currentTarget.classList.add(
+              "border-primary-600",
+              "bg-gradient-to-r",
+              "from-primary-50",
+              "to-secondary-50",
+              "shadow-md",
+            );
 
             // Auto-advance after selection
             setTimeout(() => this.nextStep(), 300);
@@ -539,22 +366,27 @@ const { user } = Astro.locals;
         });
 
         // Number controls (+/- buttons)
-        document.querySelectorAll(".wizard-num-btn").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            const action = e.currentTarget.dataset.action;
-            const input = e.currentTarget.parentElement.querySelector("input");
-            const step = parseFloat(input.step) || 0.5;
-            let value = parseFloat(input.value) || 0;
+        document
+          .querySelectorAll(
+            '[data-action="decrease"], [data-action="increase"]',
+          )
+          .forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const action = e.currentTarget.dataset.action;
+              const input =
+                e.currentTarget.parentElement.querySelector("input");
+              const step = parseFloat(input.step) || 0.5;
+              let value = parseFloat(input.value) || 0;
 
-            if (action === "increase") {
-              value += step;
-            } else if (action === "decrease") {
-              value = Math.max(0, value - step);
-            }
+              if (action === "increase") {
+                value += step;
+              } else if (action === "decrease") {
+                value = Math.max(0, value - step);
+              }
 
-            input.value = value.toFixed(1);
+              input.value = value.toFixed(1);
+            });
           });
-        });
 
         // Enter key navigation
         document.addEventListener("keydown", (e) => {
@@ -601,27 +433,60 @@ const { user } = Astro.locals;
 
         if (!nextStepEl) return;
 
-        // Remove active class and add prev class
-        currentStepEl.classList.remove("active");
-        currentStepEl.classList.add("prev");
+        // Remove active classes from current, add prev classes
+        currentStepEl.classList.remove(
+          "opacity-100",
+          "translate-x-0",
+          "pointer-events-auto",
+        );
+        currentStepEl.classList.add(
+          "opacity-0",
+          "-translate-x-full",
+          "pointer-events-none",
+        );
 
-        // Add active class to next step
+        // Add active classes to next, remove prev/inactive
         setTimeout(() => {
-          nextStepEl.classList.add("active");
-          nextStepEl.classList.remove("prev");
+          nextStepEl.classList.remove(
+            "opacity-0",
+            "translate-x-full",
+            "pointer-events-none",
+            "-translate-x-full",
+          );
+          nextStepEl.classList.add(
+            "opacity-100",
+            "translate-x-0",
+            "pointer-events-auto",
+          );
           this.currentStep = stepNumber;
           this.focusCurrentInput();
         }, 50);
+      }
+
+      setActiveStep(stepNumber) {
+        const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
+        stepEl.classList.remove(
+          "opacity-0",
+          "translate-x-full",
+          "pointer-events-none",
+        );
+        stepEl.classList.add(
+          "opacity-100",
+          "translate-x-0",
+          "pointer-events-auto",
+        );
+        this.currentStep = stepNumber;
+        this.focusCurrentInput();
       }
 
       validateStep() {
         if (this.currentStep === 1) {
           const nameInput = document.getElementById("wizard-name");
           if (!nameInput.value || nameInput.value.length < 2) {
+            nameInput.classList.add("border-error");
             nameInput.focus();
-            nameInput.style.borderColor = "#ef4444";
             setTimeout(() => {
-              nameInput.style.borderColor = "";
+              nameInput.classList.remove("border-error");
             }, 1000);
             return false;
           }
