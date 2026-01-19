@@ -35,12 +35,17 @@ const { user } = Astro.locals;
         <div class="text-sm text-primary-50/80 font-medium">Step 1 of 5</div>
       </div>
       <div
+        id="step-status"
+        class="text-center mb-4 text-sm text-primary-50 whitespace-pre-line"
+      >
+      </div>
+      <div
         class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
       >
         <input
           type="text"
           id="wizard-name"
-          class="w-full p-5 text-lg border-2 border-primary-200 rounded-xl outline-none transition-all bg-primary-50 focus:border-primary-600 focus:bg-primary-50 focus:shadow-lg dark:bg-secondary-50 dark:border-secondary-200 dark:focus:border-secondary-600"
+          class="w-full p-5 text-lg border-2 text-primary-900 dark:text-secondary-900 border-primary-200 rounded-xl outline-none transition-all bg-primary-50 focus:border-primary-600 focus:bg-primary-50 focus:shadow-lg dark:bg-secondary-50 dark:border-secondary-200 dark:focus:border-secondary-600"
           placeholder={t("newStrain.strainPlaceholder")}
           data-field="name"
           autocomplete="off"
@@ -76,6 +81,11 @@ const { user } = Astro.locals;
         <div class="text-sm text-primary-50/80 font-medium">Step 2 of 5</div>
       </div>
       <div
+        id="step-status"
+        class="text-center mb-4 text-sm text-primary-50 whitespace-pre-line"
+      >
+      </div>
+      <div
         class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
       >
         <div class="flex flex-col gap-4">
@@ -106,6 +116,22 @@ const { user } = Astro.locals;
             >
           </button>
         </div>
+        <div class="flex gap-4 mt-4">
+          <button
+            type="button"
+            class="flex-1 p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            data-action="back"
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            class="flex-1 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            data-action="next"
+          >
+            Continue
+          </button>
+        </div>
       </div>
     </div>
 
@@ -128,6 +154,11 @@ const { user } = Astro.locals;
           {t("newStrain.thcContentLabel")}
         </h2>
         <div class="text-sm text-primary-50/80 font-medium">Step 3 of 5</div>
+      </div>
+      <div
+        id="step-status"
+        class="text-center mb-4 text-sm text-primary-50 whitespace-pre-line"
+      >
       </div>
       <div
         class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
@@ -163,13 +194,22 @@ const { user } = Astro.locals;
         >
           % THC
         </div>
-        <button
-          type="button"
-          class="w-full p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all mt-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
-          data-action="next"
-        >
-          Continue
-        </button>
+        <div class="flex gap-4 mt-4">
+          <button
+            type="button"
+            class="flex-1 p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            data-action="back"
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            class="flex-1 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            data-action="next"
+          >
+            Continue
+          </button>
+        </div>
       </div>
     </div>
 
@@ -192,6 +232,11 @@ const { user } = Astro.locals;
           {t("newStrain.cbdContentLabel")}
         </h2>
         <div class="text-sm text-primary-50/80 font-medium">Step 4 of 5</div>
+      </div>
+      <div
+        id="step-status"
+        class="text-center mb-4 text-sm text-primary-50 whitespace-pre-line"
+      >
       </div>
       <div
         class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
@@ -227,13 +272,22 @@ const { user } = Astro.locals;
         >
           % CBD
         </div>
-        <button
-          type="button"
-          class="w-full p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all mt-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
-          data-action="next"
-        >
-          Continue
-        </button>
+        <div class="flex gap-4 mt-4">
+          <button
+            type="button"
+            class="flex-1 p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            data-action="back"
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            class="flex-1 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            data-action="next"
+          >
+            Continue
+          </button>
+        </div>
       </div>
     </div>
 
@@ -258,6 +312,11 @@ const { user } = Astro.locals;
         <div class="text-sm text-primary-50/80 font-medium">Step 5 of 5</div>
       </div>
       <div
+        id="step-status"
+        class="text-center mb-4 text-sm text-primary-50 whitespace-pre-line"
+      >
+      </div>
+      <div
         class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
       >
         <textarea
@@ -266,17 +325,17 @@ const { user } = Astro.locals;
           placeholder={t("newStrain.notesPlaceholder")}
           rows="4"
           data-field="notes"></textarea>
-        <div class="grid grid-cols-3 gap-4 mt-4">
+        <div class="grid grid-cols-2 gap-4 mt-4">
           <button
             type="button"
-            class="p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-primary-200 dark:bg-secondary-200 text-primary-700 dark:text-secondary-700 hover:bg-primary-300 dark:hover:bg-secondary-300"
-            data-action="skip"
+            class="p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            data-action="back"
           >
-            Skip
+            Back
           </button>
           <button
             type="button"
-            class="col-span-2 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            class="p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
             data-action="submit"
           >
             {t("newStrain.newStrainButton")}
@@ -301,246 +360,7 @@ const { user } = Astro.locals;
   </div>
 
   <script>
-    class FocusedWizard {
-      constructor() {
-        this.currentStep = 1;
-        this.totalSteps = 5;
-        this.data = {};
-        this.init();
-      }
-
-      init() {
-        this.attachEventListeners();
-        this.setActiveStep(1);
-      }
-
-      attachEventListeners() {
-        // Next/Continue buttons
-        document.querySelectorAll('[data-action="next"]').forEach((btn) => {
-          btn.addEventListener("click", () => this.nextStep());
-        });
-
-        // Skip button
-        document
-          .querySelector('[data-action="skip"]')
-          ?.addEventListener("click", () => {
-            this.nextStep();
-          });
-
-        // Submit button
-        document
-          .querySelector('[data-action="submit"]')
-          ?.addEventListener("click", () => {
-            this.submit();
-          });
-
-        // Option buttons (Step 2: Genetics)
-        document.querySelectorAll("[data-value]").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            const value = e.currentTarget.dataset.value;
-            this.data.genetics = value;
-
-            // Visual feedback
-            document
-              .querySelectorAll("[data-value]")
-              .forEach((b) =>
-                b.classList.remove(
-                  "border-primary-600",
-                  "bg-gradient-to-r",
-                  "from-primary-50",
-                  "to-secondary-50",
-                  "shadow-md",
-                ),
-              );
-            e.currentTarget.classList.add(
-              "border-primary-600",
-              "bg-gradient-to-r",
-              "from-primary-50",
-              "to-secondary-50",
-              "shadow-md",
-            );
-
-            // Auto-advance after selection
-            setTimeout(() => this.nextStep(), 300);
-          });
-        });
-
-        // Number controls (+/- buttons)
-        document
-          .querySelectorAll(
-            '[data-action="decrease"], [data-action="increase"]',
-          )
-          .forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-              const action = e.currentTarget.dataset.action;
-              const input =
-                e.currentTarget.parentElement.querySelector("input");
-              const step = parseFloat(input.step) || 0.5;
-              let value = parseFloat(input.value) || 0;
-
-              if (action === "increase") {
-                value += step;
-              } else if (action === "decrease") {
-                value = Math.max(0, value - step);
-              }
-
-              input.value = value.toFixed(1);
-            });
-          });
-
-        // Enter key navigation
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            if (this.currentStep === this.totalSteps) {
-              this.submit();
-            } else {
-              this.nextStep();
-            }
-          }
-        });
-
-        // Store input values
-        document.querySelectorAll("[data-field]").forEach((input) => {
-          input.addEventListener("input", (e) => {
-            const field = e.target.dataset.field;
-            this.data[field] = e.target.value;
-          });
-        });
-      }
-
-      nextStep() {
-        // Validate current step
-        if (!this.validateStep()) {
-          return;
-        }
-
-        // Collect data from current step
-        this.collectStepData();
-
-        if (this.currentStep < this.totalSteps) {
-          this.goToStep(this.currentStep + 1);
-        }
-      }
-
-      goToStep(stepNumber) {
-        const currentStepEl = document.querySelector(
-          `[data-step="${this.currentStep}"]`,
-        );
-        const nextStepEl = document.querySelector(
-          `[data-step="${stepNumber}"]`,
-        );
-
-        if (!nextStepEl) return;
-
-        // Remove active classes from current, add prev classes
-        currentStepEl.classList.remove(
-          "opacity-100",
-          "translate-x-0",
-          "pointer-events-auto",
-        );
-        currentStepEl.classList.add(
-          "opacity-0",
-          "-translate-x-full",
-          "pointer-events-none",
-        );
-
-        // Add active classes to next, remove prev/inactive
-        setTimeout(() => {
-          nextStepEl.classList.remove(
-            "opacity-0",
-            "translate-x-full",
-            "pointer-events-none",
-            "-translate-x-full",
-          );
-          nextStepEl.classList.add(
-            "opacity-100",
-            "translate-x-0",
-            "pointer-events-auto",
-          );
-          this.currentStep = stepNumber;
-          this.focusCurrentInput();
-        }, 50);
-      }
-
-      setActiveStep(stepNumber) {
-        const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
-        stepEl.classList.remove(
-          "opacity-0",
-          "translate-x-full",
-          "pointer-events-none",
-        );
-        stepEl.classList.add(
-          "opacity-100",
-          "translate-x-0",
-          "pointer-events-auto",
-        );
-        this.currentStep = stepNumber;
-        this.focusCurrentInput();
-      }
-
-      validateStep() {
-        if (this.currentStep === 1) {
-          const nameInput = document.getElementById("wizard-name");
-          if (!nameInput.value || nameInput.value.length < 2) {
-            nameInput.classList.add("border-error");
-            nameInput.focus();
-            setTimeout(() => {
-              nameInput.classList.remove("border-error");
-            }, 1000);
-            return false;
-          }
-        }
-        return true;
-      }
-
-      collectStepData() {
-        const currentStepEl = document.querySelector(
-          `[data-step="${this.currentStep}"]`,
-        );
-        const inputs = currentStepEl.querySelectorAll("[data-field]");
-
-        inputs.forEach((input) => {
-          const field = input.dataset.field;
-          this.data[field] = input.value;
-        });
-      }
-
-      focusCurrentInput() {
-        setTimeout(() => {
-          const currentStepEl = document.querySelector(
-            `[data-step="${this.currentStep}"]`,
-          );
-          const input = currentStepEl.querySelector(
-            'input:not([type="hidden"]), textarea',
-          );
-          if (input && this.currentStep !== 2) {
-            // Skip auto-focus for button selection step
-            input.focus();
-          }
-        }, 450); // Wait for transition
-      }
-
-      submit() {
-        // Collect final step data
-        this.collectStepData();
-
-        // Populate hidden form
-        document.getElementById("form-name").value = this.data.name || "";
-        document.getElementById("form-genetics").value =
-          this.data.genetics || "hybrid";
-        document.getElementById("form-thc").value =
-          this.data["thc-content"] || "0";
-        document.getElementById("form-cbd").value =
-          this.data["cbd-content"] || "0";
-        document.getElementById("form-notes").value = this.data.notes || "";
-
-        // Submit the form
-        document.getElementById("wizard-form").submit();
-      }
-    }
-
-    // Initialize wizard
+    import FocusedWizard from "../../../scripts/focusedWizard.ts";
     new FocusedWizard();
   </script>
 </Layout>
