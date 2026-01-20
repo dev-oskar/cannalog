@@ -1,7 +1,7 @@
-class FocusedWizard {
+class SessionWizard {
   currentStep: number;
   totalSteps: number;
-  data: Record<string, string>;
+  data: Record<string, any>;
 
   constructor() {
     this.currentStep = 1;
@@ -34,12 +34,21 @@ class FocusedWizard {
         this.submit();
       });
 
-    // Option buttons (Step 2: Genetics)
+    // Strain selector (Step 1)
+    document
+      .querySelector('[data-field="strain"]')
+      ?.addEventListener("change", (e) => {
+        const value = (e.target as HTMLSelectElement).value;
+        this.data.strain = value;
+        this.updateStatus();
+      });
+
+    // Usage method buttons (Step 2)
     document.querySelectorAll("[data-value]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const value = (e.currentTarget as HTMLElement).dataset.value;
         if (value) {
-          this.data.genetics = value;
+          this.data.usage_method = value;
           this.updateStatus();
           // Auto-proceed to next step after selection
           this.nextStep();
@@ -67,7 +76,7 @@ class FocusedWizard {
       });
     });
 
-    // Number controls (+/- buttons)
+    // Number controls (+/- buttons) for amount
     document
       .querySelectorAll('[data-action="decrease"], [data-action="increase"]')
       .forEach((btn) => {
@@ -77,7 +86,7 @@ class FocusedWizard {
             e.currentTarget as HTMLElement
           ).parentElement?.querySelector("input") as HTMLInputElement;
           if (!input) return;
-          const step = parseFloat(input.step) || 0.5;
+          const step = parseFloat(input.step) || 0.1;
           let value = parseFloat(input.value) || 0;
 
           if (action === "increase") {
@@ -90,6 +99,17 @@ class FocusedWizard {
           this.updateStatus();
         });
       });
+
+    // Effects checkboxes (Step 4)
+    document.querySelectorAll('[data-field="effects"]').forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        const checked = document.querySelectorAll(
+          '[data-field="effects"]:checked',
+        ) as NodeListOf<HTMLInputElement>;
+        this.data.effects = Array.from(checked).map((cb) => cb.value);
+        this.updateStatus();
+      });
+    });
 
     // Enter key navigation
     document.addEventListener("keydown", (e) => {
@@ -105,13 +125,18 @@ class FocusedWizard {
 
     // Store input values
     document.querySelectorAll("[data-field]").forEach((input) => {
-      input.addEventListener("input", (e) => {
-        const field = (e.target as HTMLInputElement).dataset.field;
-        if (field) {
-          this.data[field] = (e.target as HTMLInputElement).value;
-          this.updateStatus();
-        }
-      });
+      if (
+        (input as HTMLElement).tagName !== "INPUT" ||
+        (input as HTMLInputElement).type !== "checkbox"
+      ) {
+        input.addEventListener("input", (e) => {
+          const field = (e.target as HTMLInputElement).dataset.field;
+          if (field) {
+            this.data[field] = (e.target as HTMLInputElement).value;
+            this.updateStatus();
+          }
+        });
+      }
     });
   }
 
@@ -193,24 +218,37 @@ class FocusedWizard {
 
   validateStep(): boolean {
     if (this.currentStep === 1) {
-      const nameInput = document.getElementById(
-        "wizard-name",
-      ) as HTMLInputElement;
-      if (!nameInput.value || nameInput.value.length < 2) {
-        nameInput.classList.add("border-red-500");
-        nameInput.focus();
+      const strainSelect = document.querySelector(
+        '[data-field="strain"]',
+      ) as HTMLSelectElement;
+      if (!strainSelect.value) {
+        strainSelect.classList.add("border-red-500");
+        strainSelect.focus();
         setTimeout(() => {
-          nameInput.classList.remove("border-red-500");
+          strainSelect.classList.remove("border-red-500");
         }, 1000);
         return false;
       }
     } else if (this.currentStep === 2) {
-      if (!this.data.genetics) {
+      if (!this.data.usage_method) {
         // Highlight the options or show error
         const options = document.querySelectorAll("[data-value]");
         options.forEach((opt) => opt.classList.add("border-red-500"));
         setTimeout(() => {
           options.forEach((opt) => opt.classList.remove("border-red-500"));
+        }, 1000);
+        return false;
+      }
+    } else if (this.currentStep === 3) {
+      const amountInput = document.querySelector(
+        '[data-field="amount"]',
+      ) as HTMLInputElement;
+      const amount = parseFloat(amountInput.value);
+      if (isNaN(amount) || amount <= 0) {
+        amountInput.classList.add("border-red-500");
+        amountInput.focus();
+        setTimeout(() => {
+          amountInput.classList.remove("border-red-500");
         }, 1000);
         return false;
       }
@@ -222,14 +260,22 @@ class FocusedWizard {
     const currentStepEl = document.querySelector(
       `[data-step="${this.currentStep}"]`,
     ) as HTMLElement;
-    const inputs = currentStepEl.querySelectorAll(
-      "[data-field]",
-    ) as NodeListOf<HTMLInputElement>;
+    const inputs = currentStepEl.querySelectorAll("[data-field]") as NodeListOf<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >;
 
     inputs.forEach((input) => {
       const field = input.dataset.field;
       if (field) {
-        this.data[field] = input.value;
+        if (input.type === "checkbox") {
+          // Handled separately
+        } else if (field === "amount") {
+          // Convert grams to mg
+          const grams = parseFloat(input.value);
+          this.data.amount_mg = isNaN(grams) ? 0 : Math.round(grams * 1000);
+        } else {
+          this.data[field] = input.value;
+        }
       }
     });
   }
@@ -240,8 +286,8 @@ class FocusedWizard {
         `[data-step="${this.currentStep}"]`,
       ) as HTMLElement;
       const input = currentStepEl.querySelector(
-        'input:not([type="hidden"]), textarea',
-      ) as HTMLInputElement | HTMLTextAreaElement;
+        'input:not([type="hidden"]), select, textarea',
+      ) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
       if (input && this.currentStep !== 2) {
         // Skip auto-focus for button selection step
         input.focus();
@@ -256,40 +302,125 @@ class FocusedWizard {
     if (!statusEl) return;
 
     let statusText = "";
-    if (this.data.name) statusText += `${this.data.name}\n`;
-    if (this.data.genetics) statusText += `${this.data.genetics}\n`;
-    if (this.data["thc-content"])
-      statusText += `THC: ${this.data["thc-content"]}%\n`;
-    if (this.data["cbd-content"])
-      statusText += `CBD: ${this.data["cbd-content"]}%\n`;
+    if (this.data.strain) {
+      const strainName = (
+        document.querySelector(
+          `[data-field="strain"] option[value="${this.data.strain}"]`,
+        ) as HTMLOptionElement
+      )?.text;
+      statusText += `${strainName}\n`;
+    }
+    if (this.data.usage_method) statusText += `${this.data.usage_method}\n`;
+    if (this.data.amount) statusText += `Amount: ${this.data.amount}g\n`;
+    if (this.data.effects && this.data.effects.length > 0)
+      statusText += `Effects: ${this.data.effects.join(", ")}\n`;
     if (this.data.notes) statusText += `${this.data.notes}\n`;
 
     statusEl.textContent = statusText.trim();
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
     // Collect final step data
     this.collectStepData();
 
-    // Populate hidden form
-    const formName = document.getElementById("form-name") as HTMLInputElement;
-    const formGenetics = document.getElementById(
-      "form-genetics",
-    ) as HTMLInputElement;
-    const formThc = document.getElementById("form-thc") as HTMLInputElement;
-    const formCbd = document.getElementById("form-cbd") as HTMLInputElement;
-    const formNotes = document.getElementById("form-notes") as HTMLInputElement;
+    // Set loading state
+    const submitButton = document.querySelector(
+      '[data-action="submit"]',
+    ) as HTMLButtonElement;
+    const spinner = document.querySelector("#submit-spinner");
+    submitButton.disabled = true;
+    spinner?.classList.remove("hidden");
 
-    formName.value = this.data.name || "";
-    formGenetics.value = this.data.genetics || "hybrid";
-    formThc.value = this.data["thc-content"] || "0";
-    formCbd.value = this.data["cbd-content"] || "0";
-    formNotes.value = this.data.notes || "";
+    // Validate required fields
+    if (!this.data.strain || !this.data.usage_method || !this.data.amount_mg) {
+      this.showError("Please fill in all required fields");
+      this.resetFormState();
+      return;
+    }
 
-    // Submit the form
-    const form = document.getElementById("wizard-form") as HTMLFormElement;
-    form.submit();
+    try {
+      const response = await fetch("/api/sessions/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          strain_used: this.data.strain,
+          usage_method: this.data.usage_method,
+          amount: this.data.amount_mg,
+          effects: this.data.effects || null,
+          notes: this.data.notes || null,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to create session");
+      }
+
+      // Show success feedback before redirect
+      this.showSuccess("Session logged successfully!");
+      setTimeout(() => {
+        window.location.href = `/dashboard/sessions/${this.data.strain}`;
+      }, 1000);
+    } catch (error) {
+      console.error("Error:", error);
+      this.showError(
+        error instanceof Error
+          ? error.message
+          : "Failed to create session. Please try again.",
+      );
+      this.resetFormState();
+    }
+  }
+
+  showError(message: string): void {
+    const errorEl = document.querySelector("#wizard-error") as HTMLElement;
+    if (errorEl) {
+      const errorText = errorEl.querySelector("p");
+      if (errorText) {
+        errorText.textContent = message;
+      }
+      errorEl.classList.remove("hidden");
+      errorEl.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }
+
+  showSuccess(message: string): void {
+    const errorEl = document.querySelector("#wizard-error") as HTMLElement;
+    if (errorEl) {
+      errorEl.classList.remove(
+        "hidden",
+        "bg-red-100",
+        "text-red-700",
+        "dark:bg-red-900",
+        "dark:text-red-100",
+      );
+      errorEl.classList.add(
+        "bg-green-100",
+        "text-green-700",
+        "dark:bg-green-900",
+        "dark:text-green-100",
+      );
+      const errorText = errorEl.querySelector("p");
+      if (errorText) {
+        errorText.textContent = message;
+      }
+    }
+  }
+
+  resetFormState(): void {
+    const submitButton = document.querySelector(
+      '[data-action="submit"]',
+    ) as HTMLButtonElement;
+    const spinner = document.querySelector("#submit-spinner");
+    submitButton.disabled = false;
+    spinner?.classList.add("hidden");
   }
 }
 
-export default FocusedWizard;
+export default SessionWizard;

@@ -28,3 +28,5 @@ astro_tmp_pages_*
 .github/instructions
 # Local Netlify folder
 .netlify
+
+hasura_metadata*
