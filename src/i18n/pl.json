@@ -128,7 +128,8 @@
       "creative": "Kreatywny",
       "focused": "Skupiony",
       "sleepy": "Senny"
-    }
+    },
+    "notFound": "Sesja nie znaleziona"
   },
   "common": {
     "cancel": "Anuluj"

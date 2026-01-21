@@ -130,7 +130,8 @@
       "creative": "Creative",
       "focused": "Focused",
       "sleepy": "Sleepy"
-    }
+    },
+    "notFound": "Session not found"
   },
   "common": {
     "cancel": "Cancel"
