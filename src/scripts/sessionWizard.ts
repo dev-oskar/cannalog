@@ -361,8 +361,12 @@ class SessionWizard {
 
       // Show success feedback before redirect
       this.showSuccess("Session logged successfully!");
+      const sessionId = data.session?.session_id;
+      if (!sessionId) {
+        throw new Error("No session ID returned from server");
+      }
       setTimeout(() => {
-        window.location.href = `/dashboard/sessions/${this.data.strain}`;
+        window.location.href = `/dashboard/sessions/${sessionId}`;
       }, 1000);
     } catch (error) {
       console.error("Error:", error);
