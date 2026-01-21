@@ -14,6 +14,7 @@ const { title, description, locale } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script is:inline>
       if (
         localStorage.getItem("color-theme") === "dark" ||
