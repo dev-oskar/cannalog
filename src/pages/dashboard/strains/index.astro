@@ -5,6 +5,8 @@ import CannabisIcon from "../../../components/ui/CannabisIcon.astro";
 import type { Strain } from "../../../types/db-types";
 import { createNhostServerClient } from "../../../lib/nhost";
 import { getUserStrains } from "../../../lib/queries";
+import PrimaryButton from "../../../components/ui/PrimaryButton.astro";
+import { Icon } from "astro-icon/components";
 
 const { t } = useI18n(Astro.url);
 const { user } = Astro.locals;
@@ -12,7 +14,7 @@ const nhost = await createNhostServerClient(Astro.cookies);
 
 // Fetch strains data
 let strains: Strain[] = [];
-let error;
+let error: string | null = null;
 
 try {
   strains = user ? await getUserStrains(nhost, user.id) : [];
@@ -20,109 +22,164 @@ try {
   console.error(e);
   error = "Failed to load strains data";
 }
+
+// Format cannabinoid percentages
+const formatPercentage = (value: number): string => {
+  return (value / 10).toFixed(1);
+};
 ---
 
 <DashboardLayout title={t("strains.title")} user={user}>
-  <div class="max-w-7xl mx-auto p-4">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-        {t("strains.title")}
-      </h1>
-      <a
-        href="/dashboard/new-strain"
-        class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-      >
-        <CannabisIcon class="w-5 h-5 mr-2" />
-        {t("strains.addNew")}
-      </a>
+  <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          {t("strains.title") || "My Strains"}
+        </h1>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          {strains.length} {strains.length === 1 ? "strain" : "strains"} in your collection
+        </p>
+      </div>
+      <div class="w-full sm:w-auto">
+        <PrimaryButton link="/dashboard/strains/new" text={`+ ${t("strains.addNew") || "Add New Strain"}`} block />
+      </div>
     </div>
 
-    {
-      error && (
-        <div
-          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
-          <span class="block sm:inline">{error}</span>
-        </div>
-      )
-    }
+    <!-- Error State -->
+    {error && (
+      <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg" role="alert">
+        <span class="block sm:inline">{error}</span>
+      </div>
+    )}
 
-    {
-      strains.length === 0 && !error && (
-        <div class="text-center py-12">
-          <CannabisIcon class="mx-auto h-12 w-12 text-gray-400" />
-          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
-            {t("strains.noStrains")}
-          </h3>
-          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {t("strains.getStarted")}
-          </p>
+    <!-- Empty State -->
+    {strains.length === 0 && !error && (
+      <div class="text-center py-20 px-4">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-secondary-800 mb-4">
+          <CannabisIcon class="w-8 h-8 text-primary-600 dark:text-secondary-300" />
         </div>
-      )
-    }
+        <h3 class="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
+          {t("strains.noStrains") || "No strains yet"}
+        </h3>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
+          {t("strains.getStarted") || "Get started by adding your first strain"}
+        </p>
+        <div class="mt-6">
+          <PrimaryButton link="/dashboard/strains/new" text={t("strains.addNew") || "Add New Strain"} />
+        </div>
+      </div>
+    )}
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {
-        strains.map((strain) => (
-          <a
-            href={`/dashboard/strains/${strain.id}`}
-            class="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow duration-200"
-          >
-            <div class="p-6">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    {strain.name}
-                  </h2>
-                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {new Date(strain.created_at).toLocaleDateString()}
-                  </p>
+    <!-- Strains Grid -->
+    {strains.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {strains.map((strain) => {
+          const thcPercentage = formatPercentage(strain.thc_content);
+          const cbdPercentage = formatPercentage(strain.cbd_content);
+          const thcNum = parseFloat(thcPercentage);
+          const cbdNum = parseFloat(cbdPercentage);
+          
+          return (
+            <a
+              href={`/dashboard/strains/${strain.id}`}
+              class="group relative bg-gradient-to-br from-white to-primary-50 dark:from-secondary-700 dark:to-secondary-800 rounded-xl border border-primary-200 dark:border-secondary-600 p-6 hover:shadow-2xl hover:border-primary-400 dark:hover:border-secondary-500 transition-all duration-300 overflow-hidden"
+            >
+              <!-- Animated background gradient -->
+              <div class="absolute inset-0 bg-gradient-to-br from-primary-400/10 via-transparent to-tertiary-400/10 dark:from-secondary-600/20 dark:to-tertiary-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div class="relative z-10 space-y-5">
+                <!-- Header with title and icon -->
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex-1 min-w-0">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors">
+                      {strain.name}
+                    </h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                      Added {new Date(strain.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div class="flex-shrink-0">
+                    {strain.is_public ? (
+                      <Icon
+                        name="tabler:world"
+                        class="w-5 h-5 text-primary-500 dark:text-primary-400"
+                      />
+                    ) : (
+                      <Icon
+                        name="tabler:lock"
+                        class="w-5 h-5 text-gray-400 dark:text-gray-500"
+                      />
+                    )}
+                  </div>
                 </div>
-                {!strain.is_public && (
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                    {t("strains.private")}
-                  </span>
+
+                <!-- Cannabinoid Display Section -->
+                <div class="space-y-4">
+                  <!-- THC Card -->
+                  <div class="bg-gradient-to-br from-primary-50 to-primary-100/50 dark:from-primary-900/30 dark:to-primary-800/20 rounded-lg p-4 border border-primary-200/50 dark:border-primary-700/50">
+                    <div class="flex items-end justify-between mb-2">
+                      <span class="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest">THC</span>
+                      <span class="text-2xl font-black text-primary-600 dark:text-primary-300">
+                        {thcPercentage}<span class="text-sm">%</span>
+                      </span>
+                    </div>
+                    <!-- Progress bar for THC -->
+                    <div class="w-full h-2 bg-primary-200 dark:bg-primary-900/50 rounded-full overflow-hidden">
+                      <div 
+                        class="h-full bg-gradient-to-r from-primary-500 to-primary-600 dark:from-primary-400 dark:to-primary-500 transition-all duration-500"
+                        style={`width: ${Math.min(thcNum, 100)}%`}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <!-- CBD Card -->
+                  <div class="bg-gradient-to-br from-tertiary-50 to-tertiary-100/50 dark:from-tertiary-900/30 dark:to-tertiary-800/20 rounded-lg p-4 border border-tertiary-200/50 dark:border-tertiary-700/50">
+                    <div class="flex items-end justify-between mb-2">
+                      <span class="text-xs font-bold text-tertiary-600 dark:text-tertiary-400 uppercase tracking-widest">CBD</span>
+                      <span class="text-2xl font-black text-tertiary-600 dark:text-tertiary-300">
+                        {cbdPercentage}<span class="text-sm">%</span>
+                      </span>
+                    </div>
+                    <!-- Progress bar for CBD -->
+                    <div class="w-full h-2 bg-tertiary-200 dark:bg-tertiary-900/50 rounded-full overflow-hidden">
+                      <div 
+                        class="h-full bg-gradient-to-r from-tertiary-500 to-tertiary-600 dark:from-tertiary-400 dark:to-tertiary-500 transition-all duration-500"
+                        style={`width: ${Math.min(cbdNum, 100)}%`}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tags Section -->
+                {strain.tags && strain.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-2 pt-1">
+                    {strain.tags.slice(0, 2).map((tag: string) => (
+                      <span key={tag} class="px-3 py-1 bg-primary-200/80 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 rounded-full text-xs font-semibold border border-primary-300/50 dark:border-primary-700/50">
+                        {tag}
+                      </span>
+                    ))}
+                    {strain.tags.length > 2 && (
+                      <span class="px-3 py-1 bg-gray-200/80 dark:bg-gray-700/40 text-gray-700 dark:text-gray-300 rounded-full text-xs font-semibold border border-gray-300/50 dark:border-gray-600/50">
+                        +{strain.tags.length - 2}
+                      </span>
+                    )}
+                  </div>
                 )}
-              </div>
 
-              <div class="mt-4 grid grid-cols-2 gap-4">
-                <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    THC
-                  </div>
-                  <div class="font-semibold text-gray-900 dark:text-white">
-                    {strain.thc_content}%
-                  </div>
-                </div>
-                <div class="text-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    CBD
-                  </div>
-                  <div class="font-semibold text-gray-900 dark:text-white">
-                    {strain.cbd_content}%
-                  </div>
+                <!-- Hover Arrow Indicator -->
+                <div class="pt-1 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-0 group-hover:translate-x-1">
+                  <div class="h-0.5 flex-1 bg-gradient-to-r from-primary-400 to-transparent dark:from-primary-500 dark:to-transparent"></div>
+                  <Icon
+                    name="tabler:arrow-right"
+                    class="w-5 h-5 text-primary-600 dark:text-primary-400 ml-2"
+                  />
                 </div>
               </div>
-
-              {strain.tags && strain.tags.length > 0 && (
-                <div class="mt-4 flex flex-wrap gap-2">
-                  {strain.tags.slice(0, 3).map((tag: string) => (
-                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                      {tag}
-                    </span>
-                  ))}
-                  {strain.tags.length > 3 && (
-                    <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
-                      +{strain.tags.length - 3}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          </a>
-        ))
-      }
-    </div>
+            </a>
+          );
+        })}
+      </div>
+    )}
   </div>
 </DashboardLayout>
