@@ -1,0 +1,189 @@
+---
+interface Props {
+  monthlyTrend: Array<{
+    month: number;
+    sessions: number;
+    amount: number;
+  }> | null;
+}
+
+const { monthlyTrend } = Astro.props;
+const totalSessions = monthlyTrend
+  ? monthlyTrend.reduce((sum, m) => sum + m.sessions, 0)
+  : 0;
+---
+
+<div
+  class="w-full bg-card-bg-color border border-gray-200 rounded-lg shadow-md p-6"
+>
+  <div class="flex justify-between items-start mb-4">
+    <div>
+      <h2 class="text-lg font-semibold text-text-color mb-1">
+        Sessions this year
+      </h2>
+      <p class="text-2xl font-bold text-text-color">{totalSessions}</p>
+    </div>
+    <div class="flex items-center gap-1 text-green-500 font-medium text-sm">
+      <svg
+        class="w-4 h-4"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6v13m0-13 4 4m-4-4-4 4"></path>
+      </svg>
+      12%
+    </div>
+  </div>
+  <div id="monthly-trend-chart" style="height: 250px;"></div>
+  <div
+    class="border-t border-gray-200 mt-4 pt-3 flex justify-between items-center"
+  >
+    <span class="text-xs font-medium text-text-color/70">2026</span>
+    <a
+      href="#"
+      class="inline-flex items-center text-green-600 hover:text-green-700 font-medium text-xs"
+    >
+      Full Report
+      <svg
+        class="w-3 h-3 ms-1"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 12H5m14 0-4 4m4-4-4-4"></path>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<script define:vars={{ monthlyTrend }}>
+  function initChart() {
+    const container = document.getElementById("monthly-trend-chart");
+    if (!container || typeof ApexCharts === "undefined") {
+      console.warn("Chart container or ApexCharts not found");
+      return;
+    }
+
+    const brandColor = "#10b981"; // emerald-500
+
+    const options = {
+      chart: {
+        type: "area",
+        fontFamily: "Inter, sans-serif",
+        dropShadow: {
+          enabled: false,
+        },
+        toolbar: {
+          show: false,
+        },
+        sparkline: {
+          enabled: false,
+        },
+      },
+      colors: [brandColor],
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "smooth",
+        width: 3,
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          opacityFrom: 0.45,
+          opacityTo: 0,
+          stops: [0, 90, 100],
+        },
+      },
+      grid: {
+        show: true,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        strokeDashArray: 4,
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+      },
+      xaxis: {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+        labels: {
+          style: {
+            fontSize: "12px",
+            fontWeight: 500,
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: "12px",
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+        theme: "light",
+        style: {
+          fontSize: "12px",
+        },
+      },
+      series: [
+        {
+          name: "Sessions",
+          data: monthlyTrend
+            ? monthlyTrend.map((d) => d.sessions)
+            : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+      ],
+    };
+
+    const chart = new ApexCharts(container, options);
+    chart.render();
+  }
+
+  // Wait for ApexCharts to load and DOM to be ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initChart);
+  } else {
+    // DOM already loaded
+    setTimeout(initChart, 100);
+  }
+</script>

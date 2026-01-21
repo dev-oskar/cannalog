@@ -1,0 +1,135 @@
+---
+interface Props {
+  strainsAdded: number;
+  dailyData?: Array<{ day: string; count: number }>;
+}
+
+const { strainsAdded, dailyData = [] } = Astro.props;
+---
+
+<div
+  class="w-full bg-card-bg-color border border-gray-200 rounded-lg shadow-md p-6"
+>
+  <div class="flex justify-between items-start mb-4">
+    <div>
+      <h2 class="text-lg font-semibold text-text-color mb-1">Strains added</h2>
+      <p class="text-2xl font-bold text-text-color">{strainsAdded}</p>
+      <p class="text-xs text-text-color/60 mt-1">in the last 30 days</p>
+    </div>
+    <div class="flex items-center gap-1 text-blue-500 font-medium text-sm">
+      <svg
+        class="w-4 h-4"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6v13m0-13 4 4m-4-4-4 4"></path>
+      </svg>
+      8%
+    </div>
+  </div>
+  <div id="strains-chart" style="height: 250px;"></div>
+  <div
+    class="border-t border-gray-200 mt-4 pt-3 flex justify-between items-center"
+  >
+    <span class="text-xs font-medium text-text-color/70">Last 30 days</span>
+  </div>
+</div>
+
+<script define:vars={{ dailyData }}>
+  function initChart() {
+    const container = document.getElementById("strains-chart");
+    if (!container || typeof ApexCharts === "undefined") {
+      console.warn("Chart container or ApexCharts not found");
+      return;
+    }
+
+    const brandColor = "#3b82f6"; // blue-500
+
+    const options = {
+      chart: {
+        type: "bar",
+        fontFamily: "Inter, sans-serif",
+        dropShadow: {
+          enabled: false,
+        },
+        toolbar: {
+          show: false,
+        },
+      },
+      colors: [brandColor],
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        width: 0,
+      },
+      grid: {
+        show: true,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        strokeDashArray: 4,
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+      },
+      xaxis: {
+        type: "datetime",
+        categories: dailyData ? dailyData.map((d) => d.day) : [],
+        labels: {
+          format: "MMM dd",
+          style: {
+            fontSize: "11px",
+            fontWeight: 500,
+          },
+        },
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: "11px",
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+        theme: "light",
+        style: {
+          fontSize: "11px",
+        },
+      },
+      series: [
+        {
+          name: "Strains added",
+          data: dailyData ? dailyData.map((d) => d.count) : [],
+        },
+      ],
+    };
+
+    const chart = new ApexCharts(container, options);
+    chart.render();
+  }
+
+  // Wait for ApexCharts to load and DOM to be ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initChart);
+  } else {
+    // DOM already loaded
+    setTimeout(initChart, 100);
+  }
+</script>
