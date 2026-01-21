@@ -2,91 +2,233 @@
 import DashboardLayout from "../../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../../i18n/utils";
 import { createNhostServerClient } from "../../../lib/nhost";
-import { getStrainById } from "../../../lib/queries";
-import type { Strain } from "../../../types/db-types";
+import { getSessionById, getUserStrains } from "../../../lib/queries";
+import { formatTimeSince } from "../../../lib/utils";
+import type { Session, Strain } from "../../../types/db-types";
+import SecondaryButton from "../../../components/ui/SecondaryButton.astro";
+import PrimaryButton from "../../../components/ui/PrimaryButton.astro";
+import { Icon } from "astro-icon/components";
 
-const { t } = useI18n(Astro.url);
+const { t, lang } = useI18n(Astro.url);
 const { id } = Astro.params;
-
 const { user } = Astro.locals;
 const nhost = await createNhostServerClient(Astro.cookies);
 
-// Fetch strain data
+// Fetch session data
+let session: Session | null = null;
 let strain: Strain | null = null;
-let error;
+let error: string | null = null;
 
 try {
- if (!id) throw new Error("ID not found");
- strain = await getStrainById(nhost, id);
+  if (!id) throw new Error("Session ID not found");
+  session = await getSessionById(nhost, id);
+  
+  if (!session) {
+    error = t("sessions.notFound") || "Session not found";
+  } else {
+    // Fetch strain details if strain_used exists
+    if (session.strain_used) {
+      const strains = await getUserStrains(nhost, user?.id || "");
+      strain = strains.find(s => s.id === session.strain_used) || null;
+    }
+  }
 } catch (e) {
-  error = "Failed to load strain data";
+  error = "Failed to load session data";
+  console.error(e);
 }
+
+// Usage method display names
+const usageMethodDisplayNames: { [key: string]: string } = {
+  vape: t("sessions.methods.vape") || "Vape",
+  smoke: t("sessions.methods.smoke") || "Smoke",
+  edible: t("sessions.methods.edible") || "Edible",
+  oil: t("sessions.methods.oil") || "Oil",
+};
+
+// Effects display names
+const effectsMap: { [key: string]: string } = {
+  relaxed: t("sessions.effects.relaxed") || "Relaxed",
+  energetic: t("sessions.effects.energetic") || "Energetic",
+  creative: t("sessions.effects.creative") || "Creative",
+  focused: t("sessions.effects.focused") || "Focused",
+  sleepy: t("sessions.effects.sleepy") || "Sleepy",
+};
+
+// Get icon name based on usage method
+const getIconName = (method: string): string => {
+  const iconMap: { [key: string]: string } = {
+    vape: "akar-icons:vape-kit",
+    smoke: "la:joint",
+    edible: "la:cookie",
+    oil: "la:oil-can",
+  };
+  return iconMap[method] || "game-icons:cannabis";
+};
 ---
 
-<DashboardLayout title={strain ? strain.name : t("strains.notFound")} user={user}>
-  <div class="max-w-4xl mx-auto p-4">
+<DashboardLayout title={session ? "Session Details" : t("sessions.notFound") || "Session"} user={user}>
+  <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+    <!-- Back Button -->
+    <div class="mb-6">
+      <SecondaryButton link="/dashboard/sessions" text="← Back to Sessions" />
+    </div>
+
+    <!-- Error State -->
     {error && (
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg" role="alert">
         <span class="block sm:inline">{error}</span>
       </div>
     )}
     
-    {strain && (
-      <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <div class="space-y-6">
-          <!-- Strain Name -->
-          <div>
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-              {strain.name}
-            </h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-              {new Date(strain.created_at).toLocaleDateString()}
-            </p>
-          </div>
-
-          <!-- THC and CBD Content -->
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">THC</h3>
-              <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                {strain.thc_content}%
-              </p>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">CBD</h3>
-              <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                {strain.cbd_content}%
-              </p>
-            </div>
-          </div>
-
-          <!-- Description -->
-          {strain.description && (
-            <div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                {t("strains.description")}
-              </h3>
-              <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-                {strain.description}
-              </p>
-            </div>
-          )}
-
-          <!-- Tags -->
-          {strain.tags && strain.tags.length > 0 && (
-            <div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                {t("strains.tags")}
-              </h3>
-              <div class="flex flex-wrap gap-2">
-                {strain.tags.map((tag: string) => (
-                  <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                    {tag}
-                  </span>
-                ))}
+    {session && (
+      <div class="space-y-6">
+        <!-- Header Card -->
+        <div class="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-secondary-900 dark:to-secondary-800 rounded-lg p-6 sm:p-8 border border-primary-200 dark:border-secondary-700">
+          <div class="flex items-start justify-between">
+            <div class="flex items-start space-x-4">
+              <div class="flex-shrink-0">
+                <div class="w-16 h-16 flex items-center justify-center bg-primary-200 dark:bg-secondary-700 rounded-full">
+                  <Icon
+                    name={getIconName(session.usage_method)}
+                    class="h-10 w-10 text-primary-600 dark:text-secondary-300"
+                  />
+                </div>
+              </div>
+              <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                  {usageMethodDisplayNames[session.usage_method] || session.usage_method}
+                </h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {formatTimeSince(session.created_at, lang)}
+                </p>
               </div>
             </div>
-          )}
+
+          </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Left Column - Key Details -->
+          <div class="md:col-span-2 space-y-6">
+            <!-- Strain Information -->
+            {strain && (
+              <div class="bg-primary-50 dark:bg-secondary-800 rounded-lg p-6 border border-primary-200 dark:border-secondary-700">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                  {t("sessions.new.strain") || "Strain Information"}
+                </h2>
+                <div class="space-y-3">
+                  <div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Strain</p>
+                    <p class="text-lg font-medium text-primary-600 dark:text-secondary-300">
+                      {strain.name}
+                    </p>
+                  </div>
+                  {strain.description && (
+                    <div>
+                      <p class="text-sm text-gray-600 dark:text-gray-400">{t("strains.description") || "Description"}</p>
+                      <p class="text-gray-700 dark:text-gray-300 text-sm">
+                        {strain.description}
+                      </p>
+                    </div>
+                  )}
+                  {strain.tags && strain.tags.length > 0 && (
+                    <div>
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Tags</p>
+                      <div class="flex flex-wrap gap-2">
+                        {strain.tags.map((tag: string) => (
+                          <span key={tag} class="px-3 py-1 bg-primary-200 dark:bg-secondary-700 text-primary-700 dark:text-secondary-200 rounded-full text-xs font-medium">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <!-- Amount & Dosage -->
+            {session.amount && (
+              <div class="bg-primary-50 dark:bg-secondary-800 rounded-lg p-6 border border-primary-200 dark:border-secondary-700">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                  {t("sessions.new.amount") || "Dosage"}
+                </h2>
+                <div class="text-3xl font-bold text-primary-600 dark:text-secondary-300">
+                  {session.amount}<span class="text-lg text-gray-600 dark:text-gray-400 ml-1">mg</span>
+                </div>
+              </div>
+            )}
+
+            <!-- Notes -->
+            {session.notes && (
+              <div class="bg-primary-50 dark:bg-secondary-800 rounded-lg p-6 border border-primary-200 dark:border-secondary-700">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                  {t("sessions.new.notes") || "Notes"}
+                </h2>
+                <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap text-sm leading-relaxed">
+                  {session.notes}
+                </p>
+              </div>
+            )}
+          </div>
+
+          <!-- Right Column - Quick Info -->
+          <div class="space-y-6">
+            <!-- Usage Method Card -->
+            <div class="bg-primary-50 dark:bg-secondary-800 rounded-lg p-6 border border-primary-200 dark:border-secondary-700">
+              <h3 class="text-sm font-semibold text-primary-600 dark:text-secondary-400 uppercase tracking-wide mb-2">
+                {t("sessions.new.usage_method") || "Usage Method"}
+              </h3>
+              <p class="text-2xl font-bold text-primary-700 dark:text-secondary-200">
+                {usageMethodDisplayNames[session.usage_method] || session.usage_method}
+              </p>
+            </div>
+
+            <!-- Effects Card -->
+            {session.effects && session.effects.length > 0 && (
+              <div class="bg-primary-50 dark:bg-secondary-800 rounded-lg p-6 border border-primary-200 dark:border-secondary-700">
+                <h3 class="text-sm font-semibold text-primary-600 dark:text-secondary-400 uppercase tracking-wide mb-3">
+                  {t("sessions.new.effects") || "Effects"}
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  {session.effects.map((effect: string) => (
+                    <span key={effect} class="px-3 py-1 bg-tertiary-100 dark:bg-tertiary-900/30 text-tertiary-700 dark:text-tertiary-300 rounded-full text-xs font-medium">
+                      {effectsMap[effect] || effect}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- Date & Time Info -->
+            <div class="bg-primary-50 dark:bg-secondary-800 rounded-lg p-6 border border-primary-200 dark:border-secondary-700">
+              <h3 class="text-sm font-semibold text-primary-600 dark:text-secondary-400 uppercase tracking-wide mb-3">
+                Date & Time
+              </h3>
+              <div class="space-y-2">
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-500">Logged</p>
+                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    {new Date(session.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-500">Time</p>
+                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    {new Date(session.created_at).toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-primary-200 dark:border-secondary-700">
+          <SecondaryButton link="/dashboard/sessions" text={t("common.cancel") || "Back"} />
+          <div class="flex-1"></div>
+          <!-- Edit and Delete buttons can be added here in the future -->
         </div>
       </div>
     )}
