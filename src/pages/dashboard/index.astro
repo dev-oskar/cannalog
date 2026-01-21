@@ -2,7 +2,14 @@
 import DashboardLayout from "../../layouts/DashboardLayout.astro";
 import { useI18n } from "../../i18n/utils";
 import Tile from "../../components/dashboard/Tile.astro";
-import { getTimeSinceLastSession } from "../../lib/queries";
+import MonthlyTrendChart from "../../components/dashboard/MonthlyTrendChart.astro";
+import StrainsAddedChart from "../../components/dashboard/StrainsAddedChart.astro";
+import {
+  getTimeSinceLastSession,
+  getMonthlyTrend,
+  getStrainsAddedLastDays,
+  getStrainsAddedDailyLast30Days,
+} from "../../lib/queries";
 
 import { createNhostServerClient } from "../../lib/nhost";
 
@@ -11,6 +18,20 @@ const { user } = Astro.locals;
 
 const nhost = await createNhostServerClient(Astro.cookies);
 const timeSinceLastSession = await getTimeSinceLastSession(nhost, lang);
+const monthlyTrend = await getMonthlyTrend(
+  nhost,
+  user?.id || "",
+  new Date().getFullYear(),
+);
+const strainsAddedLast30Days = await getStrainsAddedLastDays(
+  nhost,
+  user?.id || "",
+  30,
+);
+const strainsAddedDaily = await getStrainsAddedDailyLast30Days(
+  nhost,
+  user?.id || "",
+);
 ---
 
 <DashboardLayout user={user}>
@@ -29,27 +50,23 @@ const timeSinceLastSession = await getTimeSinceLastSession(nhost, lang);
       </p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid md:grid-cols-2 gap-6">
       <Tile
         title={t("dashboard.recentEntries.title")}
-        description={t("dashboard.recentEntries.description")}
+        description={strainsAddedLast30Days > 0
+          ? `You have added ${strainsAddedLast30Days} new strain${strainsAddedLast30Days !== 1 ? "s" : ""} this month. Great work!`
+          : "No strains added yet. Start building your collection!"}
         buttonText={t("dashboard.recentEntries.button")}
         variant="primary"
       />
+    </div>
 
-      <Tile
-        title={t("dashboard.inventory.title")}
-        description={t("dashboard.inventory.description")}
-        buttonText={t("dashboard.inventory.button")}
-        variant="secondary"
+    <div class="grid md:grid-cols-2 gap-6">
+      <MonthlyTrendChart monthlyTrend={monthlyTrend} />
+      <StrainsAddedChart
+        strainsAdded={strainsAddedLast30Days}
+        dailyData={strainsAddedDaily}
       />
-
-      <Tile
-        title={t("dashboard.discover.title")}
-        description={t("dashboard.discover.description")}
-      />
-
-      <Tile variant="primary" />
     </div>
   </div>
 </DashboardLayout>
