@@ -3,8 +3,8 @@
     "mission": "Nasza Misja",
     "about": "O nas",
     "contact": "Kontakt",
-    "login": "Zaloguj się",
-    "register": "Zarejestruj się",
+    "login": "Logowanie",
+    "register": "Rejestracja",
     "toggleTheme": "Przełącz motyw",
     "dashboard": "Panel",
     "profile": "Profil",
@@ -12,23 +12,23 @@
   },
   "hero": {
     "title": "Twoja konopna podróż - jasna jak nigdy.",
-    "subtitle": "CannaLog to Twój kompan w świadomym podejściu do konopi. Śledź, analizuj i optymalizuj swoje doświadczenia. Odkryj, co naprawdę na Ciebie działa.",
+    "subtitle": "CannaLog to Twój kompan w świadomym podejściu do korzystania z konopi. Śledź, analizuj i optymalizuj swoje doświadczenia. Pozwól pomóc sobie z CannaLog.",
     "ctaButton": "Zacznij za darmo"
   },
   "features": {
-    "title": "Twoja podróż na nowo odkryta",
-    "paragraph1": "CannaLog to więcej niż zwykły dzienniczek - to Twój przewodnik po świecie konopi. Łączymy odmiany, dawki i Twoje samopoczucie w jedną całość. Zamiast zgadywać, będziesz podejmować świadome decyzje, które naprawdę wpłyną na Twoje życie.",
+    "title": "Twoja podróż odkryta na nowo",
+    "paragraph1": "CannaLog to to Twój przewodnik po świecie konopi. Łączymy odmiany, dawki i Twoje samopoczucie w jedną całość. Zamiast zgadywać, podejmuj świadome decyzje, które naprawdę wpłyną na jakość Twojego życia.",
     "paragraph2": "Dowiedz się, które terpeny rozpędzają Twoją kreatywność, a które pomagają zasnąć. Nasze narzędzia pomogą Ci stworzyć rutynę idealnie dopasowaną do Twoich potrzeb."
   },
   "doctors": {
-    "title": "Mostek Danych Klinicznych",
+    "title": "Raporty, które mają znaczenie",
     "description": "Generuj jasne, ustrukturyzowane raporty, które zamieniają Twoje subiektywne doświadczenie w **obiektywne dane medyczne**. Ta krytyczna pętla sprzężenia zwrotnego dostarcza Twojemu lekarzowi przepisującemu dowody potrzebne do bezpieczniejszego, bardziej precyzyjnego przepisywania i spersonalizowanej opieki."
   },
   "toolkit": {
     "title": "Narzędzia dla Twojego zdrowia",
     "subtitle": "CannaLog to więcej niż aplikacja - to Twój cyfrowy asystent, który pomoże Ci zrozumieć i ulepszyć Twoje doświadczenia z konopiami. Prosto i skutecznie.",
     "logging": {
-      "title": "Rejestruj sesje",
+      "title": "Rejestruj swoje sesje",
       "description": "Zapisuj wszystko co ważne - odmianę, dawkę, nastrój, aktywności. Szybko i bez zbędnych komplikacji."
     },
     "insights": {
