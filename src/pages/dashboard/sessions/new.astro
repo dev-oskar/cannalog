@@ -24,15 +24,15 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       data-step="1"
     >
       <div
-        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+        class="flex flex-col justify-center items-center p-4 sm:p-8 sm:flex-1 text-center"
       >
         <div
-          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+          class="w-16 h-16 mb-3 drop-shadow-lg animate-bounce sm:w-24 sm:h-24 md:w-32 md:h-32 sm:mb-8"
         >
           <Icon name="tabler:cannabis" class="w-full h-full" />
         </div>
         <h2
-          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+          class="text-lg font-bold text-primary-50 mb-2 drop-shadow-lg sm:text-xl md:text-2xl sm:mb-4"
         >
           {t("sessions.new.strain")}
         </h2>
@@ -44,14 +44,14 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       >
       </div>
       <div
-        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+        class="w-full max-w-128 p-4 sm:p-6 md:p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg overflow-y-auto"
       >
         {
           userStrains.length > 0 ? (
             <>
               <select
                 data-field="strain"
-                class="w-full p-5 text-lg border-2 text-primary-900 dark:text-secondary-900 border-primary-200 rounded-xl outline-none transition-all bg-primary-50 focus:border-primary-600 focus:bg-primary-50 focus:shadow-lg dark:bg-secondary-50 dark:border-secondary-200 dark:focus:border-secondary-600"
+                class="w-full p-3 sm:p-5 text-base sm:text-lg border-2 text-primary-900 dark:text-secondary-900 border-primary-200 rounded-xl outline-none transition-all bg-primary-50 focus:border-primary-600 focus:bg-primary-50 focus:shadow-lg dark:bg-secondary-50 dark:border-secondary-200 dark:focus:border-secondary-600"
               >
                 <option value="">{t("sessions.new.select_strain")}</option>
                 {userStrains.map((strain) => (
@@ -60,7 +60,7 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
               </select>
               <button
                 type="button"
-                class="w-full p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all mt-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+                class="w-full p-3 sm:p-5 text-base sm:text-lg font-semibold border-none rounded-xl cursor-pointer transition-all mt-4 bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
                 data-action="next"
               >
                 Continue
@@ -76,7 +76,7 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
               </div>
               <a
                 href="/dashboard/strains/new"
-                class="w-full p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 text-center block"
+                class="w-full p-3 sm:p-5 text-base sm:text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 text-center block"
               >
                 Create Strain
               </a>
@@ -92,15 +92,15 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       data-step="2"
     >
       <div
-        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+        class="flex flex-col justify-center items-center p-4 sm:p-8 sm:flex-1 text-center"
       >
         <div
-          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+          class="w-16 h-16 mb-3 drop-shadow-lg animate-bounce sm:w-24 sm:h-24 md:w-32 md:h-32 sm:mb-8"
         >
           <Icon name="tabler:cannabis" class="w-full h-full" />
         </div>
         <h2
-          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+          class="text-lg font-bold text-primary-50 mb-2 drop-shadow-lg sm:text-xl md:text-2xl sm:mb-4"
         >
           {t("sessions.new.usage_method")}
         </h2>
@@ -112,53 +112,53 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       >
       </div>
       <div
-        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+        class="w-full max-w-128 p-4 sm:p-6 md:p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg overflow-y-auto"
       >
         <div class="grid grid-cols-2 gap-4">
           <button
             type="button"
-            class="flex flex-col items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
+            class="flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-base sm:text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
             data-value="smoke"
           >
-            <Icon name="la:joint" class="h-12 w-12" />
+            <Icon name="la:joint" class="h-8 w-8 sm:h-12 sm:w-12" />
             <span>{t("sessions.methods.smoke")}</span>
           </button>
           <button
             type="button"
-            class="flex flex-col items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
+            class="flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-base sm:text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
             data-value="vape"
           >
-            <Icon name="tabler:device-analytics" class="h-12 w-12" />
+            <Icon name="tabler:device-analytics" class="h-8 w-8 sm:h-12 sm:w-12" />
             <span>{t("sessions.methods.vape")}</span>
           </button>
           <button
             type="button"
-            class="flex flex-col items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
+            class="flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-base sm:text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
             data-value="edible"
           >
-            <Icon name="la:cookie" class="h-12 w-12" />
+            <Icon name="la:cookie" class="h-8 w-8 sm:h-12 sm:w-12" />
             <span>{t("sessions.methods.edible")}</span>
           </button>
           <button
             type="button"
-            class="flex flex-col items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
+            class="flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-base sm:text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 hover:translate-x-1 text-primary-900 dark:text-secondary-900"
             data-value="oil"
           >
-            <Icon name="la:oil-can" class="h-12 w-12" />
+            <Icon name="la:oil-can" class="h-8 w-8 sm:h-12 sm:w-12" />
             <span>{t("sessions.methods.oil")}</span>
           </button>
         </div>
         <div class="flex gap-4 mt-4">
           <button
             type="button"
-            class="flex-1 p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            class="flex-1 p-3 sm:p-5 text-base sm:text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
             data-action="back"
           >
             Back
           </button>
           <button
             type="button"
-            class="flex-1 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            class="flex-1 p-3 sm:p-5 text-base sm:text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
             data-action="next"
           >
             Continue
@@ -173,15 +173,15 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       data-step="3"
     >
       <div
-        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+        class="flex flex-col justify-center items-center p-4 sm:p-8 sm:flex-1 text-center"
       >
         <div
-          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+          class="w-16 h-16 mb-3 drop-shadow-lg animate-bounce sm:w-24 sm:h-24 md:w-32 md:h-32 sm:mb-8"
         >
           <Icon name="tabler:cannabis" class="w-full h-full" />
         </div>
         <h2
-          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+          class="text-lg font-bold text-primary-50 mb-2 drop-shadow-lg sm:text-xl md:text-2xl sm:mb-4"
         >
           {t("sessions.new.amount")}
         </h2>
@@ -193,12 +193,12 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       >
       </div>
       <div
-        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+        class="w-full max-w-128 p-4 sm:p-6 md:p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg overflow-y-auto"
       >
         <div class="flex items-center justify-center gap-6 mb-2">
           <button
             type="button"
-            class="w-16 h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
+            class="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-xl sm:text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
             data-action="decrease"
           >
             <span>−</span>
@@ -214,7 +214,7 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
           />
           <button
             type="button"
-            class="w-16 h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
+            class="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-primary-200 dark:border-secondary-200 bg-primary-50 dark:bg-secondary-50 text-xl sm:text-2xl font-semibold text-primary-600 dark:text-secondary-600 cursor-pointer transition-all hover:bg-primary-600 dark:hover:bg-secondary-600 hover:text-primary-50 dark:hover:text-secondary-50 hover:border-primary-600 dark:hover:border-secondary-600 hover:scale-110 active:scale-95 flex items-center justify-center"
             data-action="increase"
           >
             <span>+</span>
@@ -228,14 +228,14 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
         <div class="flex gap-4 mt-4">
           <button
             type="button"
-            class="flex-1 p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            class="flex-1 p-3 sm:p-5 text-base sm:text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
             data-action="back"
           >
             Back
           </button>
           <button
             type="button"
-            class="flex-1 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            class="flex-1 p-3 sm:p-5 text-base sm:text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
             data-action="next"
           >
             Continue
@@ -250,15 +250,15 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       data-step="4"
     >
       <div
-        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+        class="flex flex-col justify-center items-center p-4 sm:p-8 sm:flex-1 text-center"
       >
         <div
-          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+          class="w-16 h-16 mb-3 drop-shadow-lg animate-bounce sm:w-24 sm:h-24 md:w-32 md:h-32 sm:mb-8"
         >
           <Icon name="tabler:cannabis" class="w-full h-full" />
         </div>
         <h2
-          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+          class="text-lg font-bold text-primary-50 mb-2 drop-shadow-lg sm:text-xl md:text-2xl sm:mb-4"
         >
           {t("sessions.new.effects")}
         </h2>
@@ -270,13 +270,13 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       >
       </div>
       <div
-        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+        class="w-full max-w-128 p-4 sm:p-6 md:p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg overflow-y-auto"
       >
         <div class="grid grid-cols-2 gap-4">
           {
             ["relaxed", "energetic", "creative", "focused", "sleepy"].map(
               (effect) => (
-                <label class="flex items-center gap-4 p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 text-primary-900 dark:text-secondary-900">
+                <label class="flex items-center gap-3 sm:gap-4 p-3 sm:p-5 bg-primary-50 dark:bg-secondary-50 border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all font-medium text-base sm:text-lg hover:border-primary-600 dark:hover:border-secondary-600 hover:bg-primary-100 dark:hover:bg-secondary-100 text-primary-900 dark:text-secondary-900">
                   <input
                     type="checkbox"
                     data-field="effects"
@@ -292,14 +292,14 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
         <div class="flex gap-4 mt-4">
           <button
             type="button"
-            class="flex-1 p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            class="flex-1 p-3 sm:p-5 text-base sm:text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
             data-action="back"
           >
             Back
           </button>
           <button
             type="button"
-            class="flex-1 p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            class="flex-1 p-3 sm:p-5 text-base sm:text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
             data-action="next"
           >
             Continue
@@ -314,15 +314,15 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       data-step="5"
     >
       <div
-        class="flex-1 flex flex-col justify-center items-center p-8 text-center"
+        class="flex flex-col justify-center items-center p-4 sm:p-8 sm:flex-1 text-center"
       >
         <div
-          class="w-32 h-32 mb-8 drop-shadow-lg animate-bounce sm:w-20 sm:h-20"
+          class="w-16 h-16 mb-3 drop-shadow-lg animate-bounce sm:w-24 sm:h-24 md:w-32 md:h-32 sm:mb-8"
         >
           <Icon name="tabler:cannabis" class="w-full h-full" />
         </div>
         <h2
-          class="text-2xl font-bold text-primary-50 mb-4 drop-shadow-lg sm:text-xl"
+          class="text-lg font-bold text-primary-50 mb-2 drop-shadow-lg sm:text-xl md:text-2xl sm:mb-4"
         >
           {t("sessions.new.notes")}
         </h2>
@@ -334,24 +334,24 @@ const userStrains = user ? await getUserStrains(nhost, user.id) : [];
       >
       </div>
       <div
-        class="w-full max-w-128 p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg"
+        class="w-full max-w-128 p-4 sm:p-6 md:p-8 bg-primary-50 dark:bg-secondary-50 rounded-t-3xl shadow-lg overflow-y-auto"
       >
         <textarea
           data-field="notes"
-          class="w-full p-5 text-base border-2 border-primary-200 dark:border-secondary-200 rounded-xl outline-none transition-all bg-primary-50 dark:bg-secondary-50 resize-none font-inherit mb-4 focus:border-primary-600 dark:focus:border-secondary-600 focus:bg-primary-50 dark:focus:bg-secondary-50 focus:shadow-lg text-primary-900 dark:text-secondary-900"
+          class="w-full p-3 sm:p-5 text-base border-2 border-primary-200 dark:border-secondary-200 rounded-xl outline-none transition-all bg-primary-50 dark:bg-secondary-50 resize-none font-inherit mb-4 focus:border-primary-600 dark:focus:border-secondary-600 focus:bg-primary-50 dark:focus:bg-secondary-50 focus:shadow-lg text-primary-900 dark:text-secondary-900"
           placeholder={t("sessions.new.notes")}
-          rows="4"></textarea>
+          rows="3"></textarea>
         <div class="grid grid-cols-2 gap-4 mt-4">
           <button
             type="button"
-            class="p-5 text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
+            class="p-3 sm:p-5 text-base sm:text-lg font-semibold border-2 border-primary-200 dark:border-secondary-200 rounded-xl cursor-pointer transition-all bg-primary-50 dark:bg-secondary-50 text-primary-700 dark:text-secondary-700 hover:bg-primary-100 dark:hover:bg-secondary-100"
             data-action="back"
           >
             Back
           </button>
           <button
             type="button"
-            class="p-5 text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-2"
+            class="p-3 sm:p-5 text-base sm:text-lg font-semibold border-none rounded-xl cursor-pointer transition-all bg-gradient-to-r from-primary-600 to-secondary-600 text-primary-50 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-2"
             data-action="submit"
           >
             <span>{t("sessions.new.submit")}</span>
