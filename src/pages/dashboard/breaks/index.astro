@@ -1,0 +1,151 @@
+---
+import DashboardLayout from "../../../layouts/DashboardLayout.astro";
+import BreakCard from "../../../components/dashboard/BreakCard.astro";
+import { useI18n } from "../../../i18n/utils";
+import { createNhostServerClient } from "../../../lib/nhost";
+import { getActiveBreak, getLastSessionTimestamp, getPastBreaks } from "../../../lib/queries";
+
+const { t, lang, translatePath } = useI18n(Astro.url);
+const { user } = Astro.locals;
+
+if (!user) return Astro.redirect(translatePath("/signin"));
+
+const nhost = await createNhostServerClient(Astro.cookies);
+
+const [activeBreak, lastSessionTimestamp, pastBreaks] = await Promise.all([
+  getActiveBreak(nhost, user.id),
+  getLastSessionTimestamp(nhost, user.id),
+  getPastBreaks(nhost, user.id),
+]);
+---
+
+<DashboardLayout user={user}>
+  <div class="p-4 sm:p-6 lg:p-8 space-y-6">
+
+    <!-- Header -->
+    <div class="bg-white dark:bg-secondary-800 p-6 rounded-lg shadow-md">
+      <h1 class="text-2xl font-bold text-text-color">{t("breaks.title")}</h1>
+    </div>
+
+    <!-- Active break card (full mode) -->
+    <BreakCard
+      activeBreak={activeBreak}
+      lastSessionTimestamp={lastSessionTimestamp}
+      compact={false}
+    />
+
+    <!-- Start break form (only when no active break) -->
+    {!activeBreak && (
+      <div class="bg-white dark:bg-secondary-800 rounded-lg shadow-md border border-primary-200 dark:border-tertiary-700 p-6">
+        <h2 class="text-lg font-semibold text-text-color mb-4">
+          {t("breaks.startBreak")}
+        </h2>
+        <form id="start-break-form" class="flex flex-col sm:flex-row gap-4 items-end">
+          <div class="flex-1">
+            <label
+              for="goal-days"
+              class="block text-sm font-medium text-text-color/70 mb-1"
+            >
+              {t("breaks.goalDaysLabel")}
+              <span class="text-text-color/40 ml-1">({t("breaks.optional")})</span>
+            </label>
+            <input
+              id="goal-days"
+              name="goal_days"
+              type="number"
+              min="1"
+              max="365"
+              placeholder={t("breaks.goalDaysPlaceholder")}
+              class="w-full rounded-md border border-primary-300 dark:border-tertiary-600 bg-white dark:bg-secondary-900 text-text-color px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+          </div>
+          <button
+            type="submit"
+            class="px-5 py-2 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium transition-colors"
+          >
+            {t("breaks.startBreak")}
+          </button>
+        </form>
+        <p
+          id="break-error"
+          data-already-active={t("breaks.errors.alreadyActive")}
+          data-start-failed={t("breaks.errors.startFailed")}
+          class="text-sm text-error mt-2 hidden"
+        ></p>
+      </div>
+    )}
+
+    <!-- Past breaks -->
+    <div class="bg-white dark:bg-secondary-800 rounded-lg shadow-md border border-primary-200 dark:border-tertiary-700 p-6">
+      <h2 class="text-lg font-semibold text-text-color mb-4">
+        {t("breaks.pastBreaks")}
+      </h2>
+      {pastBreaks.length === 0 ? (
+        <p class="text-sm text-text-color/50">{t("breaks.noPastBreaks")}</p>
+      ) : (
+        <ul class="divide-y divide-primary-100 dark:divide-tertiary-700">
+          {pastBreaks.map((b) => {
+            const start = new Date(b.start_date);
+            const end = new Date(b.end_date!);
+            const days = Math.max(
+              1,
+              Math.round((end.getTime() - start.getTime()) / 86_400_000),
+            );
+            return (
+              <li class="py-3 flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-sm font-medium text-text-color">
+                    {start.toLocaleDateString(lang)} → {end.toLocaleDateString(lang)}
+                  </p>
+                  <p class="text-xs text-text-color/50">
+                    {t("breaks.breakDuration").replace("{{days}}", String(days))}
+                  </p>
+                </div>
+                <span
+                  class={`text-xs px-2 py-0.5 rounded-full font-medium ${b.break_type === "intentional" ? "bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300" : "bg-tertiary-100 text-tertiary-700 dark:bg-tertiary-900/30 dark:text-tertiary-300"}`}
+                >
+                  {b.break_type === "intentional"
+                    ? t("breaks.typeIntentional")
+                    : t("breaks.typePassive")}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+
+  </div>
+</DashboardLayout>
+
+<script>
+  const form = document.getElementById("start-break-form") as HTMLFormElement | null;
+  const errorEl = document.getElementById("break-error");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form || !errorEl) return;
+
+    const goalDaysInput = form.querySelector<HTMLInputElement>("#goal-days");
+    const goalDays = goalDaysInput?.value
+      ? parseInt(goalDaysInput.value, 10)
+      : null;
+
+    const res = await fetch("/api/breaks/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ goal_days: goalDays }),
+    });
+
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      const json = await res.json().catch(() => ({}));
+      const alreadyActive = errorEl.dataset.alreadyActive ?? "A break is already active.";
+      const startFailed = errorEl.dataset.startFailed ?? "Failed to start break. Please try again.";
+      errorEl.textContent =
+        json.message === "A break is already active" ? alreadyActive : startFailed;
+      errorEl.classList.remove("hidden");
+    }
+  });
+</script>
