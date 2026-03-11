@@ -189,6 +189,7 @@
       "sessions": "Sessions",
       "journal": "Journal",
       "analytics": "Analytics",
+      "tbreak": "T-Break",
       "docs": "Docs",
       "help": "Help",
       "settings": "Settings",
@@ -266,6 +267,33 @@
       "strainTypeRequired": "Please select a strain type",
       "cannabinoidsRequired": "Please enter at least one cannabinoid",
       "terpenesRequired": "Please enter at least one terpene"
+    }
+  },
+  "breaks": {
+    "title": "Tolerance Break",
+    "pageTitle": "Tolerance Break - CannaLog",
+    "activeBreak": "Active Break",
+    "startBreak": "Start T-Break",
+    "cancelBreak": "Cancel Break",
+    "goalDaysLabel": "Goal duration (days)",
+    "goalDaysPlaceholder": "e.g. 21",
+    "optional": "optional",
+    "dayStreak": "Day {{count}}",
+    "motivationalWithGoal": "Day {{elapsed}} of {{goal}} — keep going!",
+    "motivationalNoGoal": "Day {{elapsed}} — great work!",
+    "goalReached": "Goal reached! Amazing job.",
+    "noActiveBreak": "No active break",
+    "daysSinceLast": "{{count}} days since last session",
+    "startCta": "Start a T-Break",
+    "pastBreaks": "Past Breaks",
+    "noPastBreaks": "No past breaks yet",
+    "typeIntentional": "Intentional",
+    "typePassive": "Passive",
+    "breakDuration": "{{days}} days",
+    "errors": {
+      "startFailed": "Failed to start break. Please try again.",
+      "cancelFailed": "Failed to cancel break. Please try again.",
+      "alreadyActive": "A break is already active."
     }
   }
 }

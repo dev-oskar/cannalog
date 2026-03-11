@@ -186,6 +186,7 @@
       "sessions": "Sesje",
       "journal": "Dziennik",
       "analytics": "Statystyki",
+      "tbreak": "Przerwa",
       "docs": "Dokumentacja",
       "help": "Pomoc",
       "settings": "Ustawienia",
@@ -263,6 +264,33 @@
       "strainTypeRequired": "Wybierz typ odmiany",
       "cannabinoidsRequired": "Podaj przynajmniej jeden kannabinoid",
       "terpenesRequired": "Podaj przynajmniej jeden terpen"
+    }
+  },
+  "breaks": {
+    "title": "Przerwa od THC",
+    "pageTitle": "Przerwa od THC - CannaLog",
+    "activeBreak": "Aktywna przerwa",
+    "startBreak": "Zacznij przerwę",
+    "cancelBreak": "Anuluj przerwę",
+    "goalDaysLabel": "Czas trwania (dni)",
+    "goalDaysPlaceholder": "np. 21",
+    "optional": "opcjonalnie",
+    "dayStreak": "Dzień {{count}}",
+    "motivationalWithGoal": "Dzień {{elapsed}} z {{goal}} — trzymaj się!",
+    "motivationalNoGoal": "Dzień {{elapsed}} — świetna robota!",
+    "goalReached": "Cel osiągnięty! Niesamowita robota.",
+    "noActiveBreak": "Brak aktywnej przerwy",
+    "daysSinceLast": "{{count}} dni od ostatniej sesji",
+    "startCta": "Zacznij przerwę od THC",
+    "pastBreaks": "Poprzednie przerwy",
+    "noPastBreaks": "Brak poprzednich przerw",
+    "typeIntentional": "Zaplanowana",
+    "typePassive": "Wykryta",
+    "breakDuration": "{{days}} dni",
+    "errors": {
+      "startFailed": "Nie udało się rozpocząć przerwy. Spróbuj ponownie.",
+      "cancelFailed": "Nie udało się anulować przerwy. Spróbuj ponownie.",
+      "alreadyActive": "Przerwa jest już aktywna."
     }
   }
 }
