@@ -1,5 +1,5 @@
 import type { NhostClient } from "@nhost/nhost-js";
-import type { Session, Strain } from "../types/db-types";
+import type { Session, Strain, ToleranceBreak } from "../types/db-types";
 
 // Input types that mimic the database requirements minus generated fields
 export interface CreateSessionInput {
@@ -19,6 +19,14 @@ export interface CreateStrainInput {
   is_public: boolean;
   created_by: string;
   img_path: string;
+}
+
+export interface CreateBreakInput {
+  user_id: string;
+  start_date: string;
+  end_date?: string | null;
+  goal_days?: number | null;
+  break_type: "intentional" | "passive";
 }
 
 const INSERT_SESSION_MUTATION = `
@@ -68,6 +76,44 @@ mutation InsertStrains($name: String!, $thc_content: Int!, $cbd_content: Int!, $
 }
 `;
 
+const INSERT_BREAK_MUTATION = `
+mutation InsertBreak(
+  $user_id: uuid!,
+  $start_date: timestamptz!,
+  $end_date: timestamptz,
+  $goal_days: Int,
+  $break_type: String!
+) {
+  insert_tolerance_breaks_one(object: {
+    user_id: $user_id,
+    start_date: $start_date,
+    end_date: $end_date,
+    goal_days: $goal_days,
+    break_type: $break_type
+  }) {
+    break_id
+    user_id
+    start_date
+    end_date
+    goal_days
+    break_type
+    created_at
+  }
+}
+`;
+
+const CLOSE_BREAK_MUTATION = `
+mutation CloseBreak($break_id: uuid!, $end_date: timestamptz!) {
+  update_tolerance_breaks_by_pk(
+    pk_columns: { break_id: $break_id }
+    _set: { end_date: $end_date }
+  ) {
+    break_id
+    end_date
+  }
+}
+`;
+
 export async function createSession(
   nhost: NhostClient,
   input: CreateSessionInput
@@ -112,4 +158,44 @@ export async function createStrain(
   }
 
   return data.insert_strains_one;
+}
+
+export async function createBreak(
+  nhost: NhostClient,
+  input: CreateBreakInput,
+): Promise<ToleranceBreak> {
+  const response = await nhost.graphql.request({
+    query: INSERT_BREAK_MUTATION,
+    variables: input,
+  });
+
+  const data = (response as any).body?.data;
+  const errors = (response as any).body?.errors;
+
+  if (errors) {
+    throw new Error(errors[0]?.message || "GraphQL Error");
+  }
+
+  if (!data?.insert_tolerance_breaks_one) {
+    throw new Error("Failed to create break - no data returned");
+  }
+
+  return data.insert_tolerance_breaks_one;
+}
+
+export async function closeBreak(
+  nhost: NhostClient,
+  breakId: string,
+  endDate: string,
+): Promise<void> {
+  const response = await nhost.graphql.request({
+    query: CLOSE_BREAK_MUTATION,
+    variables: { break_id: breakId, end_date: endDate },
+  });
+
+  const errors = (response as any).body?.errors;
+
+  if (errors) {
+    throw new Error(errors[0]?.message || "GraphQL Error");
+  }
 }
