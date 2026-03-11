@@ -1,0 +1,145 @@
+---
+import type { ToleranceBreak } from "../../types/db-types";
+import { useI18n } from "../../i18n/utils";
+
+export interface Props {
+  activeBreak: ToleranceBreak | null;
+  lastSessionTimestamp: string | null;
+  compact?: boolean;
+}
+
+const { activeBreak, lastSessionTimestamp, compact = false } = Astro.props;
+const { t, translatePath } = useI18n(Astro.url);
+
+const now = Date.now();
+
+// Compute elapsed days for an active break
+const elapsedDays = activeBreak
+  ? Math.floor((now - new Date(activeBreak.start_date).getTime()) / 86_400_000)
+  : 0;
+
+// Progress toward goal (0-100), or null if no goal set
+const progressPct =
+  activeBreak?.goal_days != null
+    ? Math.min(100, Math.round((elapsedDays / activeBreak.goal_days) * 100))
+    : null;
+
+// Days since last session when no break is active
+const daysSinceLast = lastSessionTimestamp
+  ? Math.floor((now - new Date(lastSessionTimestamp).getTime()) / 86_400_000)
+  : null;
+
+// Motivational message
+let motivationalMsg = "";
+if (activeBreak) {
+  if (progressPct !== null && progressPct >= 100) {
+    motivationalMsg = t("breaks.goalReached");
+  } else if (activeBreak.goal_days != null) {
+    motivationalMsg = t("breaks.motivationalWithGoal")
+      .replace("{{elapsed}}", String(elapsedDays))
+      .replace("{{goal}}", String(activeBreak.goal_days));
+  } else {
+    motivationalMsg = t("breaks.motivationalNoGoal").replace(
+      "{{elapsed}}",
+      String(elapsedDays),
+    );
+  }
+}
+---
+
+<div
+  class={`bg-white dark:bg-secondary-800 rounded-lg shadow-md border border-primary-200 dark:border-tertiary-700 ${compact ? "p-4" : "p-6"}`}
+>
+  {activeBreak ? (
+    <div class="space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-300">
+          {t("breaks.activeBreak")}
+        </span>
+        <span
+          class={`text-xs px-2 py-0.5 rounded-full font-medium ${activeBreak.break_type === "intentional" ? "bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300" : "bg-tertiary-100 text-tertiary-700 dark:bg-tertiary-900/30 dark:text-tertiary-300"}`}
+        >
+          {activeBreak.break_type === "intentional"
+            ? t("breaks.typeIntentional")
+            : t("breaks.typePassive")}
+        </span>
+      </div>
+
+      <div>
+        <p class={`font-bold text-text-color ${compact ? "text-2xl" : "text-4xl"}`}>
+          {t("breaks.dayStreak").replace("{{count}}", String(elapsedDays))}
+        </p>
+        <p class="text-sm text-text-color/70 mt-0.5">{motivationalMsg}</p>
+      </div>
+
+      {progressPct !== null && (
+        <div>
+          <div class="flex justify-between text-xs text-text-color/60 mb-1">
+            <span>{elapsedDays}d</span>
+            <span>{activeBreak.goal_days}d</span>
+          </div>
+          <div class="w-full bg-primary-100 dark:bg-secondary-700 rounded-full h-2">
+            <div
+              class="bg-primary-600 dark:bg-primary-400 h-2 rounded-full transition-all"
+              style={`width: ${progressPct}%`}
+            />
+          </div>
+        </div>
+      )}
+
+      {!compact && (
+        <div class="flex gap-3 pt-2">
+          <a
+            href={translatePath("/dashboard/sessions/new")}
+            class="text-sm text-primary-600 dark:text-primary-300 underline underline-offset-2"
+          >
+            {t("sidebar.nav.newSession")}
+          </a>
+          <button
+            id="cancel-break-btn"
+            type="button"
+            data-confirm={t("breaks.cancelBreak") + "?"}
+            data-error={t("breaks.errors.cancelFailed")}
+            class="text-sm text-error underline underline-offset-2"
+          >
+            {t("breaks.cancelBreak")}
+          </button>
+        </div>
+      )}
+    </div>
+  ) : (
+    <div class="space-y-2">
+      <p class="text-xs font-semibold uppercase tracking-wide text-text-color/50">
+        {t("breaks.noActiveBreak")}
+      </p>
+      {daysSinceLast !== null && (
+        <p class="text-sm text-text-color/70">
+          {t("breaks.daysSinceLast").replace("{{count}}", String(daysSinceLast))}
+        </p>
+      )}
+      <a
+        href={translatePath("/dashboard/breaks")}
+        class="inline-block mt-2 text-sm font-medium text-primary-600 dark:text-primary-300 underline underline-offset-2"
+      >
+        {t("breaks.startCta")}
+      </a>
+    </div>
+  )}
+</div>
+
+{!compact && activeBreak && (
+  <script>
+    const btn = document.getElementById("cancel-break-btn");
+    btn?.addEventListener("click", async () => {
+      const confirmMsg = btn.dataset.confirm ?? "Cancel your active break?";
+      const errorMsg = btn.dataset.error ?? "Failed to cancel break.";
+      if (!confirm(confirmMsg)) return;
+      const res = await fetch("/api/breaks/cancel", { method: "POST" });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        alert(errorMsg);
+      }
+    });
+  </script>
+)}
