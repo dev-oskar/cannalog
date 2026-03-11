@@ -1,4 +1,4 @@
-import type { Session, Strain } from "../types/db-types";
+import type { Session, Strain, ToleranceBreak } from "../types/db-types";
 import { formatTimeSince } from "./utils";
 import type { NhostClient } from "@nhost/nhost-js";
 
@@ -634,4 +634,112 @@ export async function getStrainsAddedDailyLast30Days(
     .map(([day, count]) => ({ day, count }));
 
   return result;
+}
+
+export async function getLastSessionTimestamp(
+  nhost: NhostClient,
+  userId: string,
+): Promise<string | null> {
+  if (!userId) return null;
+
+  const QUERY = `query GetLastSessionTimestamp($userId: uuid!) {
+    sessions(
+      where: { created_by: { _eq: $userId } }
+      limit: 1
+      order_by: { created_at: desc }
+    ) {
+      created_at
+    }
+  }`;
+
+  const response = await nhost.graphql.request({
+    query: QUERY,
+    variables: { userId },
+  });
+
+  const data = (response as any).body?.data;
+  const errors = (response as any).body?.errors;
+
+  if (errors) {
+    console.error("GraphQL Error:", errors);
+    return null;
+  }
+
+  const sessions = data?.sessions || [];
+  return sessions.length > 0 ? sessions[0].created_at : null;
+}
+
+export async function getActiveBreak(
+  nhost: NhostClient,
+  userId: string,
+): Promise<ToleranceBreak | null> {
+  if (!userId) return null;
+
+  const QUERY = `query GetActiveBreak($userId: uuid!) {
+    tolerance_breaks(
+      where: { user_id: { _eq: $userId }, end_date: { _is_null: true } }
+      limit: 1
+    ) {
+      break_id
+      user_id
+      start_date
+      end_date
+      goal_days
+      break_type
+      created_at
+    }
+  }`;
+
+  const response = await nhost.graphql.request({
+    query: QUERY,
+    variables: { userId },
+  });
+
+  const data = (response as any).body?.data;
+  const errors = (response as any).body?.errors;
+
+  if (errors) {
+    console.error("GraphQL Error:", errors);
+    return null;
+  }
+
+  const breaks = data?.tolerance_breaks || [];
+  return breaks.length > 0 ? breaks[0] : null;
+}
+
+export async function getPastBreaks(
+  nhost: NhostClient,
+  userId: string,
+): Promise<ToleranceBreak[]> {
+  if (!userId) return [];
+
+  const QUERY = `query GetPastBreaks($userId: uuid!) {
+    tolerance_breaks(
+      where: { user_id: { _eq: $userId }, end_date: { _is_null: false } }
+      order_by: { start_date: desc }
+    ) {
+      break_id
+      user_id
+      start_date
+      end_date
+      goal_days
+      break_type
+      created_at
+    }
+  }`;
+
+  const response = await nhost.graphql.request({
+    query: QUERY,
+    variables: { userId },
+  });
+
+  const data = (response as any).body?.data;
+  const errors = (response as any).body?.errors;
+
+  if (errors) {
+    console.error("GraphQL Error:", errors);
+    return [];
+  }
+
+  return data?.tolerance_breaks || [];
 }
