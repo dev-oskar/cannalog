@@ -22,3 +22,13 @@ export interface Strain {
   tags: string[];
   img_path: string;
 }
+
+export interface ToleranceBreak {
+  break_id: string;
+  user_id: string;
+  start_date: string;
+  end_date: string | null;
+  goal_days: number | null;
+  break_type: "intentional" | "passive";
+  created_at: string;
+}
