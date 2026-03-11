@@ -4,11 +4,14 @@ import { useI18n } from "../../i18n/utils";
 import Tile from "../../components/dashboard/Tile.astro";
 import MonthlyTrendChart from "../../components/dashboard/MonthlyTrendChart.astro";
 import StrainsAddedChart from "../../components/dashboard/StrainsAddedChart.astro";
+import BreakCard from "../../components/dashboard/BreakCard.astro";
 import {
   getTimeSinceLastSession,
   getMonthlyTrend,
   getStrainsAddedLastDays,
   getStrainsAddedDailyLast30Days,
+  getActiveBreak,
+  getLastSessionTimestamp,
 } from "../../lib/queries";
 
 import { createNhostServerClient } from "../../lib/nhost";
@@ -32,6 +35,8 @@ const strainsAddedDaily = await getStrainsAddedDailyLast30Days(
   nhost,
   user?.id || "",
 );
+const activeBreak = await getActiveBreak(nhost, user?.id || "");
+const lastSessionTimestamp = await getLastSessionTimestamp(nhost, user?.id || "");
 ---
 
 <DashboardLayout user={user}>
@@ -58,6 +63,11 @@ const strainsAddedDaily = await getStrainsAddedDailyLast30Days(
           : "No strains added yet. Start building your collection!"}
         buttonText={t("dashboard.recentEntries.button")}
         variant="primary"
+      />
+      <BreakCard
+        activeBreak={activeBreak}
+        lastSessionTimestamp={lastSessionTimestamp}
+        compact={true}
       />
     </div>
 
