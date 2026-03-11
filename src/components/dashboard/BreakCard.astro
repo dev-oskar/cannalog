@@ -131,8 +131,8 @@ if (activeBreak) {
   <script>
     const btn = document.getElementById("cancel-break-btn");
     btn?.addEventListener("click", async () => {
-      const confirmMsg = btn.dataset.confirm ?? "Cancel your active break?";
-      const errorMsg = btn.dataset.error ?? "Failed to cancel break.";
+      const confirmMsg = btn.dataset.confirm;
+      const errorMsg = btn.dataset.error;
       if (!confirm(confirmMsg)) return;
       const res = await fetch("/api/breaks/cancel", { method: "POST" });
       if (res.ok) {
